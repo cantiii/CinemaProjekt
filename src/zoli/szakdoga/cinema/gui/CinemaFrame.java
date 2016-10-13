@@ -1,8 +1,14 @@
 package zoli.szakdoga.cinema.gui;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import static zoli.szakdoga.cinema.gui.GuiConstants.*;
 
 /**
@@ -11,11 +17,15 @@ import static zoli.szakdoga.cinema.gui.GuiConstants.*;
  */
 public class CinemaFrame extends JFrame {
     
-    private final JPanel jPanel = new JPanel();
+    private final JPanel panelCont = new JPanel();
+    private final JPanel panelIndex = new JPanel();
+    private final JPanel panelAr = new JPanel();
+    private final JPanel panelKapcsolat = new JPanel();
+    private final CardLayout cl = new CardLayout();
     
     public CinemaFrame() {
         initFrame();
-
+        
         setMenu();
         setCenter();
 
@@ -33,14 +43,29 @@ public class CinemaFrame extends JFrame {
     
     private void setMenu() {
         JMenuBar menuBar = new JMenuBar();
-        JMenu index = new JMenu(INDEX_MENU_TEXT);
-        JMenu musor = new JMenu(MUSOR_MENU_TEXT);
-        JMenu film = new JMenu(FILM_MENU_TEXT);
-        JMenu ar = new JMenu(AR_MENU_TEXT);
-        JMenu kapcsolat = new JMenu(KAPCSOLAT_MENU_TEXT);
-        JMenu admin = new JMenu(ADMIN_MENU_TEXT);
-        JMenu tortenet = new JMenu(TORTENET_MENU_TEXT);
-        JMenu logout = new JMenu(LOGOUT_MENU_TEXT);
+        JMenuItem index = new JMenuItem(new AbstractAction(INDEX_MENU_TEXT) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cl.show(panelCont, "1");
+            }
+        });
+        JMenuItem musor = new JMenuItem(MUSOR_MENU_TEXT);
+        JMenuItem film = new JMenuItem(FILM_MENU_TEXT);
+        JMenuItem ar = new JMenuItem(new AbstractAction(AR_MENU_TEXT) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cl.show(panelCont, "2");
+            }
+        });
+        JMenuItem kapcsolat = new JMenuItem(new AbstractAction(KAPCSOLAT_MENU_TEXT) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cl.show(panelCont, "3");
+            }
+        });
+        JMenuItem admin = new JMenuItem(ADMIN_MENU_TEXT);
+        JMenuItem tortenet = new JMenuItem(TORTENET_MENU_TEXT);
+        JMenuItem logout = new JMenuItem(LOGOUT_MENU_TEXT);
         
         menuBar.add(index);
         menuBar.add(musor);
@@ -53,10 +78,17 @@ public class CinemaFrame extends JFrame {
         setJMenuBar(menuBar);
     }
     
-        private void setCenter() {
-        JPanel panel = new JPanel(new GridLayout(1, 1));
-
-        panel.add(jPanel);
-        add(panel, BorderLayout.CENTER);
+    private void setCenter() {
+        panelCont.setLayout(cl);
+        
+        panelCont.add(panelIndex, "1");
+        panelAr.setBackground(Color.red);
+	panelCont.add(panelAr, "2");
+        panelKapcsolat.setBackground(Color.BLUE);
+        panelCont.add(panelKapcsolat, "3");
+	cl.show(panelCont, "1");
+        
+        add(panelCont, BorderLayout.CENTER);
     }
+    
 }
