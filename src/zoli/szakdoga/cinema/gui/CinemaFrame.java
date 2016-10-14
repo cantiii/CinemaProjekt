@@ -5,7 +5,11 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
+import javax.swing.table.TableRowSorter;
+import zoli.szakdoga.cinema.db.dao.DaoManager;
+import zoli.szakdoga.cinema.db.entity.Film;
 import static zoli.szakdoga.cinema.gui.GuiConstants.*;
+import zoli.szakdoga.cinema.gui.model.GenericTableModel;
 
 /**
  *
@@ -18,6 +22,9 @@ public class CinemaFrame extends JFrame {
     private final JPanel panelAr = new JPanel();
     private final JPanel panelKapcsolat = new JPanel();
     private final CardLayout cl = new CardLayout();
+    
+    private final JPanel panelFilm = new JPanel();
+    private final JTable filmTable = new JTable();
 
     public CinemaFrame() {
         initFrame();
@@ -47,7 +54,13 @@ public class CinemaFrame extends JFrame {
             }
         });
         JMenuItem musor = new JMenuItem(MUSOR_MENU_TEXT);
-        JMenuItem film = new JMenuItem(FILM_MENU_TEXT);
+        JMenuItem film = new JMenuItem(new AbstractAction(FILM_MENU_TEXT) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cl.show(panelCont, "4");
+                loadFilmPanel();
+            }
+        });
         JMenuItem ar = new JMenuItem(new AbstractAction(AR_MENU_TEXT) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -89,6 +102,7 @@ public class CinemaFrame extends JFrame {
         panelCont.setLayout(cl);
 
         panelCont.add(panelIndex, "1");
+        panelCont.add(panelFilm, "4");
         panelAr.setBackground(Color.red);
         panelCont.add(panelAr, "2");
         panelKapcsolat.setBackground(Color.BLUE);
@@ -96,5 +110,15 @@ public class CinemaFrame extends JFrame {
         cl.show(panelCont, "1");
 
         add(panelCont, BorderLayout.CENTER);
+    }
+    
+    public void loadFilmPanel() {
+        GenericTableModel<Film> model = new GenericTableModel(DaoManager.getInstance().getFilmDao(), Film.PROPERTY_NAMES);
+        TableRowSorter<GenericTableModel<Film>> sorter = new TableRowSorter<>(model);
+        
+        filmTable.setModel(model);
+        filmTable.setRowSorter(sorter);
+        
+        panelFilm.add(FILM_MENU_TEXT, new  JScrollPane(filmTable));
     }
 }
