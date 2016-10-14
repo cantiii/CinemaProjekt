@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package zoli.szakdoga.cinema.db.entity;
 
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +23,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Szekterem.findAll", query = "SELECT s FROM Szekterem s"),
     @NamedQuery(name = "Szekterem.findById", query = "SELECT s FROM Szekterem s WHERE s.id = :id")})
-public class Szekterem implements Serializable {
+public class Szekterem extends PersistentEntity {
+
+    public static final String PROPERTY_NAMES[] = {"Terem", "Szék"};
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -97,7 +93,31 @@ public class Szekterem implements Serializable {
 
     @Override
     public String toString() {
-        return "zoli.szakdoga.cinema.db.entity.Szekterem[ id=" + id + " ]";
+        return teremId + " " + szekId.toString();
     }
-    
+
+    @Override
+    public Object get(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return teremId;
+            case 1:
+                return szekId;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void set(int columnIndex, Object value) {
+        switch (columnIndex) {
+            case 0:
+                setTeremId((Terem) value);
+                break;
+            case 1:
+                setSzekId((Szek) value);
+                break;
+        }
+    }
+
 }

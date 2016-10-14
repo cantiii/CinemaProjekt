@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package zoli.szakdoga.cinema.db.entity;
 
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,8 +23,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Tartalmaz.findAll", query = "SELECT t FROM Tartalmaz t"),
     @NamedQuery(name = "Tartalmaz.findById", query = "SELECT t FROM Tartalmaz t WHERE t.id = :id")})
-public class Tartalmaz implements Serializable {
+public class Tartalmaz extends PersistentEntity {
 
+    public static final String PROPERTY_NAMES[] = {"Mozi", "Terem"};
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -97,7 +93,31 @@ public class Tartalmaz implements Serializable {
 
     @Override
     public String toString() {
-        return "zoli.szakdoga.cinema.db.entity.Tartalmaz[ id=" + id + " ]";
+        return moziId + " " + teremId;
     }
-    
+
+    @Override
+    public Object get(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return moziId;
+            case 1:
+                return teremId;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void set(int columnIndex, Object value) {
+        switch (columnIndex) {
+            case 0:
+                setMoziId((Mozi) value);
+                break;
+            case 1:
+                setTeremId((Terem) value);
+                break;
+        }
+    }
+
 }

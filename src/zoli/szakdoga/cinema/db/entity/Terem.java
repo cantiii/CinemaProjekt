@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package zoli.szakdoga.cinema.db.entity;
 
 import java.io.Serializable;
@@ -32,7 +27,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Terem.findById", query = "SELECT t FROM Terem t WHERE t.id = :id"),
     @NamedQuery(name = "Terem.findByNev", query = "SELECT t FROM Terem t WHERE t.nev = :nev"),
     @NamedQuery(name = "Terem.findByFerohely", query = "SELECT t FROM Terem t WHERE t.ferohely = :ferohely")})
-public class Terem implements Serializable {
+public class Terem extends PersistentEntity {
+
+    public static final String PROPERTY_NAMES[] = {"Név", "Férőhely"};
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -139,7 +136,31 @@ public class Terem implements Serializable {
 
     @Override
     public String toString() {
-        return "zoli.szakdoga.cinema.db.entity.Terem[ id=" + id + " ]";
+        return nev + " " + ferohely;
     }
-    
+
+    @Override
+    public Object get(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return nev;
+            case 1:
+                return ferohely;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void set(int columnIndex, Object value) {
+        switch (columnIndex) {
+            case 0:
+                setNev((String) value);
+                break;
+            case 1:
+                setFerohely((Integer) value);
+                break;
+        }
+    }
+
 }

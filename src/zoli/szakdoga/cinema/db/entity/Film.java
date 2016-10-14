@@ -1,6 +1,5 @@
 package zoli.szakdoga.cinema.db.entity;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -31,7 +30,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Film.findByLeiras", query = "SELECT f FROM Film f WHERE f.leiras = :leiras"),
     @NamedQuery(name = "Film.findByHossz", query = "SELECT f FROM Film f WHERE f.hossz = :hossz"),
     @NamedQuery(name = "Film.findByKorhatar", query = "SELECT f FROM Film f WHERE f.korhatar = :korhatar")})
-public class Film implements Serializable {
+public class Film extends PersistentEntity {
+
+    public static final String PROPERTY_NAMES[] = {"Cím", "Rendező", "Színész", "Hossz", "Korhatár"};
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -166,5 +167,44 @@ public class Film implements Serializable {
     public String toString() {
         return cim + " " + rendezo + " " + szinesz + " " + leiras + " " + korhatar + " " + hossz;
     }
-    
+
+    @Override
+    public Object get(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return cim;
+            case 1:
+                return rendezo;
+            case 2:
+                return szinesz;
+            case 3:
+                return hossz;
+            case 4:
+                return korhatar;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void set(int columnIndex, Object value) {
+        switch (columnIndex) {
+            case 0:
+                setCim((String) value);
+                break;
+            case 1:
+                setRendezo((String) value);
+                break;
+            case 2:
+                setSzinesz((String) value);
+                break;
+            case 3:
+                setHossz((Integer) value);
+                break;
+            case 4:
+                setKorhatar((Integer) value);
+                break;
+        }
+    }
+
 }

@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package zoli.szakdoga.cinema.db.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -33,8 +27,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Vetites.findAll", query = "SELECT v FROM Vetites v"),
     @NamedQuery(name = "Vetites.findById", query = "SELECT v FROM Vetites v WHERE v.id = :id"),
     @NamedQuery(name = "Vetites.findByMikor", query = "SELECT v FROM Vetites v WHERE v.mikor = :mikor")})
-public class Vetites implements Serializable {
+public class Vetites extends PersistentEntity {
 
+    public static final String PROPERTY_NAMES[] = {"Film", "Mikor", "Terem"};
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -112,7 +108,36 @@ public class Vetites implements Serializable {
 
     @Override
     public String toString() {
-        return "zoli.szakdoga.cinema.db.entity.Vetites[ id=" + id + " ]";
+        return filmId + " " + mikor + " " + teremId;
+    }
+
+    @Override
+    public Object get(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return filmId;
+            case 1:
+                return mikor;
+            case 2:
+                return teremId;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void set(int columnIndex, Object value) {
+                switch (columnIndex) {
+            case 0:
+                setFilmId((Film) value);
+                break;
+            case 1:
+                setMikor((Date) value);
+                break;
+            case 2:
+                setTeremId((Terem) value);
+                break;
+        }
     }
     
 }

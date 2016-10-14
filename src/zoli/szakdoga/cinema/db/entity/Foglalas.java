@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package zoli.szakdoga.cinema.db.entity;
 
-import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -28,8 +25,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Foglalas.findAll", query = "SELECT f FROM Foglalas f"),
-    @NamedQuery(name = "Foglalas.findById", query = "SELECT f FROM Foglalas f WHERE f.id = :id")})
-public class Foglalas implements Serializable {
+    @NamedQuery(name = "Foglalas.findById", query = "SELECT f FROM Foglalas f WHERE f.id = :id"),
+    @NamedQuery(name = "Foglalas.findByMikor", query = "SELECT f FROM Foglalas f WHERE f.mikor = :mikor")})
+public class Foglalas extends PersistentEntity {
+
+    public static final String PROPERTY_NAMES[] = {"Felhasználó", "Mikor", "Szék"};
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -37,6 +37,9 @@ public class Foglalas implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
+    @Column(name = "MIKOR")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date mikor;
     @JoinColumn(name = "FELHASZNALO_ID", referencedColumnName = "ID")
     @ManyToOne
     private Felhasznalo felhasznaloId;
@@ -57,6 +60,14 @@ public class Foglalas implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Date getMikor() {
+        return mikor;
+    }
+
+    public void setMikor(Date mikor) {
+        this.mikor = mikor;
     }
 
     public Felhasznalo getFelhasznaloId() {
@@ -97,7 +108,36 @@ public class Foglalas implements Serializable {
 
     @Override
     public String toString() {
-        return "zoli.szakdoga.cinema.db.entity.Foglalas[ id=" + id + " ]";
+        return felhasznaloId + " " + mikor + " " + szekId;
     }
-    
+
+    @Override
+    public Object get(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return felhasznaloId;
+            case 1:
+                return mikor;
+            case 2:
+                return szekId;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void set(int columnIndex, Object value) {
+        switch (columnIndex) {
+            case 0:
+                setFelhasznaloId((Felhasznalo) value);
+                break;
+            case 1:
+                setMikor((Date) value);
+                break;
+            case 2:
+                setSzekId((Szek) value);
+                break;
+        }
+    }
+
 }

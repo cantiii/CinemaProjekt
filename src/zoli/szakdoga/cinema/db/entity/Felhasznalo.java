@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package zoli.szakdoga.cinema.db.entity;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -32,7 +26,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Felhasznalo.findById", query = "SELECT f FROM Felhasznalo f WHERE f.id = :id"),
     @NamedQuery(name = "Felhasznalo.findByNev", query = "SELECT f FROM Felhasznalo f WHERE f.nev = :nev"),
     @NamedQuery(name = "Felhasznalo.findByJog", query = "SELECT f FROM Felhasznalo f WHERE f.jog = :jog")})
-public class Felhasznalo implements Serializable {
+public class Felhasznalo extends PersistentEntity {
+
+    public static final String PROPERTY_NAMES[] = {"Név", "Jog"};
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -117,7 +113,30 @@ public class Felhasznalo implements Serializable {
 
     @Override
     public String toString() {
-        return "zoli.szakdoga.cinema.db.entity.Felhasznalo[ id=" + id + " ]";
+        return nev + " " + jog;
     }
-    
+
+    @Override
+    public Object get(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return nev;
+            case 1:
+                return jog;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void set(int columnIndex, Object value) {
+        switch (columnIndex) {
+            case 0:
+                setNev((String) value);
+                break;
+            case 3:
+                setJog((Integer) value);
+                break;
+        }
+    }
 }

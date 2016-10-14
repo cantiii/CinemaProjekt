@@ -19,4 +19,8 @@ public class GuiConstants {
     public static final String TORTENET_MENU_TEXT = "Történet";
     public static final String LOGOUT_MENU_TEXT = "Logout";
     
+    public static final String MOZI_MENU_TEXT = "Mozi";
+    public static final String TEREM_MENU_TEXT = "Terem";
+    public static final String FELHASZNALO_MENU_TEXT = "Felhasználó";
+    
 }

@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package zoli.szakdoga.cinema.db.entity;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -31,7 +25,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Mozi.findAll", query = "SELECT m FROM Mozi m"),
     @NamedQuery(name = "Mozi.findById", query = "SELECT m FROM Mozi m WHERE m.id = :id"),
     @NamedQuery(name = "Mozi.findByNev", query = "SELECT m FROM Mozi m WHERE m.nev = :nev")})
-public class Mozi implements Serializable {
+public class Mozi extends PersistentEntity {
+
+    public static final String PROPERTY_NAMES[] = {"Név"};
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -104,7 +100,26 @@ public class Mozi implements Serializable {
 
     @Override
     public String toString() {
-        return "zoli.szakdoga.cinema.db.entity.Mozi[ id=" + id + " ]";
+        return nev;
     }
-    
+
+    @Override
+    public Object get(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return nev;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void set(int columnIndex, Object value) {
+        switch (columnIndex) {
+            case 0:
+                setNev((String) value);
+                break;
+        }
+    }
+
 }
