@@ -23,4 +23,6 @@ public class GuiConstants {
     public static final String TEREM_MENU_TEXT = "Terem";
     public static final String FELHASZNALO_MENU_TEXT = "Felhasználó";
     
+    public static final String LEIRAS_MENU_TEXT = "Leírás";
+    
 }
