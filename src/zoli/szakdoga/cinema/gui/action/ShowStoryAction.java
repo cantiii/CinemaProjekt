@@ -30,7 +30,8 @@ public class ShowStoryAction implements ActionListener{
         int selectedRow = table.getSelectedRow();
             if (selectedRow > -1) {
                 int convertRowIndexToModel = table.convertRowIndexToModel(selectedRow);
-                int convertColIndexToModel = table.convertColumnIndexToModel(selectedRow);
+                //oszlop elkérésre valami szebb módszer !   
+                int convertColIndexToModel = 5;
                 GenericTableModel model = (GenericTableModel) table.getModel();
                 JOptionPane.showMessageDialog(parent, model.getValueAt(convertRowIndexToModel, convertColIndexToModel), GuiConstants.LEIRAS_MENU_TEXT, JOptionPane.INFORMATION_MESSAGE);
             }

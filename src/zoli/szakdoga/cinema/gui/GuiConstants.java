@@ -25,4 +25,7 @@ public class GuiConstants {
     
     public static final String LEIRAS_MENU_TEXT = "Leírás";
     
+    public static final String LOGIN_BUT_TEXT = "Bejelentkezés";
+    public static final String REG_BUT_TEXT = "Regisztráció";
+    public static final String USERNAME_TEXT = "Felhasználónév:";
 }

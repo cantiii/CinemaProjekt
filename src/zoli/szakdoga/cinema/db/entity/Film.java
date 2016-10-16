@@ -172,6 +172,8 @@ public class Film extends PersistentEntity {
                 return hossz;
             case 4:
                 return korhatar;
+            case 5:
+                return leiras;
             default:
                 return null;
         }
@@ -194,6 +196,9 @@ public class Film extends PersistentEntity {
                 break;
             case 4:
                 setKorhatar((Integer) value);
+                break;
+            case 5:
+                setLeiras((String) value);
                 break;
         }
     }

@@ -2,15 +2,13 @@ package zoli.szakdoga.cinema.gui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;
 import zoli.szakdoga.cinema.db.dao.DaoManager;
 import zoli.szakdoga.cinema.db.entity.*;
 import static zoli.szakdoga.cinema.gui.GuiConstants.*;
-import zoli.szakdoga.cinema.gui.action.ShowStoryAction;
-import zoli.szakdoga.cinema.gui.action.StoryRightClickAction;
+import zoli.szakdoga.cinema.gui.action.*;
 import zoli.szakdoga.cinema.gui.model.GenericTableModel;
 
 /**
@@ -33,13 +31,21 @@ public class CinemaFrame extends JFrame {
     //private final JTable adminTable = new JTable();
     private final JPanel panelTortenet = new JPanel();
     private final JTable tortenetTable = new JTable();
+    private final JTable felhasznaloTable = new JTable();
+    private final JPanel panelFelhasznalo = new JPanel();
     
     private MouseAdapter rightClickAction;
     private ShowStoryAction showStory;
+    
+    private final JButton loginButton = new JButton(LOGIN_BUT_TEXT);
+    private final JButton regButton = new JButton(REG_BUT_TEXT);
+    private ActionListener loginAction;
+    private ActionListener regAction;
 
     public CinemaFrame() {
         initFrame();
-        linkActionListeners();
+        setActionListeners();
+        setButtons();
 
         setMenu();
         setCenter();
@@ -47,6 +53,10 @@ public class CinemaFrame extends JFrame {
         pack();
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setLocationRelativeTo(null);
+    }
+        
+    public JTable getFelhasznaloTable() {
+        return felhasznaloTable;
     }
 
     private void initFrame() {
@@ -62,7 +72,6 @@ public class CinemaFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "1");
-
             }
         });
         JMenuItem musor = new JMenuItem(new AbstractAction(MUSOR_MENU_TEXT) {
@@ -121,6 +130,8 @@ public class CinemaFrame extends JFrame {
         panelCont.setLayout(cl);
 
         panelCont.add(panelIndex, "1");
+        panelIndex.add(loginButton);
+        panelIndex.add(regButton);
         panelCont.add(panelMusor, "2");
         panelCont.add(panelFilm, "3");
         panelCont.add(panelAr, "4");
@@ -153,8 +164,26 @@ public class CinemaFrame extends JFrame {
         panelFilm.add(FILM_MENU_TEXT, new JScrollPane(filmTable));
     }
     
-    private void linkActionListeners() {
+    public void felhasznaloListaPanel() {
+        GenericTableModel<Felhasznalo> model = new GenericTableModel(DaoManager.getInstance().getFelhasznaloDao(), Felhasznalo.PROPERTY_NAMES);
+        TableRowSorter<GenericTableModel<Felhasznalo>> sorter = new TableRowSorter<>(model);
+
+        felhasznaloTable.setModel(model);
+        felhasznaloTable.setRowSorter(sorter);
+
+        panelFelhasznalo.add(FELHASZNALO_MENU_TEXT, new JScrollPane(felhasznaloTable));
+    }
+    
+    private void setActionListeners() {
         showStory = new ShowStoryAction(this);
         rightClickAction = new StoryRightClickAction(showStory);
+        
+        loginAction = new LoginAction();
+        regAction = new RegAction(this);
+    }
+    
+    private void setButtons() {
+        loginButton.addActionListener(loginAction);
+        regButton.addActionListener(regAction);
     }
 }
