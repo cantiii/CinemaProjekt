@@ -55,6 +55,10 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
     public T findById(Integer id) {
         return getEntityManager().find(CLASS, id);
     }
+    
+    public T findByName(String name) {
+        return getEntityManager().find(CLASS, name);
+    }
 
     private EntityManager getEntityManager() {
         return EMF.createEntityManager();

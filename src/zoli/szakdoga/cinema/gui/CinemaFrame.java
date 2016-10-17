@@ -127,7 +127,7 @@ public class CinemaFrame extends JFrame {
     }
 
     private void setCenter() {
-        panelCont.setLayout(cl);
+        panelCont.setLayout(cl); // felület > mindig új layout-ot pakol ki? (kis pontok a gui-n)
 
         panelCont.add(panelIndex, "1");
         panelIndex.add(loginButton);

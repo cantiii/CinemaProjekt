@@ -28,4 +28,8 @@ public class GuiConstants {
     public static final String LOGIN_BUT_TEXT = "Bejelentkezés";
     public static final String REG_BUT_TEXT = "Regisztráció";
     public static final String USERNAME_TEXT = "Felhasználónév:";
+    public static final String USERNAME_LENGHT = "Nem megfelelő hosszúságú felhasználónév!";
+    public static final String FAIL = "HIBA!";
+    public static final String USERNAME_REQUIRED = "Felhasználónév megadása kötelező!";
+    public static final String USERNAME_TAKEN = "A felhasznalónév már foglalt!";
 }
