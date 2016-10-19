@@ -17,11 +17,14 @@ import zoli.szakdoga.cinema.gui.GuiConstants;
 public class StoryRightClickAction extends MouseAdapter {
 
     private ShowStoryAction showStory;
+    private AddAction addItem;
+    private DelAction delItem;
     
     public StoryRightClickAction(ShowStoryAction showStory) {
         this.showStory = showStory;
     }
-    
+
+
     @Override
     public void mousePressed(MouseEvent e) {
         if (SwingUtilities.isRightMouseButton(e)) {
@@ -37,9 +40,17 @@ public class StoryRightClickAction extends MouseAdapter {
     private void createPopup(MouseEvent e) {
         JPopupMenu popup = new JPopupMenu();
         JMenuItem leiras = new JMenuItem(GuiConstants.LEIRAS_MENU_TEXT);
+        JMenuItem felvitel = new JMenuItem(GuiConstants.FELVITEL_BUT_TEXT);
+        JMenuItem torles = new JMenuItem(GuiConstants.TORLES_BUT_TEXT);
         
         showStory.setTable((JTable) e.getSource());
         leiras.addActionListener(showStory);
+        felvitel.addActionListener(addItem);
+        delItem.setTable((JTable) e.getSource());
+        torles.addActionListener(delItem);
+        
+        popup.add(felvitel);
+        popup.add(torles);
         popup.add(leiras);
         popup.show(e.getComponent(), e.getX(), e.getY());
     }
