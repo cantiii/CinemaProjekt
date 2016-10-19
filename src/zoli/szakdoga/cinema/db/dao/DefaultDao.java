@@ -42,7 +42,8 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
     public void delete(T entity) {
         EntityManager entityManager = getEntityManager();
         entityManager.getTransaction().begin();
-        entityManager.remove(entity);
+        T delEntity = entityManager.getReference(CLASS, entity.getId());
+        entityManager.remove(delEntity);
         entityManager.getTransaction().commit();
     }
 

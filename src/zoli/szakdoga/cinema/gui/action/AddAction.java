@@ -3,6 +3,7 @@ package zoli.szakdoga.cinema.gui.action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 /**
@@ -24,7 +25,7 @@ public class AddAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        JOptionPane.showMessageDialog(parent, "felvitel pop-up");
     }
 
 }

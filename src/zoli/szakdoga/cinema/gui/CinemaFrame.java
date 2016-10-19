@@ -43,15 +43,15 @@ public class CinemaFrame extends JFrame {
 
     private MouseAdapter rightClickAction;
     private ShowStoryAction showStory;
-
+    private AddAction addAction;
+    private DelAction delAction;
+    
     private final JButton loginButton = new JButton(LOGIN_BUT_TEXT);
     private final JButton regButton = new JButton(REG_BUT_TEXT);
-    private final JButton addButton = new JButton(FELVITEL_BUT_TEXT);
-    private final JButton delButton = new JButton(TORLES_BUT_TEXT);
+    //private final JButton addButton = new JButton(FELVITEL_BUT_TEXT);
+    //private final JButton delButton = new JButton(TORLES_BUT_TEXT);
     private ActionListener loginAction;
     private ActionListener regAction;
-    private ActionListener addAction;
-    private ActionListener delAction;
 
     public CinemaFrame() {
         initFrame();
@@ -252,10 +252,12 @@ public class CinemaFrame extends JFrame {
     private void setActionListeners() {
         showStory = new ShowStoryAction(this);
         rightClickAction = new StoryRightClickAction(showStory);
-        addAction = new AddAction(this);
-        rightClickAction = new StoryRightClickAction();
-        delAction = new DelAction(this);
-        rightClickAction = new StoryRightClickAction();
+        
+        //addAction = new AddAction(this);
+        //rightClickAction = new StoryRightClickAction(addAction);
+        
+        //delAction = new DelAction(this);
+        //rightClickAction = new StoryRightClickAction(delAction);
 
              
         loginAction = new LoginAction();
@@ -265,8 +267,8 @@ public class CinemaFrame extends JFrame {
     private void setButtons() {
         loginButton.addActionListener(loginAction);
         regButton.addActionListener(regAction);
-        addButton.addActionListener(addAction);
-        delButton.addActionListener(delAction);
+        //addButton.addActionListener(addAction);
+        //delButton.addActionListener(delAction);
     }
     /*
     private void setActionButtons(){

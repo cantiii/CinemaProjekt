@@ -19,12 +19,14 @@ public class StoryRightClickAction extends MouseAdapter {
     private ShowStoryAction showStory;
     private AddAction addItem;
     private DelAction delItem;
+
+    public StoryRightClickAction() {
+    }
     
     public StoryRightClickAction(ShowStoryAction showStory) {
         this.showStory = showStory;
     }
-
-
+    
     @Override
     public void mousePressed(MouseEvent e) {
         if (SwingUtilities.isRightMouseButton(e)) {
@@ -43,15 +45,17 @@ public class StoryRightClickAction extends MouseAdapter {
         JMenuItem felvitel = new JMenuItem(GuiConstants.FELVITEL_BUT_TEXT);
         JMenuItem torles = new JMenuItem(GuiConstants.TORLES_BUT_TEXT);
         
+        
         showStory.setTable((JTable) e.getSource());
         leiras.addActionListener(showStory);
-        felvitel.addActionListener(addItem);
-        delItem.setTable((JTable) e.getSource());
-        torles.addActionListener(delItem);
-        
+        //addItem.setTable((JTable) e.getSource());
+        //felvitel.addActionListener(addItem);
+        //delItem.setTable((JTable) e.getSource());
+        //torles.addActionListener(delItem);
+
+        popup.add(leiras);
         popup.add(felvitel);
         popup.add(torles);
-        popup.add(leiras);
         popup.show(e.getComponent(), e.getX(), e.getY());
     }
 }
