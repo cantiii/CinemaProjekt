@@ -250,15 +250,10 @@ public class CinemaFrame extends JFrame {
     }
 
     private void setActionListeners() {
-        showStory = new ShowStoryAction(this);
-        rightClickAction = new StoryRightClickAction(showStory);
-        
-        //addAction = new AddAction(this);
-        //rightClickAction = new StoryRightClickAction(addAction);
-        
-        //delAction = new DelAction(this);
-        //rightClickAction = new StoryRightClickAction(delAction);
-
+        showStory = new ShowStoryAction(this); 
+        addAction = new AddAction(this);
+        delAction = new DelAction(this);
+        rightClickAction = new StoryRightClickAction(showStory, addAction, delAction);
              
         loginAction = new LoginAction();
         regAction = new RegAction(this);
