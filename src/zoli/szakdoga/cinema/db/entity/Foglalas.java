@@ -1,5 +1,6 @@
 package zoli.szakdoga.cinema.db.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Foglalas.findAll", query = "SELECT f FROM Foglalas f"),
     @NamedQuery(name = "Foglalas.findById", query = "SELECT f FROM Foglalas f WHERE f.id = :id"),
     @NamedQuery(name = "Foglalas.findByMikor", query = "SELECT f FROM Foglalas f WHERE f.mikor = :mikor")})
-public class Foglalas extends PersistentEntity {
+public class Foglalas  implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Felhasználó", "Mikor", "Szék"};
 

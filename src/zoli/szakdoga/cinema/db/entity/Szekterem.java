@@ -1,5 +1,6 @@
 package zoli.szakdoga.cinema.db.entity;
 
+import java.io.Serializable;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -13,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Szekterem.findAll", query = "SELECT s FROM Szekterem s"),
     @NamedQuery(name = "Szekterem.findById", query = "SELECT s FROM Szekterem s WHERE s.id = :id")})
-public class Szekterem extends PersistentEntity {
+public class Szekterem  implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Terem", "Szék"};
 

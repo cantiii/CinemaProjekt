@@ -34,18 +34,6 @@ public class RegAction implements ActionListener {
         userModel.addEntity(user);
     }
 
-    /*
-    private String readString() {
-        String name = null;
-        while (name == null) {
-            name = JOptionPane.showInputDialog(parent, GuiConstants.USERNAME_TEXT, GuiConstants.REG_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
-            if (name != null && name.trim().equals("")) {
-                name = null;
-            }
-        }
-        return name;
-    }*/
-
     private String readString() {
         String name = null;
         while (name == null) {

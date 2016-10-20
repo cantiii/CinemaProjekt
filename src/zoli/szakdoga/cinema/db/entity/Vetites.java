@@ -1,5 +1,6 @@
 package zoli.szakdoga.cinema.db.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Vetites.findAll", query = "SELECT v FROM Vetites v"),
     @NamedQuery(name = "Vetites.findById", query = "SELECT v FROM Vetites v WHERE v.id = :id"),
     @NamedQuery(name = "Vetites.findByMikor", query = "SELECT v FROM Vetites v WHERE v.mikor = :mikor")})
-public class Vetites extends PersistentEntity {
+public class Vetites  implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Film", "Mikor", "Terem"};
     

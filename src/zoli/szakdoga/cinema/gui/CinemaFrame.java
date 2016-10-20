@@ -2,7 +2,6 @@ package zoli.szakdoga.cinema.gui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.FlowLayout;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;
@@ -45,11 +44,16 @@ public class CinemaFrame extends JFrame {
     private ShowStoryAction showStory;
     private AddAction addAction;
     private DelAction delAction;
-    
+    //private final JButton addButton = new JButton(FELVITEL_BUT_TEXT);
+    //private final JButton delButton = new JButton(FELVITEL_BUT_TEXT);
+    private final JButton addMusorButton = new JButton(FELVITEL_MUSOR_TEXT);
+    private final JButton addFilmButton = new JButton(FELVITEL_FILM_TEXT);
+    private final JButton addMoziButton = new JButton(FELVITEL_MOZI_TEXT);
+    private final JButton addTeremButton = new JButton(FELVITEL_TEREM_TEXT);
+    private final JButton addFelhaszButton = new JButton(FELVITEL_FELHASZNALO_TEXT);
+
     private final JButton loginButton = new JButton(LOGIN_BUT_TEXT);
     private final JButton regButton = new JButton(REG_BUT_TEXT);
-    //private final JButton addButton = new JButton(FELVITEL_BUT_TEXT);
-    //private final JButton delButton = new JButton(TORLES_BUT_TEXT);
     private ActionListener loginAction;
     private ActionListener regAction;
 
@@ -64,6 +68,22 @@ public class CinemaFrame extends JFrame {
         pack();
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setLocationRelativeTo(null);
+    }
+
+    public JTable getMusorTable() {
+        return musorTable;
+    }
+
+    public JTable getFilmTable() {
+        return filmTable;
+    }
+
+    public JTable getMoziTable() {
+        return moziTable;
+    }
+
+    public JTable getTeremTable() {
+        return teremTable;
     }
 
     public JTable getFelhasznaloTable() {
@@ -119,7 +139,6 @@ public class CinemaFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "6");
                 loadMusorPanel();
-                //setActionButtons();
             }
         });
         admin.add(subMusor);
@@ -127,8 +146,7 @@ public class CinemaFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "7");
-                loadFilmPanel();
-               // setActionButtons();
+                adminFilmPanel();
             }
         });
         admin.add(subFilm);
@@ -136,8 +154,7 @@ public class CinemaFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "8");
-                loadMusorMozi();
-                //setActionButtons();
+                adminMoziPanel();
             }
         });
         admin.add(subMozi);
@@ -145,8 +162,7 @@ public class CinemaFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "9");
-                loadMusorTerem();
-                //setActionButtons();
+                adminTeremPanel();
             }
         });
         admin.add(subTerem);
@@ -155,7 +171,6 @@ public class CinemaFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "10");
                 felhasznaloListaPanel();
-                //setActionButtons();
             }
         });
         admin.add(subFelhasznalo);
@@ -186,10 +201,15 @@ public class CinemaFrame extends JFrame {
         panelCont.add(panelKapcsolat, "5");
 
         panelCont.add(panelMusorA, "6");
+        panelMusorA.add(addMusorButton);
         panelCont.add(panelFilmA, "7");
+        panelFilmA.add(addFilmButton);
         panelCont.add(panelMoziA, "8");
+        panelMoziA.add(addMoziButton);
         panelCont.add(panelTeremA, "9");
+        panelTeremA.add(addTeremButton);
         panelCont.add(panelFelhasznaloA, "10");
+        panelFelhasznaloA.add(addFelhaszButton);
 
         //panelCont.add(panelAdmin, "6");
         panelCont.add(panelTortenet, "11");
@@ -204,7 +224,20 @@ public class CinemaFrame extends JFrame {
 
         musorTable.setModel(model);
         musorTable.setRowSorter(sorter);
+        musorTable.setEnabled(false);
+        
+        panelMusor.add(MUSOR_MENU_TEXT, new JScrollPane(musorTable));
+    }
+    
+    public void adminMusorPanel() {
+        GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
+        TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
 
+        musorTable.setModel(model);
+        musorTable.setRowSorter(sorter);
+        musorTable.setEnabled(true);
+
+        musorTable.addMouseListener(rightClickAction);
         panelMusorA.add(MUSOR_MENU_TEXT, new JScrollPane(musorTable));
     }
 
@@ -214,28 +247,44 @@ public class CinemaFrame extends JFrame {
 
         filmTable.setModel(model);
         filmTable.setRowSorter(sorter);
+        filmTable.setEnabled(false);
+
+        panelFilm.add(FILM_MENU_TEXT, new JScrollPane(filmTable));
+    }
+    
+    public void adminFilmPanel() {
+        GenericTableModel<Film> model = new GenericTableModel(DaoManager.getInstance().getFilmDao(), Film.FULL_PROPERTY_NAMES);
+        TableRowSorter<GenericTableModel<Film>> sorter = new TableRowSorter<>(model);
+
+        filmTable.setModel(model);
+        filmTable.setRowSorter(sorter);
+        filmTable.setEnabled(true);
 
         filmTable.addMouseListener(rightClickAction);
         panelFilmA.add(FILM_MENU_TEXT, new JScrollPane(filmTable));
     }
 
-    public void loadMusorMozi() {
+    public void adminMoziPanel() {
         GenericTableModel<Mozi> model = new GenericTableModel(DaoManager.getInstance().getMoziDao(), Mozi.PROPERTY_NAMES);
         TableRowSorter<GenericTableModel<Mozi>> sorter = new TableRowSorter<>(model);
 
         moziTable.setModel(model);
         moziTable.setRowSorter(sorter);
+        moziTable.setEnabled(true);
 
+        moziTable.addMouseListener(rightClickAction);
         panelMoziA.add(MOZI_MENU_TEXT, new JScrollPane(moziTable));
     }
 
-    public void loadMusorTerem() {
+    public void adminTeremPanel() {
         GenericTableModel<Terem> model = new GenericTableModel(DaoManager.getInstance().getTeremDao(), Terem.PROPERTY_NAMES);
         TableRowSorter<GenericTableModel<Terem>> sorter = new TableRowSorter<>(model);
 
         teremTable.setModel(model);
         teremTable.setRowSorter(sorter);
+        teremTable.setEnabled(true);
 
+        teremTable.addMouseListener(rightClickAction);
         panelTeremA.add(TEREM_MENU_TEXT, new JScrollPane(teremTable));
     }
 
@@ -245,16 +294,18 @@ public class CinemaFrame extends JFrame {
 
         felhasznaloTable.setModel(model);
         felhasznaloTable.setRowSorter(sorter);
+        felhasznaloTable.setEnabled(true);
 
+        felhasznaloTable.addMouseListener(rightClickAction);
         panelFelhasznaloA.add(FELHASZNALO_MENU_TEXT, new JScrollPane(felhasznaloTable));
     }
 
     private void setActionListeners() {
-        showStory = new ShowStoryAction(this); 
+        showStory = new ShowStoryAction(this);
         addAction = new AddAction(this);
         delAction = new DelAction(this);
-        rightClickAction = new StoryRightClickAction(showStory, addAction, delAction);
-             
+        rightClickAction = new StoryRightClickAction(showStory, delAction);
+
         loginAction = new LoginAction();
         regAction = new RegAction(this);
     }
@@ -264,6 +315,11 @@ public class CinemaFrame extends JFrame {
         regButton.addActionListener(regAction);
         //addButton.addActionListener(addAction);
         //delButton.addActionListener(delAction);
+        addMusorButton.addActionListener(addAction);
+        addFilmButton.addActionListener(addAction);
+        addMoziButton.addActionListener(addAction);
+        addTeremButton.addActionListener(addAction);
+        addFelhaszButton.addActionListener(addAction);
     }
     /*
     private void setActionButtons(){
@@ -271,6 +327,5 @@ public class CinemaFrame extends JFrame {
         panel.add(addButton);
         panel.add(delButton);
         add(panel, BorderLayout.PAGE_END);
-    }
-*/
+    }*/
 }

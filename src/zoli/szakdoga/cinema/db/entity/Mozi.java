@@ -1,5 +1,6 @@
 package zoli.szakdoga.cinema.db.entity;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -16,7 +17,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Mozi.findAll", query = "SELECT m FROM Mozi m"),
     @NamedQuery(name = "Mozi.findById", query = "SELECT m FROM Mozi m WHERE m.id = :id"),
     @NamedQuery(name = "Mozi.findByNev", query = "SELECT m FROM Mozi m WHERE m.nev = :nev")})
-public class Mozi extends PersistentEntity {
+public class Mozi implements Serializable, PersistentEntity{
 
     public static final String PROPERTY_NAMES[] = {"Név"};
 

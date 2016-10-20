@@ -1,5 +1,6 @@
 package zoli.szakdoga.cinema.db.entity;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,10 +22,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Film.findByLeiras", query = "SELECT f FROM Film f WHERE f.leiras = :leiras"),
     @NamedQuery(name = "Film.findByHossz", query = "SELECT f FROM Film f WHERE f.hossz = :hossz"),
     @NamedQuery(name = "Film.findByKorhatar", query = "SELECT f FROM Film f WHERE f.korhatar = :korhatar")})
-public class Film extends PersistentEntity {
+public class Film implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Cím", "Rendező", "Színész", "Hossz", "Korhatár"};
-
+    public static final String FULL_PROPERTY_NAMES[] = {"Cím", "Rendező", "Színész", "Hossz", "Korhatár", "Leírás"};
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

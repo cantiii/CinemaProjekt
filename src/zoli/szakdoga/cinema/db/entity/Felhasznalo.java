@@ -1,5 +1,6 @@
 package zoli.szakdoga.cinema.db.entity;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -17,7 +18,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Felhasznalo.findById", query = "SELECT f FROM Felhasznalo f WHERE f.id = :id"),
     @NamedQuery(name = "Felhasznalo.findByNev", query = "SELECT f FROM Felhasznalo f WHERE f.nev = :nev"),
     @NamedQuery(name = "Felhasznalo.findByJog", query = "SELECT f FROM Felhasznalo f WHERE f.jog = :jog")})
-public class Felhasznalo extends PersistentEntity {
+public class Felhasznalo  implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Név", "Jog"};
 
@@ -125,7 +126,7 @@ public class Felhasznalo extends PersistentEntity {
             case 0:
                 setNev((String) value);
                 break;
-            case 3:
+            case 1:
                 setJog((Integer) value);
                 break;
         }

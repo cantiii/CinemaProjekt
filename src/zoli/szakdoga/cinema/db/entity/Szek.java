@@ -1,5 +1,6 @@
 package zoli.szakdoga.cinema.db.entity;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -17,7 +18,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Szek.findById", query = "SELECT s FROM Szek s WHERE s.id = :id"),
     @NamedQuery(name = "Szek.findBySor", query = "SELECT s FROM Szek s WHERE s.sor = :sor"),
     @NamedQuery(name = "Szek.findByOszlop", query = "SELECT s FROM Szek s WHERE s.oszlop = :oszlop")})
-public class Szek extends PersistentEntity {
+public class Szek  implements Serializable, PersistentEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

@@ -40,12 +40,16 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        items.get(rowIndex).set(columnIndex, aValue);
+        if (getRowCount() > rowIndex) {
+            T item = items.get(rowIndex);
+            item.set(columnIndex, aValue);
+            updateEntity(item, rowIndex);
+        }
     }
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return false;
+        return true;
     }
 
     @Override
@@ -69,6 +73,12 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
     public void removeEntity(int rowIndex) {
         T entity = items.get(rowIndex);
         DAO.delete(entity);
+        fireTableDataChanged();
+    }
+    
+    public void updateEntity(T item, int rowIndex) {
+        T entity = items.get(rowIndex);
+        DAO.update(entity);
         fireTableDataChanged();
     }
 

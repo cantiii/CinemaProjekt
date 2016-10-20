@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import zoli.szakdoga.cinema.gui.CinemaFrame;
 import zoli.szakdoga.cinema.gui.GuiConstants;
 import zoli.szakdoga.cinema.gui.model.GenericTableModel;
 
@@ -14,10 +15,10 @@ import zoli.szakdoga.cinema.gui.model.GenericTableModel;
  */
 public class ShowStoryAction implements ActionListener{
 
-    private JFrame parent;
+    private CinemaFrame parent;
     private JTable table;
 
-    public ShowStoryAction(JFrame parent) {
+    public ShowStoryAction(CinemaFrame parent) {
         this.parent = parent;
     }
 

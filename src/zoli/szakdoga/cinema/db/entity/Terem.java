@@ -1,5 +1,6 @@
 package zoli.szakdoga.cinema.db.entity;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -17,7 +18,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Terem.findById", query = "SELECT t FROM Terem t WHERE t.id = :id"),
     @NamedQuery(name = "Terem.findByNev", query = "SELECT t FROM Terem t WHERE t.nev = :nev"),
     @NamedQuery(name = "Terem.findByFerohely", query = "SELECT t FROM Terem t WHERE t.ferohely = :ferohely")})
-public class Terem extends PersistentEntity {
+public class Terem  implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Név", "Férőhely"};
 
