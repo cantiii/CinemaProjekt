@@ -42,18 +42,14 @@ public class StoryRightClickAction extends MouseAdapter {
     private void createPopup(MouseEvent e) {
         JPopupMenu popup = new JPopupMenu();
         JMenuItem leiras = new JMenuItem(GuiConstants.LEIRAS_MENU_TEXT);
-        //JMenuItem felvitel = new JMenuItem(GuiConstants.FELVITEL_BUT_TEXT);
         JMenuItem torles = new JMenuItem(GuiConstants.TORLES_BUT_TEXT);
 
         showStory.setTable((JTable) e.getSource());
         leiras.addActionListener(showStory);
-        //addItem.setTable((JTable) e.getSource());
-        //felvitel.addActionListener(addItem);
         delItem.setTable((JTable) e.getSource());
         torles.addActionListener(delItem);
         
         popup.add(leiras);
-        //popup.add(felvitel);
         popup.add(torles);
         popup.show(e.getComponent(), e.getX(), e.getY());
     }

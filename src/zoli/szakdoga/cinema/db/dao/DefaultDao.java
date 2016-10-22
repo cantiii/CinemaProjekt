@@ -3,9 +3,12 @@ package zoli.szakdoga.cinema.db.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
+import zoli.szakdoga.cinema.db.entity.Felhasznalo;
 import zoli.szakdoga.cinema.db.entity.PersistentEntity;
 
 /**
@@ -57,8 +60,20 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         return getEntityManager().find(CLASS, id);
     }
     
-    public T findByName(String name) {
-        return getEntityManager().find(CLASS, name);
+    public boolean findByName(String name) {
+        Felhasznalo result;
+        try {
+            TypedQuery<Felhasznalo> query = (TypedQuery<Felhasznalo>) getEntityManager().createNamedQuery("Felhasznalo.findByNev")
+                    .setParameter("nev", name);
+            result = query.getSingleResult();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        if(result == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private EntityManager getEntityManager() {

@@ -2,7 +2,6 @@ package zoli.szakdoga.cinema.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import zoli.szakdoga.cinema.gui.CinemaFrame;
@@ -29,6 +28,7 @@ public class ShowStoryAction implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         int selectedRow = table.getSelectedRow();
+        if(table == parent.getFilmTable()) { //  || table == parent.getMusorTable()
             if (selectedRow > -1) {
                 int convertRowIndexToModel = table.convertRowIndexToModel(selectedRow);
                 //oszlop elkérésre valami szebb módszer !   
@@ -36,7 +36,9 @@ public class ShowStoryAction implements ActionListener{
                 GenericTableModel model = (GenericTableModel) table.getModel();
                 JOptionPane.showMessageDialog(parent, model.getValueAt(convertRowIndexToModel, convertColIndexToModel), GuiConstants.LEIRAS_MENU_TEXT, JOptionPane.INFORMATION_MESSAGE);
             }
-        
+        } else {
+            JOptionPane.showMessageDialog(parent, "Az elemnél nem elérhető leírás!", GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+        }
     }
     
 }

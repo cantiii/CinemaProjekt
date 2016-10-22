@@ -20,12 +20,12 @@ public class RegAction implements ActionListener {
 
     public RegAction(CinemaFrame parent) {
         this.parent = parent;
-        
+        dao = new DefaultDao(Felhasznalo.class);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        parent.felhasznaloListaPanel();
+        parent.adminFelhasznaloPanel();
         Felhasznalo user = new Felhasznalo();
         user.setNev(readString());
         user.setJog(2);
@@ -43,7 +43,7 @@ public class RegAction implements ActionListener {
                     JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_LENGHT, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                     name = null;
                 } else {
-                    if(dao.findByName(name) != null) {
+                    if(dao.findByName(name)) {
                         JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_TAKEN, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                         name = null;
                         // TODO :: ELLENŐRIZNI, hogy VAN-e már ilyen user a DB-ben !

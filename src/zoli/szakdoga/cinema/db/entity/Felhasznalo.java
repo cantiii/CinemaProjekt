@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Felhasznalo.findById", query = "SELECT f FROM Felhasznalo f WHERE f.id = :id"),
     @NamedQuery(name = "Felhasznalo.findByNev", query = "SELECT f FROM Felhasznalo f WHERE f.nev = :nev"),
     @NamedQuery(name = "Felhasznalo.findByJog", query = "SELECT f FROM Felhasznalo f WHERE f.jog = :jog")})
-public class Felhasznalo  implements Serializable, PersistentEntity {
+public class Felhasznalo implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Név", "Jog"};
 

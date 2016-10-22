@@ -21,6 +21,7 @@ public class GuiConstants {
 
     public static final String MOZI_MENU_TEXT = "Mozi";
     public static final String TEREM_MENU_TEXT = "Terem";
+    public static final String HOZZARENDELES_TEXT = "Hozzárendelés";
     public static final String FELHASZNALO_MENU_TEXT = "Felhasználó";
 
     public static final String LEIRAS_MENU_TEXT = "Leírás";
@@ -46,6 +47,10 @@ public class GuiConstants {
     public static final String TORLES_TEREM_TEXT = "Terem TÖRLÉS";
     public static final String FELVITEL_FELHASZNALO_TEXT = "Felhasznaló felvitel";
     public static final String TORLES_FELHASZNALO_TEXT = "Felhasznaló TÖRLÉS";
+    public static final String MOZI_TEREM_TEXT = "Terem hozzárendelés";
+    
+    public static final String VALASZTO_TEXT = "Válaszd ki a megfelelő elemet!";
+    
     public static final String INVALID_NUMBER = "Érvénytelen szám formátum.";
     public static final String INPUT_ERROR = "Beviteli hiba";
 
