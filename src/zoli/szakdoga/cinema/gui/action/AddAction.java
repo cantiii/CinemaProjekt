@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
 import javax.swing.JOptionPane;
-import zoli.szakdoga.cinema.db.dao.DaoManager;
+import zoli.szakdoga.cinema.db.dao.*;
 import zoli.szakdoga.cinema.db.entity.*;
 import zoli.szakdoga.cinema.gui.*;
 import static zoli.szakdoga.cinema.gui.GuiConstants.*;
@@ -17,6 +17,7 @@ import zoli.szakdoga.cinema.gui.model.GenericTableModel;
 public class AddAction implements ActionListener {
 
     private CinemaFrame parent;
+    private DefaultDao dao;
 
     public AddAction(CinemaFrame parent) {
         this.parent = parent;
@@ -43,7 +44,7 @@ public class AddAction implements ActionListener {
                 break;
             case FELVITEL_FILM_TEXT:
                 Film film = new Film();
-                film.setCim(readString(FELVITEL_FILM_TEXT));
+                film.setCim(readUniqueString(FELVITEL_FILM_TEXT));
                 film.setRendezo(readString(FELVITEL_FILMRENDEZO_TEXT));
                 film.setSzinesz(readString(FELVITEL_FILMSZINESZ_TEXT));
                 film.setLeiras(readString(FELVITEL_FILMLEIRAS_TEXT));
@@ -55,14 +56,14 @@ public class AddAction implements ActionListener {
                 break;
             case FELVITEL_MOZI_TEXT:
                 Mozi mozi = new Mozi();
-                mozi.setNev(readString(FELVITEL_MOZI_TEXT));
+                mozi.setNev(readUniqueString(FELVITEL_MOZI_TEXT));
 
                 GenericTableModel moziModel = (GenericTableModel) parent.getMoziTable().getModel();
                 moziModel.addEntity(mozi);
                 break;
             case FELVITEL_TEREM_TEXT:
                 Terem terem = new Terem();
-                terem.setNev(readString(FELVITEL_TEREM_TEXT));
+                terem.setNev(readUniqueString(FELVITEL_TEREM_TEXT));
                 terem.setFerohely(readNumber(FELVITEL_TEREMHELY_TEXT));
 
                 GenericTableModel teremModel = (GenericTableModel) parent.getTeremTable().getModel();
@@ -90,8 +91,71 @@ public class AddAction implements ActionListener {
         while (name == null) {
             name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
             if (name != null && !name.trim().equals("")) {
-                return name;
+                if (name.length() <= 3 || name.length() > 20) {
+                    JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                    name = null;
+                } else {
+                    return name;
+                }
             }
+        }
+        return name;
+    }
+
+    private String readUniqueString(String label) {
+        String name = null;
+        switch (label) {
+            case FELVITEL_MOZI_TEXT:
+                dao = new DefaultDao(Mozi.class);
+                while (name == null) {
+                    name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+                    if (name != null && !name.trim().equals("")) {
+                        if (name.length() <= 3 || name.length() > 20) {
+                            JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                            name = null;
+                        } else if (dao.findMozi(name)) {
+                            JOptionPane.showMessageDialog(parent, GuiConstants.UNIQUE_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                            name = null;
+                        } else {
+                            return name;
+                        }
+                    }
+                }
+                break;
+            case FELVITEL_TEREM_TEXT:
+                dao = new DefaultDao(Terem.class);
+                while (name == null) {
+                    name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+                    if (name != null && !name.trim().equals("")) {
+                        if (name.length() <= 3 || name.length() > 20) {
+                            JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                            name = null;
+                        } else if (dao.findTerem(name)) {
+                            JOptionPane.showMessageDialog(parent, GuiConstants.UNIQUE_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                            name = null;
+                        } else {
+                            return name;
+                        }
+                    }
+                }
+                break;
+            case FELVITEL_FILM_TEXT:
+                dao = new DefaultDao(Film.class);
+                while (name == null) {
+                    name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+                    if (name != null && !name.trim().equals("")) {
+                        if (name.length() <= 3 || name.length() > 20) {
+                            JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                            name = null;
+                        } else if (dao.findFilm(name)) {
+                            JOptionPane.showMessageDialog(parent, GuiConstants.UNIQUE_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                            name = null;
+                        } else {
+                            return name;
+                        }
+                    }
+                }
+                break;
         }
         return name;
     }

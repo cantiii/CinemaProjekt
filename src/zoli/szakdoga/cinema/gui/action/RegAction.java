@@ -43,7 +43,7 @@ public class RegAction implements ActionListener {
                     JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_LENGHT, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                     name = null;
                 } else {
-                    if(dao.findByName(name)) {
+                    if(dao.findUser(name)) {
                         JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_TAKEN, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                         name = null;
                         // TODO :: ELLENŐRIZNI, hogy VAN-e már ilyen user a DB-ben !
@@ -53,6 +53,7 @@ public class RegAction implements ActionListener {
                 }
             } else {
                 JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_REQUIRED, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                name = null;
             }
         }
         return name;

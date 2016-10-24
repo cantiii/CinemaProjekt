@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Film.findAll", query = "SELECT f FROM Film f"),
     @NamedQuery(name = "Film.findById", query = "SELECT f FROM Film f WHERE f.id = :id"),
-    @NamedQuery(name = "Film.findByCim", query = "SELECT f FROM Film f WHERE f.cim = :cim"),
+    @NamedQuery(name = "Film.findByNev", query = "SELECT f FROM Film f WHERE f.cim = :nev"),
     @NamedQuery(name = "Film.findByRendezo", query = "SELECT f FROM Film f WHERE f.rendezo = :rendezo"),
     @NamedQuery(name = "Film.findBySzinesz", query = "SELECT f FROM Film f WHERE f.szinesz = :szinesz"),
     @NamedQuery(name = "Film.findByLeiras", query = "SELECT f FROM Film f WHERE f.leiras = :leiras"),

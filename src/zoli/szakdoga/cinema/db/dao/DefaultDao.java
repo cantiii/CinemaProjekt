@@ -6,9 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
-import zoli.szakdoga.cinema.db.entity.Felhasznalo;
 import zoli.szakdoga.cinema.db.entity.PersistentEntity;
 
 /**
@@ -59,17 +57,69 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
     public T findById(Integer id) {
         return getEntityManager().find(CLASS, id);
     }
-    
-    public boolean findByName(String name) {
-        Felhasznalo result;
+
+    public boolean findMozi(String name) {
+        T result;
         try {
-            TypedQuery<Felhasznalo> query = (TypedQuery<Felhasznalo>) getEntityManager().createNamedQuery("Felhasznalo.findByNev")
+            Query query = getEntityManager()
+                    .createNamedQuery("Mozi.findByNev")
                     .setParameter("nev", name);
-            result = query.getSingleResult();
+            result = (T) query.getSingleResult();
         } catch (NoResultException e) {
             result = null;
         }
-        if(result == null) {
+        if (result == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean findTerem(String name) {
+        T result;
+        try {
+            Query query = getEntityManager()
+                    .createNamedQuery("Terem.findByNev")
+                    .setParameter("nev", name);
+            result = (T) query.getSingleResult();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        if (result == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean findFilm(String name) {
+        T result;
+        try {
+            Query query = getEntityManager()
+                    .createNamedQuery("Film.findByNev")
+                    .setParameter("nev", name);
+            result = (T) query.getSingleResult();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        if (result == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    public boolean findUser(String name) {
+        T result;
+        try {
+            Query query = getEntityManager()
+                    .createNamedQuery("Felhasznalo.findByNev")
+                    .setParameter("nev", name);
+            result = (T) query.getSingleResult();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        if (result == null) {
             return false;
         } else {
             return true;
