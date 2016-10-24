@@ -33,6 +33,7 @@ public class GuiConstants {
     public static final String TORLES_BUT_TEXT = "TÖRLÉS";
     public static final String FELVITEL_MUSOR_TEXT = "Műsor felvitel";
     public static final String TORLES_MUSOR_TEXT = "Műsor TÖRLÉS";
+    public static final String FELVITEL_DATUM_TEXT = "Dátum felvitel";
     public static final String FELVITEL_FILM_TEXT = "Film felvitel";
     public static final String FELVITEL_FILMRENDEZO_TEXT = "Rendező felvitel";
     public static final String FELVITEL_FILMSZINESZ_TEXT = "Színész felvitel";
@@ -51,7 +52,8 @@ public class GuiConstants {
     
     public static final String VALASZTO_TEXT = "Válaszd ki a megfelelő elemet!";
     
-    public static final String LENGHT_ERROR = "Nem megfelelő hosszúságú ";
+    public static final String LENGHT_ERROR = "Nem megfelelő hosszúságú!";
+    public static final String FORMAT_ERROR = "Nem jó formátum, helyesen: YYYY-MM-DD";
     public static final String UNIQUE_ERROR = "Nem egyedi a név!";
     public static final String INVALID_NUMBER = "Érvénytelen szám formátum.";
     public static final String INPUT_ERROR = "Beviteli hiba";

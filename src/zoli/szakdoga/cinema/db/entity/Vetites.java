@@ -26,9 +26,10 @@ public class Vetites  implements Serializable, PersistentEntity {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
+    @Basic(optional = false)
     @Column(name = "MIKOR")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date mikor;
+    //@Temporal(TemporalType.TIMESTAMP)
+    private String mikor;
     @JoinColumn(name = "FILM_ID", referencedColumnName = "ID")
     @ManyToOne
     private Film filmId;
@@ -51,11 +52,11 @@ public class Vetites  implements Serializable, PersistentEntity {
         this.id = id;
     }
 
-    public Date getMikor() {
+    public String getMikor() {
         return mikor;
     }
 
-    public void setMikor(Date mikor) {
+    public void setMikor(String mikor) {
         this.mikor = mikor;
     }
 
@@ -121,7 +122,7 @@ public class Vetites  implements Serializable, PersistentEntity {
                 setFilmId((Film) value);
                 break;
             case 1:
-                setMikor((Date) value);
+                setMikor((String) value);
                 break;
             case 2:
                 setTeremId((Terem) value);

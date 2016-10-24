@@ -3,6 +3,7 @@ package zoli.szakdoga.cinema.gui.action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import zoli.szakdoga.cinema.db.dao.*;
 import zoli.szakdoga.cinema.db.entity.*;
@@ -34,9 +35,9 @@ public class AddAction implements ActionListener {
                         Vetites vetites = new Vetites();
                         vetites.setFilmId(valaszFilm);
                         vetites.setTeremId(valaszTerem);
-                        java.util.Date date = new java.util.Date();
-                        vetites.setMikor(new Timestamp(date.getTime()));
-
+                        vetites.setMikor(readDate(FELVITEL_DATUM_TEXT));
+                        //Date date = new Date();
+                        //vetites.setMikor(new Timestamp(date.getTime()));
                         GenericTableModel vetitesModel = (GenericTableModel) parent.getMusorTable().getModel();
                         vetitesModel.addEntity(vetites);
                     }
@@ -171,6 +172,27 @@ public class AddAction implements ActionListener {
             }
         } while (number == null);
         return number;
+    }
+
+    // --- szétbontani év/hónap/napra --- év kötött(csak 2016?)
+    //Formátum ellenőrzés
+    private String readDate(String label) {
+        String name = null;
+        while (name == null) {
+            name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+            if (name != null && !name.trim().equals("")) {
+                if (name.length() != 10) {
+                    JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                    name = null;
+                } else {
+                    return name;
+                }
+            } else {
+                JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                name = null;
+            }
+        }
+        return name;
     }
 
     private Mozi readMozi() {
