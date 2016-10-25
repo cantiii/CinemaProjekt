@@ -2,8 +2,6 @@ package zoli.szakdoga.cinema.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Timestamp;
-import java.util.Date;
 import javax.swing.JOptionPane;
 import zoli.szakdoga.cinema.db.dao.*;
 import zoli.szakdoga.cinema.db.entity.*;
@@ -188,8 +186,7 @@ public class AddAction implements ActionListener {
                     return name;
                 }
             } else {
-                JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
-                name = null;
+                name = "KÉSŐBB!";
             }
         }
         return name;
