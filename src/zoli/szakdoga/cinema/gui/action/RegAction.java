@@ -46,7 +46,6 @@ public class RegAction implements ActionListener {
                     if(dao.findUser(name)) {
                         JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_TAKEN, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                         name = null;
-                        // TODO :: ELLENŐRIZNI, hogy VAN-e már ilyen user a DB-ben !
                     } else {
                         return name;
                     }

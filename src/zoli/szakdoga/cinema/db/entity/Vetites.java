@@ -1,7 +1,7 @@
 package zoli.szakdoga.cinema.db.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,7 +26,6 @@ public class Vetites  implements Serializable, PersistentEntity {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Basic(optional = false)
     @Column(name = "MIKOR")
     //@Temporal(TemporalType.TIMESTAMP)
     private String mikor;

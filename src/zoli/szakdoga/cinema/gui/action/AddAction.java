@@ -2,6 +2,9 @@ package zoli.szakdoga.cinema.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import zoli.szakdoga.cinema.db.dao.*;
 import zoli.szakdoga.cinema.db.entity.*;
@@ -34,8 +37,7 @@ public class AddAction implements ActionListener {
                         vetites.setFilmId(valaszFilm);
                         vetites.setTeremId(valaszTerem);
                         vetites.setMikor(readDate(FELVITEL_DATUM_TEXT));
-                        //Date date = new Date();
-                        //vetites.setMikor(new Timestamp(date.getTime()));
+
                         GenericTableModel vetitesModel = (GenericTableModel) parent.getMusorTable().getModel();
                         vetitesModel.addEntity(vetites);
                     }
@@ -172,14 +174,12 @@ public class AddAction implements ActionListener {
         return number;
     }
 
-    // --- szétbontani év/hónap/napra --- év kötött(csak 2016?)
-    //Formátum ellenőrzés
     private String readDate(String label) {
         String name = null;
         while (name == null) {
             name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
             if (name != null && !name.trim().equals("")) {
-                if (name.length() != 10) {
+                if (!dateFormat(name)) {
                     JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                     name = null;
                 } else {
@@ -190,6 +190,22 @@ public class AddAction implements ActionListener {
             }
         }
         return name;
+    }
+
+    public boolean dateFormat(String dateIn) {
+        if (dateIn == null) {
+            return false;
+        }
+        SimpleDateFormat sample = new SimpleDateFormat("yyyy/MM/dd");
+        sample.setLenient(false);
+        try {
+            //if not valid, it will throw ParseException
+            Date date = sample.parse(dateIn);
+            System.out.println(date);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
     }
 
     private Mozi readMozi() {
