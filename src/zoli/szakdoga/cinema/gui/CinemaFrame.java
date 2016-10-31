@@ -18,7 +18,6 @@ import zoli.szakdoga.cinema.gui.model.GenericTableModel;
 public class CinemaFrame extends JFrame {
 
     private final JPanel panelCont = new JPanel();
-    private final JPanel panelIndex = new JPanel();
     private final JPanel panelAr = new JPanel();
     private final JPanel panelKapcsolat = new JPanel();
     private final CardLayout cl = new CardLayout();
@@ -51,18 +50,16 @@ public class CinemaFrame extends JFrame {
     private final JButton addFilmButton = new JButton(FELVITEL_FILM_TEXT);
     private final JButton addMoziButton = new JButton(FELVITEL_MOZI_TEXT);
     private final JButton addTeremButton = new JButton(FELVITEL_TEREM_TEXT);
-    //private final JButton addFelhaszButton = new JButton(FELVITEL_FELHASZNALO_TEXT);
     private final JButton addTeremMoziButton = new JButton(MOZI_TEREM_TEXT);
 
-    private final JButton loginButton = new JButton(LOGIN_BUT_TEXT);
-    private final JButton regButton = new JButton(REG_BUT_TEXT);
-    private ActionListener loginAction;
-    private ActionListener regAction;
+    private LoginAction logIn;
+    private RegAction regIn;
 
     public CinemaFrame() {
         initFrame();
-        setActionListeners();
         setButtons();
+
+        setStart();
 
         setMenu();
         setCenter();
@@ -103,14 +100,20 @@ public class CinemaFrame extends JFrame {
         setResizable(false);
     }
 
+    private void setStart() {
+        Object[] options = {LOGIN_BUT_TEXT, REG_BUT_TEXT};
+        int n = JOptionPane.showOptionDialog(panelCont, LOGIN_BUT_TEXT + " vagy " + REG_BUT_TEXT + "?", FRAME_TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        if (n == 0) {
+            logIn = new LoginAction(this);
+        } else {
+            regIn = new RegAction(this);
+            logIn = new LoginAction(this);
+        }
+        setActionListeners();
+    }
+
     private void setMenu() {
         JMenuBar menuBar = new JMenuBar();
-        JMenuItem index = new JMenuItem(new AbstractAction(INDEX_MENU_TEXT) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cl.show(panelCont, "1");
-            }
-        });
         JMenuItem musor = new JMenuItem(new AbstractAction(MUSOR_MENU_TEXT) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -188,11 +191,16 @@ public class CinemaFrame extends JFrame {
             }
         });
         admin.add(subFelhasznalo);
+        if (logIn.currUser.getJog() != 1) {
+            admin.setVisible(false);
+        }
 
         JMenuItem tortenet = new JMenuItem(TORTENET_MENU_TEXT);
+        if (logIn.currUser.getJog() != 2) {
+            tortenet.setVisible(false);
+        }
         JMenuItem logout = new JMenuItem(LOGOUT_MENU_TEXT);
 
-        menuBar.add(index);
         menuBar.add(musor);
         menuBar.add(film);
         menuBar.add(ar);
@@ -206,9 +214,6 @@ public class CinemaFrame extends JFrame {
     private void setCenter() {
         panelCont.setLayout(cl); // felület > mindig új layout-ot pakol ki? (kis pontok a gui-n)
 
-        panelCont.add(panelIndex, "1");
-        panelIndex.add(loginButton);
-        panelIndex.add(regButton);
         panelCont.add(panelMusor, "2");
         panelCont.add(panelFilm, "3");
         panelCont.add(panelAr, "4");
@@ -225,11 +230,9 @@ public class CinemaFrame extends JFrame {
         panelCont.add(panelTartalmazA, "10");
         panelTartalmazA.add(addTeremMoziButton);
         panelCont.add(panelFelhasznaloA, "11");
-        //panelFelhasznaloA.add(addFelhaszButton);
 
-        //panelCont.add(panelAdmin, "6");
         panelCont.add(panelTortenet, "12");
-        cl.show(panelCont, "1");
+        cl.show(panelCont, "2");
 
         add(panelCont, BorderLayout.CENTER);
     }
@@ -241,7 +244,7 @@ public class CinemaFrame extends JFrame {
         musorTable.setModel(model);
         musorTable.setRowSorter(sorter);
         musorTable.setEnabled(false);
-        
+
         panelMusor.add(MUSOR_MENU_TEXT, new JScrollPane(musorTable));
     }
 
@@ -331,20 +334,14 @@ public class CinemaFrame extends JFrame {
         showStory = new ShowStoryAction(this);
         addAction = new AddAction(this);
         delAction = new DelAction(this);
-        rightClickAction = new StoryRightClickAction(showStory, delAction);
-
-        loginAction = new LoginAction();
-        regAction = new RegAction(this);
+        rightClickAction = new StoryRightClickAction(showStory, delAction, logIn);
     }
 
     private void setButtons() {
-        loginButton.addActionListener(loginAction);
-        regButton.addActionListener(regAction);
         addMusorButton.addActionListener(addAction);
         addFilmButton.addActionListener(addAction);
         addMoziButton.addActionListener(addAction);
         addTeremButton.addActionListener(addAction);
         addTeremMoziButton.addActionListener(addAction);
-        //addFelhaszButton.addActionListener(addAction);
     }
 }

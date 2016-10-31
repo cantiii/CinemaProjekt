@@ -13,7 +13,7 @@ import zoli.szakdoga.cinema.gui.model.GenericTableModel;
  *
  * @author Zoli
  */
-public class RegAction implements ActionListener {
+public class RegAction {
 
     private CinemaFrame parent;
     private DefaultDao dao;
@@ -21,10 +21,10 @@ public class RegAction implements ActionListener {
     public RegAction(CinemaFrame parent) {
         this.parent = parent;
         dao = new DefaultDao(Felhasznalo.class);
+        regisztracio();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public void regisztracio() {
         parent.adminFelhasznaloPanel();
         Felhasznalo user = new Felhasznalo();
         user.setNev(readString());

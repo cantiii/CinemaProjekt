@@ -53,7 +53,7 @@ public class GuiConstants {
     public static final String VALASZTO_TEXT = "Válaszd ki a megfelelő elemet!";
     
     public static final String LENGHT_ERROR = "Nem megfelelő hosszúságú!";
-    public static final String FORMAT_ERROR = "Nem jó formátum, helyesen: YYYY-MM-DD";
+    public static final String FORMAT_ERROR = "Nem jó formátum, helyesen: ÉÉÉÉ/HH/NN";
     public static final String UNIQUE_ERROR = "Nem egyedi a név!";
     public static final String INVALID_NUMBER = "Érvénytelen szám formátum.";
     public static final String INPUT_ERROR = "Beviteli hiba";
@@ -63,4 +63,5 @@ public class GuiConstants {
     public static final String FAIL = "HIBA!";
     public static final String USERNAME_REQUIRED = "Név megadása kötelező!";
     public static final String USERNAME_TAKEN = "A felhasznalónév már foglalt!";
+    public static final String USERNAME_NO = "Nincs ilyen felhasznaló az adatbázisban!";
 }

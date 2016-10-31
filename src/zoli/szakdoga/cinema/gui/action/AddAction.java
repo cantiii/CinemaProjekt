@@ -180,7 +180,7 @@ public class AddAction implements ActionListener {
             name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
             if (name != null && !name.trim().equals("")) {
                 if (!dateFormat(name)) {
-                    JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, GuiConstants.FORMAT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                     name = null;
                 } else {
                     return name;
@@ -199,7 +199,7 @@ public class AddAction implements ActionListener {
         SimpleDateFormat sample = new SimpleDateFormat("yyyy/MM/dd");
         sample.setLenient(false);
         try {
-            //if not valid, it will throw ParseException
+            //ha nem valid dátum formátum, akkor ParseException
             Date date = sample.parse(dateIn);
             System.out.println(date);
         } catch (ParseException e) {

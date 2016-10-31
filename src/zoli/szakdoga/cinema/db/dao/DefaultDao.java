@@ -7,6 +7,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
+import zoli.szakdoga.cinema.db.entity.Felhasznalo;
 import zoli.szakdoga.cinema.db.entity.PersistentEntity;
 
 /**
@@ -123,6 +124,23 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
             return false;
         } else {
             return true;
+        }
+    }
+    
+    public Felhasznalo isUser(String name) {
+        Felhasznalo result;
+        try {
+            Query query = getEntityManager()
+                    .createNamedQuery("Felhasznalo.findByNev")
+                    .setParameter("nev", name);
+            result = (Felhasznalo) query.getSingleResult();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        if (result == null) {
+            return null;
+        } else {
+            return result;
         }
     }
 

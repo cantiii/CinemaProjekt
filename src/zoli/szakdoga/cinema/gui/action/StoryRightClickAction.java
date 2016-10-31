@@ -18,13 +18,15 @@ public class StoryRightClickAction extends MouseAdapter {
 
     private ShowStoryAction showStory;
     private DelAction delItem;
+    private LoginAction logUser;
 
     public StoryRightClickAction() {
     }
 
-    public StoryRightClickAction(ShowStoryAction showStory, DelAction delItem) {
+    public StoryRightClickAction(ShowStoryAction showStory, DelAction delItem, LoginAction logUser) {
         this.showStory = showStory;
         this.delItem = delItem;
+        this.logUser = logUser;
     }
 
     @Override
@@ -43,12 +45,15 @@ public class StoryRightClickAction extends MouseAdapter {
         JPopupMenu popup = new JPopupMenu();
         JMenuItem leiras = new JMenuItem(GuiConstants.LEIRAS_MENU_TEXT);
         JMenuItem torles = new JMenuItem(GuiConstants.TORLES_BUT_TEXT);
+        if (logUser.getJog() != 1) {
+            torles.setVisible(false);
+        }
 
         showStory.setTable((JTable) e.getSource());
         leiras.addActionListener(showStory);
         delItem.setTable((JTable) e.getSource());
         torles.addActionListener(delItem);
-        
+
         popup.add(leiras);
         popup.add(torles);
         popup.show(e.getComponent(), e.getX(), e.getY());
