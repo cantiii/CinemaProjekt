@@ -57,12 +57,8 @@ public class CinemaFrame extends JFrame {
 
     public CinemaFrame() {
         initFrame();
-        setButtons();
 
         setStart();
-
-        setMenu();
-        setCenter();
 
         pack();
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -109,6 +105,9 @@ public class CinemaFrame extends JFrame {
             regIn = new RegAction(this);
             logIn = new LoginAction(this);
         }
+        setMenu();
+        setCenter();
+        setButtons();
         setActionListeners();
     }
 
@@ -199,7 +198,13 @@ public class CinemaFrame extends JFrame {
         if (logIn.currUser.getJog() != 2) {
             tortenet.setVisible(false);
         }
-        JMenuItem logout = new JMenuItem(LOGOUT_MENU_TEXT);
+        JMenuItem logout = new JMenuItem(new AbstractAction(LOGOUT_MENU_TEXT) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setStart();
+            }
+            
+        });
 
         menuBar.add(musor);
         menuBar.add(film);
