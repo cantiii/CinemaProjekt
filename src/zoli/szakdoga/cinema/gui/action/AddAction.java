@@ -201,7 +201,6 @@ public class AddAction implements ActionListener {
         try {
             //ha nem valid dátum formátum, akkor ParseException
             Date date = sample.parse(dateIn);
-            System.out.println(date);
         } catch (ParseException e) {
             return false;
         }
@@ -214,6 +213,8 @@ public class AddAction implements ActionListener {
         return mozi;
     }
 
+    //csak azokat a termeket kellene felhozni
+    //amik még nincsenek mozihoz adva
     private Terem readTerem() {
         Object[] termek = DaoManager.getInstance().getTeremDao().findAll().toArray();
         Terem terem = (Terem) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, termek, termek[0]);

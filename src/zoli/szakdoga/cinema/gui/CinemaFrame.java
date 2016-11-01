@@ -59,6 +59,10 @@ public class CinemaFrame extends JFrame {
         initFrame();
 
         setStart();
+        
+        setCenter();
+        setButtons();
+        setActionListeners();
 
         pack();
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -106,9 +110,6 @@ public class CinemaFrame extends JFrame {
             logIn = new LoginAction(this);
         }
         setMenu();
-        setCenter();
-        setButtons();
-        setActionListeners();
     }
 
     private void setMenu() {

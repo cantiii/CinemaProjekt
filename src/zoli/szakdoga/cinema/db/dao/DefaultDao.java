@@ -6,9 +6,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.RollbackException;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.swing.JOptionPane;
 import zoli.szakdoga.cinema.db.entity.Felhasznalo;
 import zoli.szakdoga.cinema.db.entity.PersistentEntity;
+import zoli.szakdoga.cinema.gui.GuiConstants;
 
 /**
  *
@@ -18,6 +21,7 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
 
     private final Class<T> CLASS;
     private final EntityManagerFactory EMF;
+    
 
     public DefaultDao(Class<T> CLASS) {
         this.CLASS = CLASS;
@@ -37,7 +41,11 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         EntityManager entityManager = getEntityManager();
         entityManager.getTransaction().begin();
         entityManager.merge(entity);
-        entityManager.getTransaction().commit();
+        try {
+            entityManager.getTransaction().commit();
+        } catch (RollbackException e) {
+            JOptionPane.showMessageDialog(null, GuiConstants.UNIQUE_DATA_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     @Override

@@ -41,8 +41,8 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         if (getRowCount() > rowIndex) {
-            T item = items.get(rowIndex);
-            item.set(columnIndex, aValue);
+            T item = items.get(rowIndex); // meg van az entitás minden eleme a sor miatt
+            item.set(columnIndex, aValue); // az entitás columnIndex. oszlopában megváltoztatja az értéket
             updateEntity(item, rowIndex);
         }
     }
