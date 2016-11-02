@@ -264,7 +264,7 @@ public class CinemaFrame extends JFrame {
 
         musorTable.setModel(model);
         musorTable.setRowSorter(sorter);
-        //musorTable.getColumnModel().getColumn(1).setCellEditor(new MyCellEditor());
+        musorTable.getColumnModel().getColumn(1).setCellEditor(new IntegerEditor());
         
         setComboColumn(musorTable, 0, DaoManager.getInstance().getFilmDao().findAll().toArray());
         setComboColumn(musorTable, 2, DaoManager.getInstance().getTeremDao().findAll().toArray());
