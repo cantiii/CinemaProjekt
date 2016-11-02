@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import zoli.szakdoga.cinema.db.dao.DaoManager;
 import zoli.szakdoga.cinema.db.entity.*;
@@ -54,6 +56,8 @@ public class CinemaFrame extends JFrame {
 
     private LoginAction logIn;
     private RegAction regIn;
+    
+    private final static Integer[] JOGOK = {1,2};
 
     public CinemaFrame() {
         initFrame();
@@ -260,6 +264,9 @@ public class CinemaFrame extends JFrame {
 
         musorTable.setModel(model);
         musorTable.setRowSorter(sorter);
+        
+        setComboColumn(musorTable, 0, DaoManager.getInstance().getFilmDao().findAll().toArray());
+        setComboColumn(musorTable, 2, DaoManager.getInstance().getTeremDao().findAll().toArray());
 
         musorTable.addMouseListener(rightClickAction);
         panelMusorA.add(MUSOR_MENU_TEXT, new JScrollPane(musorTable));
@@ -319,6 +326,9 @@ public class CinemaFrame extends JFrame {
 
         tartalmazTable.setModel(model);
         tartalmazTable.setRowSorter(sorter);
+        
+        setComboColumn(tartalmazTable, 0, DaoManager.getInstance().getMoziDao().findAll().toArray());
+        setComboColumn(tartalmazTable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
 
         tartalmazTable.addMouseListener(rightClickAction);
         panelTartalmazA.add(HOZZARENDELES_TEXT, new JScrollPane(tartalmazTable));
@@ -331,9 +341,18 @@ public class CinemaFrame extends JFrame {
         felhasznaloTable.setModel(model);
         felhasznaloTable.setRowSorter(sorter);
         felhasznaloTable.setEnabled(true);
+        
+        setComboColumn(felhasznaloTable, 1, JOGOK);
 
         felhasznaloTable.addMouseListener(rightClickAction);
         panelFelhasznaloA.add(FELHASZNALO_MENU_TEXT, new JScrollPane(felhasznaloTable));
+    }
+    
+    private void setComboColumn(JTable table, int index, Object[] values) {
+        JComboBox comboBox = new JComboBox(values);
+        TableColumn column = table.getColumnModel().getColumn(index);
+        column.setCellEditor(new DefaultCellEditor(comboBox));
+        column.setCellRenderer(new DefaultTableCellRenderer());
     }
 
     private void setActionListeners() {
