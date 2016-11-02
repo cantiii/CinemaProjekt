@@ -11,7 +11,7 @@ import zoli.szakdoga.cinema.db.dao.DaoManager;
 import zoli.szakdoga.cinema.db.entity.*;
 import static zoli.szakdoga.cinema.gui.GuiConstants.*;
 import zoli.szakdoga.cinema.gui.action.*;
-import zoli.szakdoga.cinema.gui.model.GenericTableModel;
+import zoli.szakdoga.cinema.gui.model.*;
 
 /**
  *
@@ -264,6 +264,7 @@ public class CinemaFrame extends JFrame {
 
         musorTable.setModel(model);
         musorTable.setRowSorter(sorter);
+        //musorTable.getColumnModel().getColumn(1).setCellEditor(new MyCellEditor());
         
         setComboColumn(musorTable, 0, DaoManager.getInstance().getFilmDao().findAll().toArray());
         setComboColumn(musorTable, 2, DaoManager.getInstance().getTeremDao().findAll().toArray());
