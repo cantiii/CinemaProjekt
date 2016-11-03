@@ -55,7 +55,7 @@ public class GuiConstants {
     public static final String LENGHT_ERROR = "Nem megfelelő hosszúságú!";
     public static final String FORMAT_ERROR = "Nem jó formátum, helyesen: ÉÉÉÉ/HH/NN";
     public static final String UNIQUE_ERROR = "Nem egyedi a név!";
-    public static final String UNIQUE_DATA_ERROR = "Nem egyedi a adat!";
+    public static final String UNIQUE_DATA_ERROR = "Nem egyedi a adat, vagy túl hosszú bevitel!";
     public static final String INVALID_NUMBER = "Érvénytelen szám formátum.";
     public static final String INPUT_ERROR = "Beviteli hiba";
 
