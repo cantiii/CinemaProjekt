@@ -54,6 +54,7 @@ public class GuiConstants {
     
     public static final String LENGHT_ERROR = "Nem megfelelő hosszúságú!";
     public static final String FORMAT_ERROR = "Nem jó formátum, helyesen: ÉÉÉÉ/HH/NN";
+    public static final String DATE_ERROR = "Nem jó időintervallum!\n(MIN: holnap, MAX: +100 nap)";
     public static final String UNIQUE_ERROR = "Nem egyedi a név!";
     public static final String UNIQUE_DATA_ERROR = "Nem egyedi a adat, vagy túl hosszú bevitel!";
     public static final String INVALID_NUMBER = "Érvénytelen szám formátum.";

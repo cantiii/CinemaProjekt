@@ -56,21 +56,32 @@ public class CinemaFrame extends JFrame {
 
     private LoginAction logIn;
     private RegAction regIn;
-    
-    private final static Integer[] JOGOK = {1,2};
+
+    private final static Integer[] JOGOK = {1, 2};
 
     public CinemaFrame() {
         initFrame();
 
         setStart();
-        
-        setCenter();
         setButtons();
-        setActionListeners();
 
         pack();
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setLocationRelativeTo(null);
+    }
+
+    private void setStart() {
+        Object[] options = {LOGIN_BUT_TEXT, REG_BUT_TEXT};
+        int n = JOptionPane.showOptionDialog(panelCont, LOGIN_BUT_TEXT + " vagy " + REG_BUT_TEXT + "?", FRAME_TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        if (n == 0) {
+            logIn = new LoginAction(this);
+        } else {
+            regIn = new RegAction(this);
+            logIn = new LoginAction(this);
+        }
+        setMenu();
+        setCenter();
+        setActionListeners();
     }
 
     public JTable getMusorTable() {
@@ -102,18 +113,6 @@ public class CinemaFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setResizable(false);
-    }
-
-    private void setStart() {
-        Object[] options = {LOGIN_BUT_TEXT, REG_BUT_TEXT};
-        int n = JOptionPane.showOptionDialog(panelCont, LOGIN_BUT_TEXT + " vagy " + REG_BUT_TEXT + "?", FRAME_TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-        if (n == 0) {
-            logIn = new LoginAction(this);
-        } else {
-            regIn = new RegAction(this);
-            logIn = new LoginAction(this);
-        }
-        setMenu();
     }
 
     private void setMenu() {
@@ -208,7 +207,7 @@ public class CinemaFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 setStart();
             }
-            
+
         });
 
         menuBar.add(musor);
@@ -265,7 +264,7 @@ public class CinemaFrame extends JFrame {
         musorTable.setModel(model);
         musorTable.setRowSorter(sorter);
         musorTable.getColumnModel().getColumn(1).setCellEditor(new MyDateCell());
-        
+
         setComboColumn(musorTable, 0, DaoManager.getInstance().getFilmDao().findAll().toArray());
         setComboColumn(musorTable, 2, DaoManager.getInstance().getTeremDao().findAll().toArray());
 
@@ -280,7 +279,8 @@ public class CinemaFrame extends JFrame {
         filmTable.setModel(model);
         filmTable.setRowSorter(sorter);
         filmTable.setEnabled(false);
-
+        
+        //jobb klikk nem kellene ide ha admin van;
         filmTable.addMouseListener(rightClickAction);
         panelFilm.add(FILM_MENU_TEXT, new JScrollPane(filmTable));
     }
@@ -327,7 +327,7 @@ public class CinemaFrame extends JFrame {
 
         tartalmazTable.setModel(model);
         tartalmazTable.setRowSorter(sorter);
-        
+
         setComboColumn(tartalmazTable, 0, DaoManager.getInstance().getMoziDao().findAll().toArray());
         setComboColumn(tartalmazTable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
 
@@ -342,13 +342,13 @@ public class CinemaFrame extends JFrame {
         felhasznaloTable.setModel(model);
         felhasznaloTable.setRowSorter(sorter);
         felhasznaloTable.setEnabled(true);
-        
+
         setComboColumn(felhasznaloTable, 1, JOGOK);
 
         felhasznaloTable.addMouseListener(rightClickAction);
         panelFelhasznaloA.add(FELHASZNALO_MENU_TEXT, new JScrollPane(felhasznaloTable));
     }
-    
+
     private void setComboColumn(JTable table, int index, Object[] values) {
         JComboBox comboBox = new JComboBox(values);
         TableColumn column = table.getColumnModel().getColumn(index);

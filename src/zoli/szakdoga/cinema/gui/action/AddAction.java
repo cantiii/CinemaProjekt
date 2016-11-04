@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import zoli.szakdoga.cinema.db.dao.*;
@@ -180,7 +181,6 @@ public class AddAction implements ActionListener {
             name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
             if (name != null && !name.trim().equals("")) {
                 if (!dateFormat(name)) {
-                    JOptionPane.showMessageDialog(parent, GuiConstants.FORMAT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                     name = null;
                 } else {
                     return name;
@@ -194,14 +194,32 @@ public class AddAction implements ActionListener {
 
     public boolean dateFormat(String dateIn) {
         if (dateIn == null) {
+            JOptionPane.showMessageDialog(parent, GuiConstants.FORMAT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
             return false;
         }
         SimpleDateFormat sample = new SimpleDateFormat("yyyy/MM/dd");
         sample.setLenient(false);
+        
+        Date nextDay = new Date();
+        Date nextCDay = new Date();
+        
+        Calendar c = Calendar.getInstance(); 
+        c.setTime(nextDay); 
+        c.add(Calendar.DATE, 1);
+        nextDay = c.getTime();
+        
+        c.add(Calendar.DATE, 100);
+        nextCDay = c.getTime();
+
         try {
             //ha nem valid dátum formátum, akkor ParseException
             Date date = sample.parse(dateIn);
+            if(date.after(nextCDay) || date.before(nextDay)) {
+                JOptionPane.showMessageDialog(parent, GuiConstants.DATE_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
         } catch (ParseException e) {
+            JOptionPane.showMessageDialog(parent, GuiConstants.FORMAT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;

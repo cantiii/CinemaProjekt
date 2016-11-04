@@ -20,9 +20,6 @@ public class StoryRightClickAction extends MouseAdapter {
     private DelAction delItem;
     private LoginAction logUser;
 
-    public StoryRightClickAction() {
-    }
-
     public StoryRightClickAction(ShowStoryAction showStory, DelAction delItem, LoginAction logUser) {
         this.showStory = showStory;
         this.delItem = delItem;
