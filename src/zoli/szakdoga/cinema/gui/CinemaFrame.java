@@ -3,6 +3,9 @@ package zoli.szakdoga.cinema.gui;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -250,6 +253,21 @@ public class CinemaFrame extends JFrame {
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
         TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
 
+        RowFilter<Object, Object> filter = new RowFilter<Object, Object>() {
+            public boolean include(RowFilter.Entry entry) {
+                Date today = new Date();
+                String dates = (String) entry.getValue(1);
+                SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+                Date date = null;
+                try {
+                    date = format.parse(dates);
+                } catch (ParseException ex) {
+                }
+                return date.after(today);
+            }
+        };
+        sorter.setRowFilter(filter);
+
         musorTable.setModel(model);
         musorTable.setRowSorter(sorter);
         musorTable.setEnabled(false);
@@ -279,7 +297,7 @@ public class CinemaFrame extends JFrame {
         filmTable.setModel(model);
         filmTable.setRowSorter(sorter);
         filmTable.setEnabled(false);
-        
+
         //jobb klikk nem kellene ide ha admin van;
         filmTable.addMouseListener(rightClickAction);
         panelFilm.add(FILM_MENU_TEXT, new JScrollPane(filmTable));
@@ -370,4 +388,5 @@ public class CinemaFrame extends JFrame {
         addTeremButton.addActionListener(addAction);
         addTeremMoziButton.addActionListener(addAction);
     }
+
 }

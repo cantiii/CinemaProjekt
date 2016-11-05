@@ -27,7 +27,6 @@ public class Vetites  implements Serializable, PersistentEntity {
     @Column(name = "ID")
     private Integer id;
     @Column(name = "MIKOR")
-    //@Temporal(TemporalType.TIMESTAMP)
     private String mikor;
     @JoinColumn(name = "FILM_ID", referencedColumnName = "ID")
     @ManyToOne
