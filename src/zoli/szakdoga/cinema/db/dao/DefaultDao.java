@@ -9,8 +9,7 @@ import javax.persistence.Query;
 import javax.persistence.RollbackException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.swing.JOptionPane;
-import zoli.szakdoga.cinema.db.entity.Felhasznalo;
-import zoli.szakdoga.cinema.db.entity.PersistentEntity;
+import zoli.szakdoga.cinema.db.entity.*;
 import zoli.szakdoga.cinema.gui.GuiConstants;
 
 /**
@@ -21,7 +20,6 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
 
     private final Class<T> CLASS;
     private final EntityManagerFactory EMF;
-    
 
     public DefaultDao(Class<T> CLASS) {
         this.CLASS = CLASS;
@@ -65,6 +63,18 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
     @Override
     public T findById(Integer id) {
         return getEntityManager().find(CLASS, id);
+    }
+
+    public List<T> findAll(Mozi id) {
+        List<T> result = null;
+        try {
+            Query query = getEntityManager()
+                    .createNamedQuery("Tartalmaz.findMoziById")
+                    .setParameter("moziId", id);
+            result = (List<T>) query.getResultList();
+        } catch (NoResultException e) {
+        }
+        return result;
     }
 
     public boolean findMozi(String name) {
@@ -117,7 +127,7 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
             return true;
         }
     }
-    
+
     public boolean findUser(String name) {
         T result;
         try {
@@ -134,7 +144,7 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
             return true;
         }
     }
-    
+
     public Felhasznalo isUser(String name) {
         Felhasznalo result;
         try {

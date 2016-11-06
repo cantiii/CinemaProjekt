@@ -13,7 +13,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tartalmaz.findAll", query = "SELECT t FROM Tartalmaz t"),
-    @NamedQuery(name = "Tartalmaz.findById", query = "SELECT t FROM Tartalmaz t WHERE t.id = :id")})
+    @NamedQuery(name = "Tartalmaz.findById", query = "SELECT t FROM Tartalmaz t WHERE t.id = :id"),
+    @NamedQuery(name = "Tartalmaz.findMoziById", query = "SELECT t FROM Tartalmaz t WHERE t.moziId = :moziId")})
 public class Tartalmaz implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Mozi", "Terem"};

@@ -4,8 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
 import zoli.szakdoga.cinema.db.dao.*;
 import zoli.szakdoga.cinema.db.entity.*;
@@ -74,7 +76,7 @@ public class AddAction implements ActionListener {
             case MOZI_TEREM_TEXT:
                 Mozi valaszMozi = readMozi();
                 if (valaszMozi != null) {
-                    Terem valaszTerem = readTerem();
+                    Terem valaszTerem = readTerem(valaszMozi);
                     if (valaszTerem != null) {
                         Tartalmaz tartalmaz = new Tartalmaz();
                         tartalmaz.setMoziId(valaszMozi);
@@ -82,6 +84,8 @@ public class AddAction implements ActionListener {
 
                         GenericTableModel tartalmazModel = (GenericTableModel) parent.getTartalmazTable().getModel();
                         tartalmazModel.addEntity(tartalmaz);
+                    } else {
+                        JOptionPane.showMessageDialog(parent, " másik mozi PLS !", GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 break;
@@ -199,22 +203,22 @@ public class AddAction implements ActionListener {
         }
         SimpleDateFormat sample = new SimpleDateFormat("yyyy/MM/dd");
         sample.setLenient(false);
-        
+
         Date nextDay = new Date();
         Date nextCDay = new Date();
-        
-        Calendar c = Calendar.getInstance(); 
-        c.setTime(nextDay); 
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(nextDay);
         c.add(Calendar.DATE, 1);
         nextDay = c.getTime();
-        
+
         c.add(Calendar.DATE, 100);
         nextCDay = c.getTime();
 
         try {
             //ha nem valid dátum formátum, akkor ParseException
             Date date = sample.parse(dateIn);
-            if(date.after(nextCDay) || date.before(nextDay)) {
+            if (date.after(nextCDay) || date.before(nextDay)) {
                 JOptionPane.showMessageDialog(parent, GuiConstants.DATE_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                 return false;
             }
@@ -231,11 +235,41 @@ public class AddAction implements ActionListener {
         return mozi;
     }
 
-    //csak azokat a termeket kellene felhozni
-    //amik még nincsenek mozihoz adva
     private Terem readTerem() {
         Object[] termek = DaoManager.getInstance().getTeremDao().findAll().toArray();
         Terem terem = (Terem) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, termek, termek[0]);
+        return terem;
+    }
+
+    //csak azokat a termeket kellene felhozni, amik még nincsenek mozihoz adva
+    private Terem readTerem(Mozi mozi) {
+        dao = new DefaultDao(Terem.class);
+        List<Terem> osszTerem = dao.findAll();
+        List<Terem> segedTerem = osszTerem;
+
+        dao = new DefaultDao(Tartalmaz.class);
+        List<Tartalmaz> idInTartalmaz = dao.findAll(mozi);
+
+        List<Terem> tartalmazottTerem = new ArrayList<>();
+        for (int i = 0; i < idInTartalmaz.size(); i++) {
+            tartalmazottTerem.add(idInTartalmaz.get(i).getTeremId());
+        }
+        
+        if(tartalmazottTerem.size()==osszTerem.size()) {
+            return null;
+        }
+        
+        for (int i = 0; i < osszTerem.size(); i++) {
+            for (int j = 0; j < tartalmazottTerem.size(); j++) {
+                if (osszTerem.get(i).getId() == tartalmazottTerem.get(j).getId()) {
+                    segedTerem.remove(i);
+                }
+            }
+        }
+
+        Object[] kellMegTerem = segedTerem.toArray();
+
+        Terem terem = (Terem) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, kellMegTerem, kellMegTerem[0]);
         return terem;
     }
 
