@@ -76,7 +76,7 @@ public class AddAction implements ActionListener {
             case MOZI_TEREM_TEXT:
                 Mozi valaszMozi = readMozi();
                 if (valaszMozi != null) {
-                    Terem valaszTerem = readTerem(valaszMozi);
+                    Terem valaszTerem = readTerem();
                     if (valaszTerem != null) {
                         Tartalmaz tartalmaz = new Tartalmaz();
                         tartalmaz.setMoziId(valaszMozi);
@@ -235,30 +235,24 @@ public class AddAction implements ActionListener {
         return mozi;
     }
 
-    private Terem readTerem() {
-        Object[] termek = DaoManager.getInstance().getTeremDao().findAll().toArray();
-        Terem terem = (Terem) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, termek, termek[0]);
-        return terem;
-    }
-
     //csak azokat a termeket kellene felhozni, amik még nincsenek mozihoz adva
-    private Terem readTerem(Mozi mozi) {
+    private Terem readTerem() {
         dao = new DefaultDao(Terem.class);
         List<Terem> osszTerem = dao.findAll();
-        List<Terem> segedTerem = osszTerem;
+        List<Terem> segedTerem = new ArrayList<>(osszTerem);
 
         dao = new DefaultDao(Tartalmaz.class);
-        List<Tartalmaz> idInTartalmaz = dao.findAll(mozi);
+        List<Tartalmaz> idInTartalmaz = dao.findAll();
 
         List<Terem> tartalmazottTerem = new ArrayList<>();
         for (int i = 0; i < idInTartalmaz.size(); i++) {
             tartalmazottTerem.add(idInTartalmaz.get(i).getTeremId());
         }
-        
-        if(tartalmazottTerem.size()==osszTerem.size()) {
+
+        if (tartalmazottTerem.size() == osszTerem.size()) {
             return null;
         }
-        
+
         for (int i = 0; i < osszTerem.size(); i++) {
             for (int j = 0; j < tartalmazottTerem.size(); j++) {
                 if (osszTerem.get(i).getId() == tartalmazottTerem.get(j).getId()) {
@@ -268,7 +262,7 @@ public class AddAction implements ActionListener {
         }
 
         Object[] kellMegTerem = segedTerem.toArray();
-
+        // ???
         Terem terem = (Terem) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, kellMegTerem, kellMegTerem[0]);
         return terem;
     }

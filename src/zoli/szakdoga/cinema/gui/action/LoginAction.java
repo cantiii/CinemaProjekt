@@ -23,6 +23,7 @@ public class LoginAction {
         currUser = readUniqueString();
     }
 
+    // ! ! ! be leeht jelentkezni null névvel is
     private Felhasznalo readUniqueString() {
         Felhasznalo getUser = new Felhasznalo();
         String name = null;
