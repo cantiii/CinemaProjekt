@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -84,8 +85,6 @@ public class AddAction implements ActionListener {
 
                         GenericTableModel tartalmazModel = (GenericTableModel) parent.getTartalmazTable().getModel();
                         tartalmazModel.addEntity(tartalmaz);
-                    } else {
-                        JOptionPane.showMessageDialog(parent, " másik mozi PLS !", GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 break;
@@ -250,19 +249,15 @@ public class AddAction implements ActionListener {
         }
 
         if (tartalmazottTerem.size() == osszTerem.size()) {
+            JOptionPane.showMessageDialog(parent, GuiConstants.NOMORE_ROOM_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
-        for (int i = 0; i < osszTerem.size(); i++) {
-            for (int j = 0; j < tartalmazottTerem.size(); j++) {
-                if (osszTerem.get(i).getId() == tartalmazottTerem.get(j).getId()) {
-                    segedTerem.remove(i);
-                }
-            }
-        }
+        Collection<Terem> torlendoTermek = new ArrayList(tartalmazottTerem);
+        segedTerem.removeAll(torlendoTermek);
 
         Object[] kellMegTerem = segedTerem.toArray();
-        // ???
+
         Terem terem = (Terem) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, kellMegTerem, kellMegTerem[0]);
         return terem;
     }

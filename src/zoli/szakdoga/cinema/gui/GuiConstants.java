@@ -57,6 +57,7 @@ public class GuiConstants {
     public static final String UNIQUE_DATA_ERROR = "Nem egyedi a adat, vagy túl hosszú bevitel!";
     public static final String INVALID_NUMBER = "Érvénytelen szám formátum.";
     public static final String INPUT_ERROR = "Beviteli hiba";
+    public static final String NOMORE_ROOM_ERROR = "Nincs már szabad terem!";
 
     public static final String USERNAME_TEXT = "Felhasználónév:";
     public static final String USERNAME_LENGHT = "Nem megfelelő hosszúságú felhasználónév!";

@@ -244,7 +244,7 @@ public class CinemaFrame extends JFrame {
         panelCont.add(panelFelhasznaloA, "11");
 
         panelCont.add(panelTortenet, "12");
-        cl.show(panelCont, "2");
+        cl.show(panelCont, "5");
 
         add(panelCont, BorderLayout.CENTER);
     }
