@@ -252,11 +252,11 @@ public class CinemaFrame extends JFrame {
     public void loadMusorPanel() {
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
         TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
-
+        //régi dátum kiszűrés
         RowFilter<Object, Object> filter = new RowFilter<Object, Object>() {
             public boolean include(RowFilter.Entry entry) {
                 Date today = new Date();
-                String dates = (String) entry.getValue(1);
+                String dates = (String) entry.getValue(2);
                 SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
                 Date date = null;
                 try {
@@ -281,10 +281,10 @@ public class CinemaFrame extends JFrame {
 
         musorTable.setModel(model);
         musorTable.setRowSorter(sorter);
-        musorTable.getColumnModel().getColumn(1).setCellEditor(new MyDateCell());
+        musorTable.getColumnModel().getColumn(2).setCellEditor(new MyDateCell()); // jó dátum és dátum forma
 
         setComboColumn(musorTable, 0, DaoManager.getInstance().getFilmDao().findAll().toArray());
-        setComboColumn(musorTable, 2, DaoManager.getInstance().getTeremDao().findAll().toArray());
+        setComboColumn(musorTable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
 
         musorTable.addMouseListener(rightClickAction);
         panelMusorA.add(MUSOR_MENU_TEXT, new JScrollPane(musorTable));

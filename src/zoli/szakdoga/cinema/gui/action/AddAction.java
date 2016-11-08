@@ -33,6 +33,21 @@ public class AddAction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case FELVITEL_MUSOR_TEXT:
+                String date = readDate(FELVITEL_DATUM_TEXT);
+                Terem valaszTerem = readTerem(date);
+                if (valaszTerem != null) {
+                    Film valaszFilm = readFilm();
+                    if (valaszFilm != null) {
+                        Vetites vetites = new Vetites();
+                        vetites.setFilmId(valaszFilm);
+                        vetites.setTeremId(valaszTerem);
+                        vetites.setMikor(date);
+
+                        GenericTableModel vetitesModel = (GenericTableModel) parent.getMusorTable().getModel();
+                        vetitesModel.addEntity(vetites);
+                    }
+                }
+                /*
                 Film valaszFilm = readFilm();
                 if (valaszFilm != null) {
                     Terem valaszTerem = readTerem();
@@ -45,7 +60,7 @@ public class AddAction implements ActionListener {
                         GenericTableModel vetitesModel = (GenericTableModel) parent.getMusorTable().getModel();
                         vetitesModel.addEntity(vetites);
                     }
-                }
+                }*/
                 break;
             case FELVITEL_FILM_TEXT:
                 Film film = new Film();
@@ -77,7 +92,7 @@ public class AddAction implements ActionListener {
             case MOZI_TEREM_TEXT:
                 Mozi valaszMozi = readMozi();
                 if (valaszMozi != null) {
-                    Terem valaszTerem = readTerem();
+                    valaszTerem = readTerem();
                     if (valaszTerem != null) {
                         Tartalmaz tartalmaz = new Tartalmaz();
                         tartalmaz.setMoziId(valaszMozi);
@@ -189,7 +204,7 @@ public class AddAction implements ActionListener {
                     return name;
                 }
             } else {
-                name = "KÉSŐBB!";
+                name = null; // nem lehet default value
             }
         }
         return name;
@@ -254,6 +269,34 @@ public class AddAction implements ActionListener {
         }
 
         Collection<Terem> torlendoTermek = new ArrayList(tartalmazottTerem);
+        segedTerem.removeAll(torlendoTermek);
+
+        Object[] kellMegTerem = segedTerem.toArray();
+
+        Terem terem = (Terem) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, kellMegTerem, kellMegTerem[0]);
+        return terem;
+    }
+
+    //vetítés >> dátum a prio, mert az nap 1 terem csak 1x használható
+    private Terem readTerem(String date) {
+        dao = new DefaultDao(Terem.class);
+        List<Terem> osszTerem = dao.findAll();
+        List<Terem> segedTerem = new ArrayList<>(osszTerem);
+
+        dao = new DefaultDao(Vetites.class);
+        List<Vetites> idInVetites = dao.findUsedTerem(date);
+
+        List<Terem> hasznaltTerem = new ArrayList<>();
+        for (int i = 0; i < idInVetites.size(); i++) {
+            hasznaltTerem.add(idInVetites.get(i).getTeremId());
+        }
+
+        if (hasznaltTerem.size() == osszTerem.size()) {
+            JOptionPane.showMessageDialog(parent, GuiConstants.NOMORE_ROOM_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        Collection<Terem> torlendoTermek = new ArrayList(hasznaltTerem);
         segedTerem.removeAll(torlendoTermek);
 
         Object[] kellMegTerem = segedTerem.toArray();

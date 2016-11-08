@@ -111,6 +111,23 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         }
     }
 
+    public List<Vetites> findUsedTerem(String date) {
+        List<Vetites> result;
+        try {
+            Query query = getEntityManager()
+                    .createNamedQuery("Vetites.findByMikor")
+                    .setParameter("mikor", date);
+            result = (List<Vetites>) query.getResultList();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        if (result == null) {
+            return null;
+        } else {
+            return result;
+        }
+    }
+
     public boolean findFilm(String name) {
         T result;
         try {
