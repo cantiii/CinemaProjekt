@@ -67,7 +67,7 @@ public class CinemaFrame extends JFrame {
 
         setStart();
         setButtons();
-
+        
         pack();
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setLocationRelativeTo(null);
@@ -256,11 +256,11 @@ public class CinemaFrame extends JFrame {
         RowFilter<Object, Object> filter = new RowFilter<Object, Object>() {
             public boolean include(RowFilter.Entry entry) {
                 Date today = new Date();
-                String dates = (String) entry.getValue(2);
+                String myDate = (String) entry.getValue(2);
                 SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
                 Date date = null;
                 try {
-                    date = format.parse(dates);
+                    date = format.parse(myDate);
                 } catch (ParseException ex) {
                 }
                 return date.after(today);

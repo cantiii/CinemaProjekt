@@ -226,7 +226,7 @@ public class AddAction implements ActionListener {
         c.add(Calendar.DATE, 1);
         nextDay = c.getTime();
 
-        c.add(Calendar.DATE, 100);
+        c.add(Calendar.DATE, 60);
         nextCDay = c.getTime();
 
         try {

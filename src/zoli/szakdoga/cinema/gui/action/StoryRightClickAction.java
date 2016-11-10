@@ -42,10 +42,10 @@ public class StoryRightClickAction extends MouseAdapter {
         JPopupMenu popup = new JPopupMenu();
         JMenuItem leiras = new JMenuItem(GuiConstants.LEIRAS_MENU_TEXT);
         JMenuItem torles = new JMenuItem(GuiConstants.TORLES_BUT_TEXT);
-        if (logUser.getJog() != 2) {
+        if (logUser.currUser.getJog() != 2) {
             leiras.setVisible(false);
         }
-        if (logUser.getJog() != 1) {
+        if (logUser.currUser.getJog() != 1) {
             torles.setVisible(false);
         }
 

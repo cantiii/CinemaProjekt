@@ -52,12 +52,12 @@ public class GuiConstants {
     
     public static final String LENGHT_ERROR = "Nem megfelelő hosszúságú!";
     public static final String FORMAT_ERROR = "Nem jó formátum, helyesen: ÉÉÉÉ/HH/NN";
-    public static final String DATE_ERROR = "Nem jó időintervallum!\n(MIN: holnap, MAX: +100 nap)";
+    public static final String DATE_ERROR = "Nem jó időintervallum!\n(MIN: +2 nap, MAX: +60 nap)";
     public static final String UNIQUE_ERROR = "Nem egyedi a név!";
     public static final String UNIQUE_DATA_ERROR = "Nem egyedi a adat, vagy túl hosszú bevitel!";
     public static final String INVALID_NUMBER = "Érvénytelen szám formátum.";
     public static final String INPUT_ERROR = "Beviteli hiba";
-    public static final String NOMORE_ROOM_ERROR = "Nincs már szabad terem!";
+    public static final String NOMORE_ROOM_ERROR = "Nincs használható terem!";
 
     public static final String USERNAME_TEXT = "Felhasználónév:";
     public static final String USERNAME_LENGHT = "Nem megfelelő hosszúságú felhasználónév!";
@@ -65,4 +65,5 @@ public class GuiConstants {
     public static final String USERNAME_REQUIRED = "Név megadása kötelező!";
     public static final String USERNAME_TAKEN = "A felhasznalónév már foglalt!";
     public static final String USERNAME_NO = "Nincs ilyen felhasznaló az adatbázisban!";
+    public static final String NOMORE_TRY = "Átírányítás a regisztrációhoz!\nLejárt a 3 próbálkozás lehetősége.";
 }
