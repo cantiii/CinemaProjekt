@@ -1,7 +1,5 @@
 package zoli.szakdoga.cinema.gui.action;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import zoli.szakdoga.cinema.db.dao.DefaultDao;
 import zoli.szakdoga.cinema.db.entity.Felhasznalo;
@@ -25,7 +23,6 @@ public class RegAction {
     }
 
     public void regisztracio() {
-        parent.adminFelhasznaloPanel();
         Felhasznalo user = new Felhasznalo();
         user.setNev(readString());
         user.setJog(2);
@@ -42,13 +39,11 @@ public class RegAction {
                 if (name.length() <= 3 || name.length() > 10) {
                     JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_LENGHT, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                     name = null;
+                } else if (dao.findUser(name)) {
+                    JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_TAKEN, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                    name = null;
                 } else {
-                    if(dao.findUser(name)) {
-                        JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_TAKEN, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
-                        name = null;
-                    } else {
-                        return name;
-                    }
+                    return name;
                 }
             } else {
                 JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_REQUIRED, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
