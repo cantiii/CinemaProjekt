@@ -232,17 +232,16 @@ public class CinemaFrame extends JFrame {
         panelCont.add(panelKapcsolat, "5");
 
         panelCont.add(panelMusorA, "6");
-        panelMusorA.add(addMusorButton);
+        //panelMusorA.add(addMusorButton);
         panelCont.add(panelFilmA, "7");
-        panelFilmA.add(addFilmButton);
+        //panelFilmA.add(addFilmButton);
         panelCont.add(panelMoziA, "8");
-        panelMoziA.add(addMoziButton);
+        //panelMoziA.add(addMoziButton);
         panelCont.add(panelTeremA, "9");
-        panelTeremA.add(addTeremButton);
+        //panelTeremA.add(addTeremButton);
         panelCont.add(panelTartalmazA, "10");
-        panelTartalmazA.add(addTeremMoziButton);
+        //panelTartalmazA.add(addTeremMoziButton);
         panelCont.add(panelFelhasznaloA, "11");
-
         panelCont.add(panelTortenet, "12");
         cl.show(panelCont, "5");
 
@@ -250,6 +249,8 @@ public class CinemaFrame extends JFrame {
     }
 
     public void loadMusorPanel() {
+        panelMusor.removeAll();
+
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
         // szebben ?
         // törlésre kiürül, akkor még ott marad a sorter hiba
@@ -280,6 +281,9 @@ public class CinemaFrame extends JFrame {
     }
 
     public void adminMusorPanel() {
+        panelMusorA.removeAll();
+        panelMusorA.add(addMusorButton);
+
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
 
         if (model.getRowCount() != 0) {
@@ -298,6 +302,8 @@ public class CinemaFrame extends JFrame {
     }
 
     public void loadFilmPanel() {
+        panelFilm.removeAll();
+
         GenericTableModel<Film> model = new GenericTableModel(DaoManager.getInstance().getFilmDao(), Film.PROPERTY_NAMES);
 
         if (model.getRowCount() != 0) {
@@ -308,20 +314,23 @@ public class CinemaFrame extends JFrame {
         filmTable.setModel(model);
         filmTable.setEnabled(false);
 
-        if(logIn.currUser.getJog()==1){
+        if (logIn.currUser.getJog() == 1) {
             filmTable.addMouseListener(rightClickAction);
         }
         panelFilm.add(FILM_MENU_TEXT, new JScrollPane(filmTable));
     }
 
     public void adminFilmPanel() {
+        panelFilmA.removeAll();
+        panelFilmA.add(addFilmButton);
+
         GenericTableModel<Film> model = new GenericTableModel(DaoManager.getInstance().getFilmDao(), Film.FULL_PROPERTY_NAMES);
 
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Film>> sorter = new TableRowSorter<>(model);
             filmTable.setRowSorter(sorter);
         }
-        
+
         filmTable.setModel(model);
         filmTable.setEnabled(true);
 
@@ -330,6 +339,9 @@ public class CinemaFrame extends JFrame {
     }
 
     public void adminMoziPanel() {
+        panelMoziA.removeAll();
+        panelMoziA.add(addMoziButton);
+
         GenericTableModel<Mozi> model = new GenericTableModel(DaoManager.getInstance().getMoziDao(), Mozi.PROPERTY_NAMES);
 
         if (model.getRowCount() != 0) {
@@ -345,13 +357,16 @@ public class CinemaFrame extends JFrame {
     }
 
     public void adminTeremPanel() {
+        panelTeremA.removeAll();
+        panelTeremA.add(addTeremButton);
+
         GenericTableModel<Terem> model = new GenericTableModel(DaoManager.getInstance().getTeremDao(), Terem.PROPERTY_NAMES);
-        
+
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Terem>> sorter = new TableRowSorter<>(model);
             teremTable.setRowSorter(sorter);
         }
-        
+
         teremTable.setModel(model);
         teremTable.setEnabled(true);
 
@@ -360,13 +375,16 @@ public class CinemaFrame extends JFrame {
     }
 
     public void adminTartalmazPanel() {
+        panelTartalmazA.removeAll();
+        panelTartalmazA.add(addTeremMoziButton);
+
         GenericTableModel<Tartalmaz> model = new GenericTableModel(DaoManager.getInstance().getTartalmazDao(), Tartalmaz.PROPERTY_NAMES);
 
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Tartalmaz>> sorter = new TableRowSorter<>(model);
             tartalmazTable.setRowSorter(sorter);
         }
-        
+
         tartalmazTable.setModel(model);
 
         setComboColumn(tartalmazTable, 0, DaoManager.getInstance().getMoziDao().findAll().toArray());
@@ -377,13 +395,15 @@ public class CinemaFrame extends JFrame {
     }
 
     public void adminFelhasznaloPanel() {
+        panelFelhasznaloA.removeAll();
+
         GenericTableModel<Felhasznalo> model = new GenericTableModel(DaoManager.getInstance().getFelhasznaloDao(), Felhasznalo.PROPERTY_NAMES);
 
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Felhasznalo>> sorter = new TableRowSorter<>(model);
             felhasznaloTable.setRowSorter(sorter);
         }
-        
+
         felhasznaloTable.setModel(model);
         felhasznaloTable.setEnabled(true);
 
