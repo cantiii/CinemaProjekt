@@ -65,11 +65,19 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
         return PROPERTY_NAMES[column];
     }
 
+    /**
+     * 
+     * @param item - egy generikus entitás, amit hozzá szeretnénk adni az adatbázishoz 
+     */
     public void addEntity(T item) {
         DAO.create(item);
         fireTableDataChanged();
     }
 
+    /**
+     * 
+     * @param rowIndex - egy sornak a száma, amiből meghatározzuk a pontos entitást, amit törölni szeretnénk
+     */
     public void removeEntity(int rowIndex) {
         T entity = items.get(rowIndex);
         items.remove(rowIndex);
@@ -77,6 +85,11 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
         DAO.delete(entity);
     }
 
+    /**
+     * 
+     * @param item - az szerkesztett/módosított entitás
+     * @param rowIndex - az update helye
+     */
     public void updateEntity(T item, int rowIndex) {
         T entity = items.get(rowIndex);
         DAO.update(entity);

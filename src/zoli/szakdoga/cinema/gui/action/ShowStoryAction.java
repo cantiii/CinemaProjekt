@@ -11,6 +11,7 @@ import zoli.szakdoga.cinema.gui.model.GenericTableModel;
 /**
  *
  * @author pappz
+ * Ennek az osztálynak a segítségével tudjuk a film leírását előhozni a felületre
  */
 public class ShowStoryAction implements ActionListener{
 
@@ -28,16 +29,15 @@ public class ShowStoryAction implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         int selectedRow = table.getSelectedRow();
-        if(table == parent.getFilmTable()) { //  || table == parent.getMusorTable()
+        //leírás csak a FIlm táblában van, így ezt meg kell vizsgálni
+        if(table == parent.getFilmTable()) {
             if (selectedRow > -1) {
                 int convertRowIndexToModel = table.convertRowIndexToModel(selectedRow);
-                //oszlop elkérésre valami szebb módszer !   
                 int convertColIndexToModel = 5;
+                //elkérjük a táblánk modeljét, hogy az, illetve sor és oszlopszám alapján megtaláljuk a leírást
                 GenericTableModel model = (GenericTableModel) table.getModel();
                 JOptionPane.showMessageDialog(parent, model.getValueAt(convertRowIndexToModel, convertColIndexToModel), GuiConstants.LEIRAS_MENU_TEXT, JOptionPane.INFORMATION_MESSAGE);
             }
-        } else {
-            JOptionPane.showMessageDialog(parent, "Az elemnél nem elérhető leírás!", GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
         }
     }
     

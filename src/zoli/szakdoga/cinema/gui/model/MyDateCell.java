@@ -27,10 +27,20 @@ public class MyDateCell extends DefaultCellEditor {
     public boolean stopCellEditing() {
         JTextField textField = (JTextField) getComponent();
         String data = textField.getText();
+        /**
+         * üres mezőre nem változtatható a dátum
+         * addig nem engedi el a szerkezstés míg üres
+         * ezt azzal is jelezzük, hogy piros keretet kap
+         */
         if (data.trim().equals("")) {
             JOptionPane.showMessageDialog(null, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
             textField.setBorder(RED);
             return false;
+        /**
+         * ha nem üres a mező akkor jöhetnek az ellenőrzések
+         * meghatározzuk az intervallumut, amiben a vetítás szerepelhet
+         * múltbeli, illetve 60napnál előrébb mutató nem lehet
+         */
         } else {
             SimpleDateFormat sample = new SimpleDateFormat("yyyy/MM/dd");
             sample.setLenient(false);
@@ -48,12 +58,14 @@ public class MyDateCell extends DefaultCellEditor {
 
             try {
                 //ha nem valid dátum formátum, akkor ParseException
+                //ha rendben van akkor kilép és felülírja a régi dátumot
                 Date date = sample.parse(data);
                 if (date.after(nextCDay) || date.before(nextDay)) {
                     JOptionPane.showMessageDialog(null, GuiConstants.DATE_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
             } catch (ParseException e) {
+                // ha nem jó dátum formátum hibaüzenetet kap a user
                 JOptionPane.showMessageDialog(null, GuiConstants.FORMAT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                 textField.setBorder(RED);
                 return false;

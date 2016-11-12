@@ -77,6 +77,11 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         return result;
     }
 
+    /**
+     * 
+     * @param name - Mozi entitás neve, amelyről megszeretnénk tudni, hogy létezik-e
+     * @return - a visszatérési érték true, vagy false, annak függvényében, hogy létezik-e a name nevű Mozi entitás
+     */
     public boolean findMozi(String name) {
         T result;
         try {
@@ -94,6 +99,11 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         }
     }
 
+    /**
+     * 
+     * @param name - Terem entitás neve, amelyről megszeretnénk tudni, hogy létezik-e
+     * @return - a visszatérési érték true, vagy false, annak függvényében, hogy létezik-e a name nevű Terem entitás
+     */
     public boolean findTerem(String name) {
         T result;
         try {
@@ -111,6 +121,12 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         }
     }
 
+    /**
+     * 
+     * @param date - dátum, amikorra igényelnénk a termet 
+     * @return - null: ha nincs akkora terem foglalva
+     * @return - Vetites lista azon Vetites entitásokkal, amik a date datumon vannak
+     */
     public List<Vetites> findUsedTerem(String date) {
         List<Vetites> result;
         try {
@@ -127,7 +143,11 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
             return result;
         }
     }
-
+    /**
+     * 
+     * @param name - Film entitás neve, amelyről megszeretnénk tudni, hogy létezik-e
+     * @return - a visszatérési érték true, vagy false, annak függvényében, hogy létezik-e a name nevű Film entitás
+     */
     public boolean findFilm(String name) {
         T result;
         try {
@@ -144,7 +164,12 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
             return true;
         }
     }
-
+    /**
+     * 
+     * @param name - Név amit szeretnénk leellenőrizni, hogy szerepel-e már az adatbázisban
+     * @return - false: nem létezik ilyen névvel felhasználó
+     * @return - true: létezik ilyen névvel felhasználó
+     */
     public boolean findUser(String name) {
         T result;
         try {
@@ -161,7 +186,12 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
             return true;
         }
     }
-
+    /**
+     * 
+     * @param name - LoginAction-nél szükséges ellenőrzés, hogy olyan névvel jelentkezzünk be, amit tartalmaz a db
+     * @return - null: ha még nincs ilyen user
+     * @return - felhasználó entitás, ha már van ilyen user
+     */
     public Felhasznalo isUser(String name) {
         Felhasznalo result;
         try {

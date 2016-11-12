@@ -73,6 +73,7 @@ public class CinemaFrame extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    // Regisztráció, vagy Bejelentkezés választó dialog ablak
     private void setStart() {
         Object[] options = {LOGIN_BUT_TEXT, REG_BUT_TEXT};
         int n = JOptionPane.showOptionDialog(panelCont, LOGIN_BUT_TEXT + " vagy " + REG_BUT_TEXT + "?", FRAME_TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
@@ -118,8 +119,10 @@ public class CinemaFrame extends JFrame {
         setResizable(false);
     }
 
+    //Létrehozzuk a menü struktúrát, a hozzájuk tartozó műveletekkel
     private void setMenu() {
         JMenuBar menuBar = new JMenuBar();
+        //Müsor menü elem, panel megjelenítés, valamit a loadMusorPanel (kifejtve lentebb)
         JMenuItem musor = new JMenuItem(new AbstractAction(MUSOR_MENU_TEXT) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -149,6 +152,7 @@ public class CinemaFrame extends JFrame {
         });
 
         JMenu admin = new JMenu(ADMIN_MENU_TEXT);
+        //admin menüben vannak almenüpontok, ezek hozzáadása itt történik
         JMenuItem subMusor = new JMenuItem(new AbstractAction(MUSOR_MENU_TEXT) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -197,11 +201,14 @@ public class CinemaFrame extends JFrame {
             }
         });
         admin.add(subFelhasznalo);
+        //ha nem rendelkezik az aktuális user adminjoggal, nem látja a menüt
         if (logIn.currUser.getJog() != 1) {
             admin.setVisible(false);
         }
-
+        
+        //aktuális user rendelési története
         JMenuItem tortenet = new JMenuItem(TORTENET_MENU_TEXT);
+        //ezt csak az aktuális user látja, admin nem
         if (logIn.currUser.getJog() != 2) {
             tortenet.setVisible(false);
         }
@@ -210,7 +217,6 @@ public class CinemaFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 setStart();
             }
-
         });
 
         menuBar.add(musor);
@@ -224,39 +230,37 @@ public class CinemaFrame extends JFrame {
     }
 
     private void setCenter() {
-        panelCont.setLayout(cl); // felület > mindig új layout-ot pakol ki? (kis pontok a gui-n)
+        // cardLayout kialaítása
+        panelCont.setLayout(cl);
 
         panelCont.add(panelMusor, "2");
         panelCont.add(panelFilm, "3");
         panelCont.add(panelAr, "4");
         panelCont.add(panelKapcsolat, "5");
-
+        
         panelCont.add(panelMusorA, "6");
-        //panelMusorA.add(addMusorButton);
         panelCont.add(panelFilmA, "7");
-        //panelFilmA.add(addFilmButton);
         panelCont.add(panelMoziA, "8");
-        //panelMoziA.add(addMoziButton);
         panelCont.add(panelTeremA, "9");
-        //panelTeremA.add(addTeremButton);
         panelCont.add(panelTartalmazA, "10");
-        //panelTartalmazA.add(addTeremMoziButton);
         panelCont.add(panelFelhasznaloA, "11");
         panelCont.add(panelTortenet, "12");
+        
         cl.show(panelCont, "5");
 
         add(panelCont, BorderLayout.CENTER);
     }
 
+    //a Müsor/Vetítés adatbázis táblát itt jelenítjük meg a felületre
     public void loadMusorPanel() {
         panelMusor.removeAll();
-
+        // táblamodel létrehozása és meghatározása
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
         // szebben ?
         // törlésre kiürül, akkor még ott marad a sorter hiba
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
-            //régi dátum kiszűrés
+            //régi dátum kiszűrés, hogy a felhasználót ne zavarják, amár amúgy sem aktuális vetítések
             RowFilter<Object, Object> filter = new RowFilter<Object, Object>() {
                 public boolean include(RowFilter.Entry entry) {
                     Date today = new Date();
@@ -267,9 +271,11 @@ public class CinemaFrame extends JFrame {
                         date = format.parse(myDate);
                     } catch (ParseException ex) {
                     }
+                    // ha régebbi, mint a mai nap nem kerül ki a felületre
                     return date.after(today);
                 }
             };
+            //fenti szűrő beállítása
             sorter.setRowFilter(filter);
             musorTable.setRowSorter(sorter);
         }
@@ -280,12 +286,13 @@ public class CinemaFrame extends JFrame {
         panelMusor.add(MUSOR_MENU_TEXT, new JScrollPane(musorTable));
     }
 
+    //ez az admin menübe való Müsor/Vetítés tábla
     public void adminMusorPanel() {
         panelMusorA.removeAll();
         panelMusorA.add(addMusorButton);
 
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
-
+        //TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
             musorTable.setRowSorter(sorter);
@@ -293,7 +300,8 @@ public class CinemaFrame extends JFrame {
 
         musorTable.setModel(model);
         musorTable.getColumnModel().getColumn(2).setCellEditor(new MyDateCell()); // jó dátum és dátum forma
-
+        
+        //A filmet és a termet combobox-ból választhatjuk ki
         setComboColumn(musorTable, 0, DaoManager.getInstance().getFilmDao().findAll().toArray());
         setComboColumn(musorTable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
 
@@ -407,12 +415,14 @@ public class CinemaFrame extends JFrame {
         felhasznaloTable.setModel(model);
         felhasznaloTable.setEnabled(true);
 
+        //a felhasználói jogok combobox-szal módosíthatok
         setComboColumn(felhasznaloTable, 1, JOGOK);
 
         felhasznaloTable.addMouseListener(rightClickAction);
         panelFelhasznaloA.add(FELHASZNALO_MENU_TEXT, new JScrollPane(felhasznaloTable));
     }
 
+    //Combobox-rt felelös függvény
     private void setComboColumn(JTable table, int index, Object[] values) {
         JComboBox comboBox = new JComboBox(values);
         TableColumn column = table.getColumnModel().getColumn(index);
@@ -420,13 +430,15 @@ public class CinemaFrame extends JFrame {
         column.setCellRenderer(new DefaultTableCellRenderer());
     }
 
+    //actionListener-ek aktiválása
     private void setActionListeners() {
         showStory = new ShowStoryAction(this);
         addAction = new AddAction(this);
         delAction = new DelAction(this);
         rightClickAction = new StoryRightClickAction(showStory, delAction, logIn);
     }
-
+    
+    // gombok aktíválása
     private void setButtons() {
         addMusorButton.addActionListener(addAction);
         addFilmButton.addActionListener(addAction);
