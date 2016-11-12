@@ -1,6 +1,7 @@
 package zoli.szakdoga.cinema.gui.action;
 
 import javax.swing.JOptionPane;
+import zoli.szakdoga.cinema.db.dao.DaoManager;
 import zoli.szakdoga.cinema.db.dao.DefaultDao;
 import zoli.szakdoga.cinema.db.entity.Felhasznalo;
 import zoli.szakdoga.cinema.gui.CinemaFrame;
@@ -29,8 +30,8 @@ public class RegAction {
         user.setNev(readString());
         //regisztrációnal mindenkit sima userként mentünk el, akit a későbbiekben kinevezhetünk majd adminná
         user.setJog(2);
-
-        GenericTableModel userModel = (GenericTableModel) parent.getFelhasznaloTable().getModel();
+        GenericTableModel<Felhasznalo> userModel = new GenericTableModel(DaoManager.getInstance().getFelhasznaloDao(), Felhasznalo.PROPERTY_NAMES);
+        
         //ha sikeres volt a regisztráció, elmentjük a felhasználót a db-be
         userModel.addEntity(user);
     }

@@ -28,19 +28,19 @@ public class MyDateCell extends DefaultCellEditor {
         JTextField textField = (JTextField) getComponent();
         String data = textField.getText();
         /**
-         * üres mezőre nem változtatható a dátum
-         * addig nem engedi el a szerkezstés míg üres
+         * üres mezőre nem változtatható a dátum,
+         * addig nem engedi el a szerkesztés míg üres
          * ezt azzal is jelezzük, hogy piros keretet kap
          */
         if (data.trim().equals("")) {
             JOptionPane.showMessageDialog(null, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
             textField.setBorder(RED);
             return false;
-        /**
-         * ha nem üres a mező akkor jöhetnek az ellenőrzések
-         * meghatározzuk az intervallumut, amiben a vetítás szerepelhet
-         * múltbeli, illetve 60napnál előrébb mutató nem lehet
-         */
+            /**
+             * ha nem üres a mező akkor jöhetnek az ellenőrzések
+             * meghatározzuk az intervallumot, amiben a vetítés szerepelhet
+             * múltbeli, illetve 60napnál előrébb mutató nem lehet
+             */
         } else {
             SimpleDateFormat sample = new SimpleDateFormat("yyyy/MM/dd");
             sample.setLenient(false);
@@ -50,8 +50,6 @@ public class MyDateCell extends DefaultCellEditor {
 
             Calendar c = Calendar.getInstance();
             c.setTime(nextDay);
-            c.add(Calendar.DATE, 1);
-            nextDay = c.getTime();
 
             c.add(Calendar.DATE, 60);
             nextCDay = c.getTime();
@@ -77,8 +75,7 @@ public class MyDateCell extends DefaultCellEditor {
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         JTextField textField
-                = (JTextField) super.getTableCellEditorComponent(
-                        table, value, isSelected, row, column);
+                = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
         textField.setBorder(BLACK);
         return textField;
     }

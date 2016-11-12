@@ -190,7 +190,7 @@ public class AddAction implements ActionListener {
             try {
                 //megpróbáljuk a stringet int-é parszolni
                 number = Integer.parseInt(str);
-            } catch (Exception ex) {
+            } catch (NumberFormatException ex) {
                 //ha ez nem volt sikeres értesítjük a usert
                 JOptionPane.showMessageDialog(parent, GuiConstants.INVALID_NUMBER, GuiConstants.INPUT_ERROR, JOptionPane.ERROR_MESSAGE);
             }
@@ -238,8 +238,8 @@ public class AddAction implements ActionListener {
 
         Calendar c = Calendar.getInstance();
         c.setTime(nextDay);
-        c.add(Calendar.DATE, 1);
-        nextDay = c.getTime();
+        //c.add(Calendar.DATE, 1);
+        //nextDay = c.getTime();
 
         c.add(Calendar.DATE, 60);
         nextCDay = c.getTime();
@@ -278,7 +278,6 @@ public class AddAction implements ActionListener {
         dao = new DefaultDao(Terem.class);
         // lekérjük az összes termet
         List<Terem> osszTerem = dao.findAll();
-        List<Terem> segedTerem = new ArrayList<>(osszTerem);
 
         dao = new DefaultDao(Tartalmaz.class);
         //lekérjük a már Mozihoz rendelt termeket, itt még Tartalmaz entitásként
@@ -296,13 +295,12 @@ public class AddAction implements ActionListener {
             return null;
         }
         
-        //A segegTerem listából kitöröljük a már használt termeket
-        Collection<Terem> torlendoTermek = new ArrayList(tartalmazottTerem);
-        segedTerem.removeAll(torlendoTermek);
+        //az összes terem közül kitöröljük a használtakat
+        osszTerem.removeAll(tartalmazottTerem);
 
         //így csak azok maradnak amiket fel tudunk használni
         //de ezeket Object-é kell alakítani
-        Object[] kellMegTerem = segedTerem.toArray();
+        Object[] kellMegTerem = osszTerem.toArray();
 
         Terem terem = (Terem) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, kellMegTerem, kellMegTerem[0]);
         return terem;
@@ -318,7 +316,6 @@ public class AddAction implements ActionListener {
         dao = new DefaultDao(Terem.class);
         // lekérjük az összes termet
         List<Terem> osszTerem = dao.findAll();
-        List<Terem> segedTerem = new ArrayList<>(osszTerem);
 
         dao = new DefaultDao(Vetites.class);
         //lekérjük azokat a termeket, amikben az adotnap már van vetítés, itt még Vetites entitásként
@@ -336,13 +333,12 @@ public class AddAction implements ActionListener {
             return null;
         }
 
-        //A segegTerem listából kitöröljük a már használt termeket
-        Collection<Terem> torlendoTermek = new ArrayList(hasznaltTerem);
-        segedTerem.removeAll(torlendoTermek);
+        //az összes terem közül kitöröljük a használtakat
+        osszTerem.removeAll(hasznaltTerem);
 
         //így csak azok maradnak amiket fel tudunk használni
         //de ezeket Object-é kell alakítani
-        Object[] kellMegTerem = segedTerem.toArray();
+        Object[] kellMegTerem = osszTerem.toArray();
 
         Terem terem = (Terem) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, kellMegTerem, kellMegTerem[0]);
         return terem;

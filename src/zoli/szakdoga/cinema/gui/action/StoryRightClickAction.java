@@ -12,9 +12,8 @@ import zoli.szakdoga.cinema.gui.GuiConstants;
 
 /**
  *
- * @author pappz
- * Ez az oosztály felelős a jobb klikk opció megjelenítéért
- * Tehát itt tudjuk kiválasztani context menü akcióit
+ * @author pappz Ez az oosztály felelős a jobb klikk opció megjelenítéért Tehát
+ * itt tudjuk kiválasztani context menü akcióit
  */
 public class StoryRightClickAction extends MouseAdapter {
 
@@ -42,24 +41,23 @@ public class StoryRightClickAction extends MouseAdapter {
 
     private void createPopup(MouseEvent e) {
         JPopupMenu popup = new JPopupMenu();
-        JMenuItem leiras = new JMenuItem(GuiConstants.LEIRAS_MENU_TEXT);
-        JMenuItem torles = new JMenuItem(GuiConstants.TORLES_BUT_TEXT);
-        //ha nem sima user, akkor nem látja a leírás menüelemet
-        if (logUser.currUser.getJog() != 2) {
-            leiras.setVisible(false);
-        }
-        //ha nem admin, nem látja a törlés menüelemet
-        if (logUser.currUser.getJog() != 1) {
-            torles.setVisible(false);
+
+        JMenuItem leiras = null;
+        if (logUser.getCurrUser().getJog() == 2) {
+            leiras = new JMenuItem(GuiConstants.LEIRAS_MENU_TEXT);
+            showStory.setTable((JTable) e.getSource());
+            leiras.addActionListener(showStory);
+            popup.add(leiras);
         }
 
-        showStory.setTable((JTable) e.getSource());
-        leiras.addActionListener(showStory);
-        delItem.setTable((JTable) e.getSource());
-        torles.addActionListener(delItem);
+        JMenuItem torles = null;
+        if (logUser.getCurrUser().getJog() == 1) {
+            torles = new JMenuItem(GuiConstants.TORLES_BUT_TEXT);
+            delItem.setTable((JTable) e.getSource());
+            torles.addActionListener(delItem);
+            popup.add(torles);
+        }
 
-        popup.add(leiras);
-        popup.add(torles);
         popup.show(e.getComponent(), e.getX(), e.getY());
     }
 }

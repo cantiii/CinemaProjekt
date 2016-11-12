@@ -2,6 +2,10 @@ package zoli.szakdoga.cinema.gui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Label;
 import java.awt.event.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -85,6 +89,7 @@ public class CinemaFrame extends JFrame {
         }
         setMenu();
         setCenter();
+        setSouth();
         setActionListeners();
     }
 
@@ -127,6 +132,7 @@ public class CinemaFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "2");
+                setNorth(MUSOR_MENU_TEXT);
                 loadMusorPanel();
             }
         });
@@ -135,6 +141,7 @@ public class CinemaFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "3");
+                setNorth(FILM_MENU_TEXT);
                 loadFilmPanel();
             }
         });
@@ -142,76 +149,89 @@ public class CinemaFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "4");
+                setNorth(AR_MENU_TEXT);
             }
         });
         JMenuItem kapcsolat = new JMenuItem(new AbstractAction(KAPCSOLAT_MENU_TEXT) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "5");
+                setNorth(KAPCSOLAT_MENU_TEXT);
             }
         });
-
-        JMenu admin = new JMenu(ADMIN_MENU_TEXT);
-        //admin menüben vannak almenüpontok, ezek hozzáadása itt történik
-        JMenuItem subMusor = new JMenuItem(new AbstractAction(MUSOR_MENU_TEXT) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cl.show(panelCont, "6");
-                adminMusorPanel();
-            }
-        });
-        admin.add(subMusor);
-        JMenuItem subFilm = new JMenuItem(new AbstractAction(FILM_MENU_TEXT) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cl.show(panelCont, "7");
-                adminFilmPanel();
-            }
-        });
-        admin.add(subFilm);
-        JMenuItem subMozi = new JMenuItem(new AbstractAction(MOZI_MENU_TEXT) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cl.show(panelCont, "8");
-                adminMoziPanel();
-            }
-        });
-        admin.add(subMozi);
-        JMenuItem subTerem = new JMenuItem(new AbstractAction(TEREM_MENU_TEXT) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cl.show(panelCont, "9");
-                adminTeremPanel();
-            }
-        });
-        admin.add(subTerem);
-        JMenuItem subTartalmaz = new JMenuItem(new AbstractAction(HOZZARENDELES_TEXT) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cl.show(panelCont, "10");
-                adminTartalmazPanel();
-            }
-        });
-        admin.add(subTartalmaz);
-        JMenuItem subFelhasznalo = new JMenuItem(new AbstractAction(FELHASZNALO_MENU_TEXT) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cl.show(panelCont, "11");
-                adminFelhasznaloPanel();
-            }
-        });
-        admin.add(subFelhasznalo);
-        //ha nem rendelkezik az aktuális user adminjoggal, nem látja a menüt
-        if (logIn.currUser.getJog() != 1) {
-            admin.setVisible(false);
+        
+        JMenu admin = null;
+        if (logIn.getCurrUser().getJog() == 1) {
+            admin = new JMenu(ADMIN_MENU_TEXT);
+            //admin menüben vannak almenüpontok, ezek hozzáadása itt történik
+            JMenuItem subMusor = new JMenuItem(new AbstractAction(MUSOR_MENU_TEXT) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    cl.show(panelCont, "6");
+                    setNorth(MUSOR_MENU_TEXT);
+                    adminMusorPanel();
+                }
+            });
+            admin.add(subMusor);
+            JMenuItem subFilm = new JMenuItem(new AbstractAction(FILM_MENU_TEXT) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    cl.show(panelCont, "7");
+                    setNorth(FILM_MENU_TEXT);
+                    adminFilmPanel();
+                }
+            });
+            admin.add(subFilm);
+            JMenuItem subMozi = new JMenuItem(new AbstractAction(MOZI_MENU_TEXT) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    cl.show(panelCont, "8");
+                    setNorth(MOZI_MENU_TEXT);
+                    adminMoziPanel();
+                }
+            });
+            admin.add(subMozi);
+            JMenuItem subTerem = new JMenuItem(new AbstractAction(TEREM_MENU_TEXT) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    cl.show(panelCont, "9");
+                    setNorth(TEREM_MENU_TEXT);
+                    adminTeremPanel();
+                }
+            });
+            admin.add(subTerem);
+            JMenuItem subTartalmaz = new JMenuItem(new AbstractAction(HOZZARENDELES_TEXT) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    cl.show(panelCont, "10");
+                    setNorth(HOZZARENDELES_TEXT);
+                    adminTartalmazPanel();
+                }
+            });
+            admin.add(subTartalmaz);
+            JMenuItem subFelhasznalo = new JMenuItem(new AbstractAction(FELHASZNALO_MENU_TEXT) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    cl.show(panelCont, "11");
+                    setNorth(FELHASZNALO_MENU_TEXT);
+                    adminFelhasznaloPanel();
+                }
+            });
+            admin.add(subFelhasznalo);
         }
         
         //aktuális user rendelési története
-        JMenuItem tortenet = new JMenuItem(TORTENET_MENU_TEXT);
-        //ezt csak az aktuális user látja, admin nem
-        if (logIn.currUser.getJog() != 2) {
-            tortenet.setVisible(false);
+        JMenuItem tortenet = null;
+        if (logIn.getCurrUser().getJog() == 2) {
+            tortenet = new JMenuItem(new AbstractAction(TORTENET_MENU_TEXT) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                cl.show(panelCont, "12");
+                setNorth(TORTENET_MENU_TEXT);
+                }
+            });
         }
+
         JMenuItem logout = new JMenuItem(new AbstractAction(LOGOUT_MENU_TEXT) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -223,8 +243,12 @@ public class CinemaFrame extends JFrame {
         menuBar.add(film);
         menuBar.add(ar);
         menuBar.add(kapcsolat);
-        menuBar.add(admin);
-        menuBar.add(tortenet);
+        if (logIn.getCurrUser().getJog() == 1) {
+            menuBar.add(admin);
+        }
+        if (logIn.getCurrUser().getJog() == 2) {
+            menuBar.add(tortenet);
+        }     
         menuBar.add(logout);
         setJMenuBar(menuBar);
     }
@@ -249,6 +273,43 @@ public class CinemaFrame extends JFrame {
         cl.show(panelCont, "5");
 
         add(panelCont, BorderLayout.CENTER);
+    }
+    
+    private void setNorth(String label) {
+        JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        
+        JLabel elem = new JLabel(label);
+        
+        elem.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+        
+        northPanel.add(elem);
+        northPanel.setBackground(Color.GRAY);
+        add(northPanel, BorderLayout.NORTH);
+    }
+    private void setSouth() {       
+        JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        
+        JLabel udv = new JLabel("Üdv:");
+        JLabel nev = new JLabel(logIn.getCurrUser().getNev());
+        JLabel jogszoveg = new JLabel("jogosultságod:");
+        Integer jogInt = logIn.getCurrUser().getJog();
+        String jogosultsag = null;
+        if(jogInt == 1) {
+            jogosultsag = "adminisztrátor";
+        } else if (jogInt == 2) {
+            jogosultsag = "felhasználó";
+        }
+        JLabel jog = new JLabel(jogosultsag);
+        
+        nev.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+        jog.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+        
+        southPanel.add(udv);
+        southPanel.add(nev);
+        southPanel.add(jogszoveg);
+        southPanel.add(jog);
+        southPanel.setBackground(Color.GRAY);
+        add(southPanel, BorderLayout.SOUTH);
     }
 
     //a Müsor/Vetítés adatbázis táblát itt jelenítjük meg a felületre
@@ -322,7 +383,7 @@ public class CinemaFrame extends JFrame {
         filmTable.setModel(model);
         filmTable.setEnabled(false);
 
-        if (logIn.currUser.getJog() == 1) {
+        if (logIn.getCurrUser().getJog() == 2) {
             filmTable.addMouseListener(rightClickAction);
         }
         panelFilm.add(FILM_MENU_TEXT, new JScrollPane(filmTable));

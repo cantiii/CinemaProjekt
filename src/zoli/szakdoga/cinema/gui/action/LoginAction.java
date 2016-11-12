@@ -8,15 +8,12 @@ import zoli.szakdoga.cinema.gui.GuiConstants;
 
 /**
  *
- * @author Zoli
- * A bejelentkezésért felelős osztályja a programnak
+ * @author Zoli A bejelentkezésért felelős osztályja a programnak
  */
 public class LoginAction {
 
     private CinemaFrame parent;
-    private DefaultDao dao;
-    public Felhasznalo currUser;
-    private RegAction regAct;
+    private Felhasznalo currUser;
 
     public LoginAction(CinemaFrame parent) {
         this.parent = parent;
@@ -26,7 +23,7 @@ public class LoginAction {
     private Felhasznalo readUniqueString() {
         Felhasznalo getUser = new Felhasznalo();
         String name = null;
-        dao = new DefaultDao(Felhasznalo.class);
+        DefaultDao dao = new DefaultDao(Felhasznalo.class);
         int i = 0;
         while (name == null) {
             i++;
@@ -36,12 +33,12 @@ public class LoginAction {
                 if (dao.isUser(name) != null) {
                     getUser = dao.isUser(name);
                     return getUser;
-                //ha nem létező felhasználó nevet adunk meg figyelmeztetést kapunk
+                    //ha nem létező felhasználó nevet adunk meg figyelmeztetést kapunk
                 } else {
                     JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_NO, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                     name = null;
                 }
-            //név nélkül nem lehet bejelentkezni
+                //név nélkül nem lehet bejelentkezni
             } else {
                 JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_REQUIRED, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                 name = null;
@@ -49,9 +46,13 @@ public class LoginAction {
             //ha 3-szor sikertelenül probálkoztunk átírányít a rendszer a regisztrációhoz
             if (i == 3) {
                 JOptionPane.showMessageDialog(parent, GuiConstants.NOMORE_TRY, GuiConstants.FAIL, JOptionPane.INFORMATION_MESSAGE);
-                regAct = new RegAction(parent);
+                new RegAction(parent);
             }
         }
         return getUser;
+    }
+
+    public Felhasznalo getCurrUser() {
+        return currUser;
     }
 }
