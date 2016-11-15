@@ -5,8 +5,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import zoli.szakdoga.cinema.db.dao.DefaultDao;
 import zoli.szakdoga.cinema.db.dao.GenericDao;
-import zoli.szakdoga.cinema.db.entity.PersistentEntity;
-import zoli.szakdoga.cinema.db.entity.Szek;
+import zoli.szakdoga.cinema.db.entity.*;
 
 /**
  *
@@ -51,7 +50,7 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return true;
+        return !PROPERTY_NAMES[columnIndex].equals("Férőhely"); // jobb megoldás ?
     }
 
     @Override

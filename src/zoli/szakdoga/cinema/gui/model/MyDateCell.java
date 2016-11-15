@@ -69,7 +69,7 @@ public class MyDateCell extends DefaultCellEditor {
                 return false;
             }
         }
-        return super.stopCellEditing();
+        return true;
     }
 
     @Override

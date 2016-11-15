@@ -66,7 +66,7 @@ public class CinemaFrame extends JFrame {
     private RegAction regIn;
 
     private final static Integer[] JOGOK = {1, 2};
-    private final static Integer[] HELYEK = {25, 50, 80};
+    //private final static Integer[] HELYEK = {25, 50, 80};
 
     public CinemaFrame() {
         initFrame();
@@ -448,8 +448,11 @@ public class CinemaFrame extends JFrame {
 
         teremTable.setModel(model);
         teremTable.setEnabled(true);
+        for(int i=0;i<teremTable.getRowCount();i++){
+            
+        }
 
-        setComboColumn(teremTable, 1, HELYEK);
+        //setComboColumn(teremTable, 1, HELYEK);
         
         teremTable.addMouseListener(rightClickAction);
         panelTeremA.add(TEREM_MENU_TEXT, new JScrollPane(teremTable));
