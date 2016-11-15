@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -18,10 +17,11 @@ import zoli.szakdoga.cinema.gui.model.GenericTableModel;
 
 /**
  *
- * @author pappz
- * A különböző felvitelekért felelős osztály
+ * @author pappz A különböző felvitelekért felelős osztály
  */
 public class AddAction implements ActionListener {
+
+    private final static Object[] HELYEK = {25, 50, 80};
 
     private CinemaFrame parent;
     private DefaultDao dao;
@@ -78,10 +78,27 @@ public class AddAction implements ActionListener {
             case FELVITEL_TEREM_TEXT:
                 Terem terem = new Terem();
                 terem.setNev(readUniqueString(FELVITEL_TEREM_TEXT));
-                terem.setFerohely(readNumber(FELVITEL_TEREMHELY_TEXT));
+                Integer helyekSzama = readHely();
+                terem.setFerohely(helyekSzama);
 
                 GenericTableModel teremModel = (GenericTableModel) parent.getTeremTable().getModel();
                 teremModel.addEntity(terem);
+
+                Szek szekek = null;
+                Szekterem szekTerem = new Szekterem();
+                for (int i = 0; i < helyekSzama; i++) {
+                    szekek = new Szek();
+                    szekek.setSor(i);
+                    GenericTableModel<Szek> szekModel = new GenericTableModel(DaoManager.getInstance().getSzekDao(), Szek.PROPERTY_NAMES);
+                    szekModel.addEntity(szekek);
+
+                    szekTerem.setTeremId(terem);
+                    szekTerem.setSzekId(szekek);
+
+                    GenericTableModel<Szekterem> szekTeremModel = new GenericTableModel(DaoManager.getInstance().getSzekteremDao(), Szekterem.PROPERTY_NAMES);//GenericTableModel szekTeremModel = (GenericTableModel) parent.getSzekTeremTable().getModel();
+                    szekTeremModel.addEntity(szekTerem);
+                }
+                JOptionPane.showMessageDialog(parent, helyekSzama + GuiConstants.SZEKRENDELES, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
                 break;
             case MOZI_TEREM_TEXT:
                 Mozi valaszMozi = readMozi();
@@ -99,10 +116,10 @@ public class AddAction implements ActionListener {
                 break;
         }
     }
+
     /**
      * Eggy egyszerű string beolvasás, csak annyi a lényeg, hogy ne legyen üres
-     * valamint, hogy a hossza rendben legyen
-     * ha ezek megvannak továbbítjuk
+     * valamint, hogy a hossza rendben legyen ha ezek megvannak továbbítjuk
      */
     private String readString(String label) {
         String name = null;
@@ -119,10 +136,11 @@ public class AddAction implements ActionListener {
         }
         return name;
     }
+
     /**
-     * 
+     *
      * @param label -
-     * @return 
+     * @return
      */
     private String readUniqueString(String label) {
         String name = null;
@@ -141,6 +159,9 @@ public class AddAction implements ActionListener {
                         } else {
                             return name;
                         }
+                    } else {
+                        JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                        name = null;
                     }
                 }
                 break;
@@ -158,6 +179,9 @@ public class AddAction implements ActionListener {
                         } else {
                             return name;
                         }
+                    } else {
+                        JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                        name = null;
                     }
                 }
                 break;
@@ -175,6 +199,9 @@ public class AddAction implements ActionListener {
                         } else {
                             return name;
                         }
+                    } else {
+                        JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                        name = null;
                     }
                 }
                 break;
@@ -226,9 +253,9 @@ public class AddAction implements ActionListener {
             return false;
         }
         /**
-         * ha nem üres a mező akkor jöhetnek az ellenőrzések
-         * meghatározzuk az intervallumut, amiben a vetítás szerepelhet
-         * múltbeli, illetve 60napnál előrébb mutató nem lehet
+         * ha nem üres a mező akkor jöhetnek az ellenőrzések meghatározzuk az
+         * intervallumut, amiben a vetítás szerepelhet múltbeli, illetve
+         * 60napnál előrébb mutató nem lehet
          */
         SimpleDateFormat sample = new SimpleDateFormat("yyyy/MM/dd");
         sample.setLenient(false);
@@ -261,7 +288,8 @@ public class AddAction implements ActionListener {
     }
 
     /**
-     *  Mozi entitások beolvasása és megjelenításe
+     * Mozi entitások beolvasása és megjelenításe
+     *
      * @return - a legördülő listából kiválasztott mozi elem
      */
     private Mozi readMozi() {
@@ -272,6 +300,7 @@ public class AddAction implements ActionListener {
 
     /**
      * Csak azokat a termeket kellene felhozni, amik még nincsenek mozihoz adva
+     *
      * @return - kiválasztott Terem entitás
      */
     private Terem readTerem() {
@@ -288,13 +317,13 @@ public class AddAction implements ActionListener {
         for (int i = 0; i < idInTartalmaz.size(); i++) {
             tartalmazottTerem.add(idInTartalmaz.get(i).getTeremId());
         }
-        
+
         //ha már nincs több terem, amit használhatnánk hibaüzenet
         if (tartalmazottTerem.size() == osszTerem.size()) {
             JOptionPane.showMessageDialog(parent, GuiConstants.NOMORE_ROOM_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
             return null;
         }
-        
+
         //az összes terem közül kitöröljük a használtakat
         osszTerem.removeAll(tartalmazottTerem);
 
@@ -307,8 +336,9 @@ public class AddAction implements ActionListener {
     }
 
     /**
-     * Terem lista az időpont függvényében
-     * vetítés >> dátum a prio, mert az nap 1 terem csak 1x használható
+     * Terem lista az időpont függvényében vetítés >> dátum a prio, mert az nap
+     * 1 terem csak 1x használható
+     *
      * @param date - A vetítés dátuma, ez szűri le a termeket
      * @return - kiválasztott terem entitás
      */
@@ -345,12 +375,18 @@ public class AddAction implements ActionListener {
     }
 
     /**
-     *  Film entitások beolvasása és megjelenításe
+     * Film entitások beolvasása és megjelenításe
+     *
      * @return - a legördülő listából kiválasztott film elem
      */
     private Film readFilm() {
         Object[] filmek = DaoManager.getInstance().getFilmDao().findAll().toArray();
         Film film = (Film) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, filmek, filmek[0]);
         return film;
+    }
+
+    private Integer readHely() {
+        Integer hely = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, HELYEK, HELYEK[0]);
+        return hely;
     }
 }

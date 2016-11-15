@@ -13,7 +13,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Szekterem.findAll", query = "SELECT s FROM Szekterem s"),
-    @NamedQuery(name = "Szekterem.findById", query = "SELECT s FROM Szekterem s WHERE s.id = :id")})
+    @NamedQuery(name = "Szekterem.findById", query = "SELECT s FROM Szekterem s WHERE s.id = :id"),
+    @NamedQuery(name = "Szekterem.findTeremById", query = "SELECT s.szekId FROM Szekterem s WHERE s.teremId = :teremId")})
 public class Szekterem  implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Terem", "Szék"};

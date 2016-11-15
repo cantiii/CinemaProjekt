@@ -12,8 +12,9 @@ import zoli.szakdoga.cinema.gui.GuiConstants;
 
 /**
  *
- * @author pappz Ez az oosztály felelős a jobb klikk opció megjelenítéért Tehát
- * itt tudjuk kiválasztani context menü akcióit
+ * @author pappz
+ * Ez az osztály felelős a jobb klikk opció megjelenítésért
+ * Tehát itt tudjuk kiválasztani context menü akcióit
  */
 public class StoryRightClickAction extends MouseAdapter {
 

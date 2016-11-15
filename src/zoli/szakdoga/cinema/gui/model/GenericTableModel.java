@@ -3,8 +3,10 @@ package zoli.szakdoga.cinema.gui.model;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import zoli.szakdoga.cinema.db.dao.DefaultDao;
 import zoli.szakdoga.cinema.db.dao.GenericDao;
 import zoli.szakdoga.cinema.db.entity.PersistentEntity;
+import zoli.szakdoga.cinema.db.entity.Szek;
 
 /**
  *
@@ -84,7 +86,13 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
         fireTableDataChanged();
         DAO.delete(entity);
     }
-
+    
+    public void removeEntity(T item) {
+        DefaultDao dao = new DefaultDao(Szek.class);
+        DAO.delete(item);
+        fireTableDataChanged();       
+    }
+    
     /**
      * 
      * @param item - az szerkesztett/módosított entitás

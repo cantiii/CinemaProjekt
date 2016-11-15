@@ -29,7 +29,7 @@ public class ShowStoryAction implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         int selectedRow = table.getSelectedRow();
-        //leírás csak a FIlm táblában van, így ezt meg kell vizsgálni
+        //leírás csak a Film táblában van, így ezt meg kell vizsgálni
         if(table == parent.getFilmTable()) {
             if (selectedRow > -1) {
                 int convertRowIndexToModel = table.convertRowIndexToModel(selectedRow);

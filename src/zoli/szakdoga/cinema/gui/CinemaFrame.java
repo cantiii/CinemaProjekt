@@ -5,7 +5,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Label;
 import java.awt.event.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,6 +41,8 @@ public class CinemaFrame extends JFrame {
     private final JTable moziTable = new JTable();
     private final JPanel panelTeremA = new JPanel();
     private final JTable teremTable = new JTable();
+    private final JTable szekTable = new JTable();
+    private final JTable szekTeremTable = new JTable();
     private final JPanel panelFelhasznaloA = new JPanel();
     private final JTable felhasznaloTable = new JTable();
     private final JPanel panelTartalmazA = new JPanel();
@@ -65,6 +66,7 @@ public class CinemaFrame extends JFrame {
     private RegAction regIn;
 
     private final static Integer[] JOGOK = {1, 2};
+    private final static Integer[] HELYEK = {25, 50, 80};
 
     public CinemaFrame() {
         initFrame();
@@ -107,6 +109,14 @@ public class CinemaFrame extends JFrame {
 
     public JTable getTeremTable() {
         return teremTable;
+    }
+    
+    public JTable getSzekTable() {
+        return szekTable;
+    }
+    
+    public JTable getSzekTeremTable() {
+        return szekTeremTable;
     }
 
     public JTable getTartalmazTable() {
@@ -289,9 +299,9 @@ public class CinemaFrame extends JFrame {
     private void setSouth() {       
         JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         
-        JLabel udv = new JLabel("Üdv:");
+        JLabel udv = new JLabel("ÜDV:");
         JLabel nev = new JLabel(logIn.getCurrUser().getNev());
-        JLabel jogszoveg = new JLabel("jogosultságod:");
+        JLabel jogszoveg = new JLabel("JOGOSULTSÁGOD:");
         Integer jogInt = logIn.getCurrUser().getJog();
         String jogosultsag = null;
         if(jogInt == 1) {
@@ -439,6 +449,8 @@ public class CinemaFrame extends JFrame {
         teremTable.setModel(model);
         teremTable.setEnabled(true);
 
+        setComboColumn(teremTable, 1, HELYEK);
+        
         teremTable.addMouseListener(rightClickAction);
         panelTeremA.add(TEREM_MENU_TEXT, new JScrollPane(teremTable));
     }

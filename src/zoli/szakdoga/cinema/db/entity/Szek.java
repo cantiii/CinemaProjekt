@@ -20,6 +20,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Szek.findByOszlop", query = "SELECT s FROM Szek s WHERE s.oszlop = :oszlop")})
 public class Szek  implements Serializable, PersistentEntity {
 
+    public static final String PROPERTY_NAMES[] = {"Sor"};
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -44,16 +44,18 @@ public class GuiConstants {
     public static final String FELVITEL_TEREM_TEXT = "Terem felvitel";
     public static final String FELVITEL_TEREMHELY_TEXT = "Terem hely felvitel";
     public static final String TORLES_TEREM_TEXT = "Terem TÖRLÉS";
+    public static final String SZEKRENDELES = " darab széket beraktunk a terembe!";
     public static final String FELVITEL_FELHASZNALO_TEXT = "Felhasznaló felvitel";
     public static final String TORLES_FELHASZNALO_TEXT = "Felhasznaló TÖRLÉS";
     public static final String MOZI_TEREM_TEXT = "Terem hozzárendelés";
+    public static final String TORLES = "Biztos törli?";
     
     public static final String VALASZTO_TEXT = "Válaszd ki a megfelelő elemet!";
     
     public static final String LENGHT_ERROR = "Nem megfelelő hosszúságú!";
     public static final String FORMAT_ERROR = "Nem jó formátum, helyesen: ÉÉÉÉ/HH/NN";
     public static final String DATE_ERROR = "Nem jó időintervallum!\n(MIN: +1nap, MAX: +60 nap)";
-    public static final String UNIQUE_ERROR = "Nem egyedi a név!";
+    public static final String UNIQUE_ERROR = "Nem egyedi adat!";
     public static final String UNIQUE_DATA_ERROR = "Nem egyedi a adat, vagy túl hosszú bevitel!";
     public static final String INVALID_NUMBER = "Érvénytelen szám formátum.";
     public static final String INPUT_ERROR = "Beviteli hiba";
