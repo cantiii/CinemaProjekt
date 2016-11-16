@@ -55,7 +55,7 @@ public class AddAction implements ActionListener {
                             szekek.setSor(i);
                             szekModel = new GenericTableModel(DaoManager.getInstance().getSzekDao(), Szek.PROPERTY_NAMES);
                             szekModel.addEntity(szekek);
-                            if(i==0) {
+                            if (i == 0) {
                                 vetites.setSzekId(szekek);
                             }
                         }
@@ -64,8 +64,7 @@ public class AddAction implements ActionListener {
                         vetites.setFilmId(valaszFilm);
                         vetites.setTeremId(valaszTerem);
                         vetites.setMikor(date);
-                        
-                            
+
                         vetitesModel = (GenericTableModel) parent.getMusorTable().getModel();
                         vetitesModel.addEntity(vetites);
                     }
@@ -99,26 +98,22 @@ public class AddAction implements ActionListener {
 
                 GenericTableModel teremModel = (GenericTableModel) parent.getTeremTable().getModel();
                 teremModel.addEntity(terem);
-                break;
-            case MOZI_TEREM_TEXT:
+
                 Mozi valaszMozi = readMozi();
                 if (valaszMozi != null) {
-                    valaszTerem = readTerem();
-                    if (valaszTerem != null) {
-                        Tartalmaz tartalmaz = new Tartalmaz();
-                        tartalmaz.setMoziId(valaszMozi);
-                        tartalmaz.setTeremId(valaszTerem);
+                    Tartalmaz tartalmaz = new Tartalmaz();
+                    tartalmaz.setMoziId(valaszMozi);
+                    tartalmaz.setTeremId(terem);
 
-                        GenericTableModel tartalmazModel = (GenericTableModel) parent.getTartalmazTable().getModel();
-                        tartalmazModel.addEntity(tartalmaz);
-                    }
+                    GenericTableModel tartalmazModel = new GenericTableModel(DaoManager.getInstance().getTartalmazDao(), Tartalmaz.PROPERTY_NAMES);
+                    tartalmazModel.addEntity(tartalmaz);
                 }
                 break;
         }
     }
 
     /**
-     * Eggy egyszerű string beolvasás, csak annyi a lényeg, hogy ne legyen üres
+     * Egy egyszerű string beolvasás, csak annyi a lényeg, hogy ne legyen üres
      * valamint, hogy a hossza rendben legyen ha ezek megvannak továbbítjuk
      */
     private String readString(String label) {
@@ -299,43 +294,6 @@ public class AddAction implements ActionListener {
     }
 
     /**
-     * Csak azokat a termeket kellene felhozni, amik még nincsenek mozihoz adva
-     *
-     * @return - kiválasztott Terem entitás
-     */
-    private Terem readTerem() {
-        dao = new DefaultDao(Terem.class);
-        // lekérjük az összes termet
-        List<Terem> osszTerem = dao.findAll();
-
-        dao = new DefaultDao(Tartalmaz.class);
-        //lekérjük a már Mozihoz rendelt termeket, itt még Tartalmaz entitásként
-        List<Tartalmaz> idInTartalmaz = dao.findAll();
-
-        //Ezeket átalakitjuk Terem listávvá
-        List<Terem> tartalmazottTerem = new ArrayList<>();
-        for (int i = 0; i < idInTartalmaz.size(); i++) {
-            tartalmazottTerem.add(idInTartalmaz.get(i).getTeremId());
-        }
-
-        //ha már nincs több terem, amit használhatnánk hibaüzenet
-        if (tartalmazottTerem.size() == osszTerem.size()) {
-            JOptionPane.showMessageDialog(parent, GuiConstants.NOMORE_ROOM_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-
-        //az összes terem közül kitöröljük a használtakat
-        osszTerem.removeAll(tartalmazottTerem);
-
-        //így csak azok maradnak amiket fel tudunk használni
-        //de ezeket Object-é kell alakítani
-        Object[] kellMegTerem = osszTerem.toArray();
-
-        Terem terem = (Terem) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, kellMegTerem, kellMegTerem[0]);
-        return terem;
-    }
-
-    /**
      * Terem lista az időpont függvényében vetítés >> dátum a prio, mert az nap
      * 1 terem csak 1x használható
      *
@@ -348,7 +306,7 @@ public class AddAction implements ActionListener {
         List<Terem> osszTerem = dao.findAll();
 
         dao = new DefaultDao(Vetites.class);
-        //lekérjük azokat a termeket, amikben az adotnap már van vetítés, itt még Vetites entitásként
+        //lekérjük azokat a termeket, amikben az adot nap már van vetítés, itt még Vetites entitásként
         List<Vetites> idInVetites = dao.findUsedTerem(date);
 
         //Ezeket átalakitjuk Terem listávvá

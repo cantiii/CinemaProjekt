@@ -59,7 +59,6 @@ public class CinemaFrame extends JFrame {
     private final JButton addFilmButton = new JButton(FELVITEL_FILM_TEXT);
     private final JButton addMoziButton = new JButton(FELVITEL_MOZI_TEXT);
     private final JButton addTeremButton = new JButton(FELVITEL_TEREM_TEXT);
-    private final JButton addTeremMoziButton = new JButton(MOZI_TEREM_TEXT);
 
     private LoginAction logIn;
     private RegAction regIn;
@@ -354,7 +353,7 @@ public class CinemaFrame extends JFrame {
         panelMusorA.add(addMusorButton);
 
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
-        //TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
+        
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
             musorTable.setRowSorter(sorter);
@@ -375,7 +374,7 @@ public class CinemaFrame extends JFrame {
         panelFilm.removeAll();
 
         GenericTableModel<Film> model = new GenericTableModel(DaoManager.getInstance().getFilmDao(), Film.PROPERTY_NAMES);
-
+        
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Film>> sorter = new TableRowSorter<>(model);
             filmTable.setRowSorter(sorter);
@@ -431,7 +430,7 @@ public class CinemaFrame extends JFrame {
         panelTeremA.add(addTeremButton);
 
         GenericTableModel<Terem> model = new GenericTableModel(DaoManager.getInstance().getTeremDao(), Terem.PROPERTY_NAMES);
-
+        
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Terem>> sorter = new TableRowSorter<>(model);
             teremTable.setRowSorter(sorter);
@@ -439,8 +438,6 @@ public class CinemaFrame extends JFrame {
 
         teremTable.setModel(model);
         teremTable.setEnabled(true);
-
-        //setComboColumn(teremTable, 1, HELYEK);
         
         teremTable.addMouseListener(rightClickAction);
         panelTeremA.add(TEREM_MENU_TEXT, new JScrollPane(teremTable));
@@ -448,7 +445,6 @@ public class CinemaFrame extends JFrame {
 
     public void adminTartalmazPanel() {
         panelTartalmazA.removeAll();
-        panelTartalmazA.add(addTeremMoziButton);
 
         GenericTableModel<Tartalmaz> model = new GenericTableModel(DaoManager.getInstance().getTartalmazDao(), Tartalmaz.PROPERTY_NAMES);
 
@@ -508,7 +504,6 @@ public class CinemaFrame extends JFrame {
         addFilmButton.addActionListener(addAction);
         addMoziButton.addActionListener(addAction);
         addTeremButton.addActionListener(addAction);
-        addTeremMoziButton.addActionListener(addAction);
     }
 
 }
