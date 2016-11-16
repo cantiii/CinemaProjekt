@@ -6,7 +6,6 @@
     <class>zoli.szakdoga.cinema.db.entity.Terem</class>
     <class>zoli.szakdoga.cinema.db.entity.Felhasznalo</class>
     <class>zoli.szakdoga.cinema.db.entity.Film</class>
-    <class>zoli.szakdoga.cinema.db.entity.Szekterem</class>
     <class>zoli.szakdoga.cinema.db.entity.Szek</class>
     <class>zoli.szakdoga.cinema.db.entity.Mozi</class>
     <class>zoli.szakdoga.cinema.db.entity.Vetites</class>

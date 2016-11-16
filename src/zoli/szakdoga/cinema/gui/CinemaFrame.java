@@ -42,7 +42,6 @@ public class CinemaFrame extends JFrame {
     private final JPanel panelTeremA = new JPanel();
     private final JTable teremTable = new JTable();
     private final JTable szekTable = new JTable();
-    private final JTable szekTeremTable = new JTable();
     private final JPanel panelFelhasznaloA = new JPanel();
     private final JTable felhasznaloTable = new JTable();
     private final JPanel panelTartalmazA = new JPanel();
@@ -114,10 +113,6 @@ public class CinemaFrame extends JFrame {
     public JTable getSzekTable() {
         return szekTable;
     }
-    
-    public JTable getSzekTeremTable() {
-        return szekTeremTable;
-    }
 
     public JTable getTartalmazTable() {
         return tartalmazTable;
@@ -173,12 +168,13 @@ public class CinemaFrame extends JFrame {
         JMenu admin = null;
         if (logIn.getCurrUser().getJog() == 1) {
             admin = new JMenu(ADMIN_MENU_TEXT);
+            setNorth(ADMIN_MENU_TEXT);
             //admin menüben vannak almenüpontok, ezek hozzáadása itt történik
             JMenuItem subMusor = new JMenuItem(new AbstractAction(MUSOR_MENU_TEXT) {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "6");
-                    setNorth(MUSOR_MENU_TEXT);
+                    
                     adminMusorPanel();
                 }
             });
@@ -187,7 +183,6 @@ public class CinemaFrame extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "7");
-                    setNorth(FILM_MENU_TEXT);
                     adminFilmPanel();
                 }
             });
@@ -196,7 +191,6 @@ public class CinemaFrame extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "8");
-                    setNorth(MOZI_MENU_TEXT);
                     adminMoziPanel();
                 }
             });
@@ -205,7 +199,6 @@ public class CinemaFrame extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "9");
-                    setNorth(TEREM_MENU_TEXT);
                     adminTeremPanel();
                 }
             });
@@ -214,7 +207,6 @@ public class CinemaFrame extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "10");
-                    setNorth(HOZZARENDELES_TEXT);
                     adminTartalmazPanel();
                 }
             });
@@ -223,7 +215,6 @@ public class CinemaFrame extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "11");
-                    setNorth(FELHASZNALO_MENU_TEXT);
                     adminFelhasznaloPanel();
                 }
             });
@@ -448,9 +439,6 @@ public class CinemaFrame extends JFrame {
 
         teremTable.setModel(model);
         teremTable.setEnabled(true);
-        for(int i=0;i<teremTable.getRowCount();i++){
-            
-        }
 
         //setComboColumn(teremTable, 1, HELYEK);
         

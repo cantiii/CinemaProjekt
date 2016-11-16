@@ -45,12 +45,28 @@ public class AddAction implements ActionListener {
                     if (valaszFilm != null) {
                         //ha minden elemet rendben találtunk:
                         //létrehozunk egy vetites objektumot és elmentjük az adatokat
+
+                        Szek szekek = null;
                         Vetites vetites = new Vetites();
+                        GenericTableModel<Szek> szekModel = null;
+                        GenericTableModel vetitesModel = null;
+                        for (int i = 0; i < valaszTerem.getFerohely(); i++) {
+                            szekek = new Szek();
+                            szekek.setSor(i);
+                            szekModel = new GenericTableModel(DaoManager.getInstance().getSzekDao(), Szek.PROPERTY_NAMES);
+                            szekModel.addEntity(szekek);
+                            if(i==0) {
+                                vetites.setSzekId(szekek);
+                            }
+                        }
+                        JOptionPane.showMessageDialog(parent, valaszTerem.getFerohely() + GuiConstants.SZEKRENDELES, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+
                         vetites.setFilmId(valaszFilm);
                         vetites.setTeremId(valaszTerem);
                         vetites.setMikor(date);
-
-                        GenericTableModel vetitesModel = (GenericTableModel) parent.getMusorTable().getModel();
+                        
+                            
+                        vetitesModel = (GenericTableModel) parent.getMusorTable().getModel();
                         vetitesModel.addEntity(vetites);
                     }
                 }
@@ -83,22 +99,6 @@ public class AddAction implements ActionListener {
 
                 GenericTableModel teremModel = (GenericTableModel) parent.getTeremTable().getModel();
                 teremModel.addEntity(terem);
-
-                Szek szekek = null;
-                Szekterem szekTerem = new Szekterem();
-                for (int i = 0; i < helyekSzama; i++) {
-                    szekek = new Szek();
-                    szekek.setSor(i);
-                    GenericTableModel<Szek> szekModel = new GenericTableModel(DaoManager.getInstance().getSzekDao(), Szek.PROPERTY_NAMES);
-                    szekModel.addEntity(szekek);
-
-                    szekTerem.setTeremId(terem);
-                    szekTerem.setSzekId(szekek);
-
-                    GenericTableModel<Szekterem> szekTeremModel = new GenericTableModel(DaoManager.getInstance().getSzekteremDao(), Szekterem.PROPERTY_NAMES);//GenericTableModel szekTeremModel = (GenericTableModel) parent.getSzekTeremTable().getModel();
-                    szekTeremModel.addEntity(szekTerem);
-                }
-                JOptionPane.showMessageDialog(parent, helyekSzama + GuiConstants.SZEKRENDELES, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
                 break;
             case MOZI_TEREM_TEXT:
                 Mozi valaszMozi = readMozi();

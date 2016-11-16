@@ -221,6 +221,40 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         }
     }
     
+    public List<Vetites> findFilmInVetites(Film filmId) {
+        List<Vetites> result;
+        try {
+            Query query = getEntityManager()
+                    .createNamedQuery("Vetites.findFilmInVetites")
+                    .setParameter("filmId", filmId);
+            result = (List<Vetites>) query.getResultList();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        if (result == null) {
+            return null;
+        } else {
+            return result;
+        }
+    }
+    
+    public List<Vetites> findTeremInVetites(Terem teremId) {
+        List<Vetites> result;
+        try {
+            Query query = getEntityManager()
+                    .createNamedQuery("Vetites.findTeremInVetites")
+                    .setParameter("teremId", teremId);
+            result = (List<Vetites>) query.getResultList();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        if (result == null) {
+            return null;
+        } else {
+            return result;
+        }
+    }
+    
     public Terem findTeremId(String name) {
         Terem result;
         try {

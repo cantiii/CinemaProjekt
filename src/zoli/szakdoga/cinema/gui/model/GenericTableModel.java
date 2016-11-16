@@ -3,7 +3,6 @@ package zoli.szakdoga.cinema.gui.model;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import zoli.szakdoga.cinema.db.dao.DefaultDao;
 import zoli.szakdoga.cinema.db.dao.GenericDao;
 import zoli.szakdoga.cinema.db.entity.*;
 
@@ -37,6 +36,10 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         return items.get(rowIndex).get(columnIndex);
+    }
+    
+    public Object getRowValue(int rowIndex) {
+        return items.get(rowIndex);
     }
 
     @Override
@@ -81,15 +84,15 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
      */
     public void removeEntity(int rowIndex) {
         T entity = items.get(rowIndex);
-        items.remove(rowIndex);
+        items.remove(rowIndex);   
         fireTableDataChanged();
         DAO.delete(entity);
     }
     
     public void removeEntity(T item) {
-        DefaultDao dao = new DefaultDao(Szek.class);
-        DAO.delete(item);
-        fireTableDataChanged();       
+        items.remove(item);
+        fireTableDataChanged();
+        DAO.delete(item);               
     }
     
     /**

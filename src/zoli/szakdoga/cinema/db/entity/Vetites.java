@@ -14,7 +14,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Vetites.findAll", query = "SELECT v FROM Vetites v"),
     @NamedQuery(name = "Vetites.findById", query = "SELECT v FROM Vetites v WHERE v.id = :id"),
-    @NamedQuery(name = "Vetites.findByMikor", query = "SELECT v FROM Vetites v WHERE v.mikor = :mikor")})
+    @NamedQuery(name = "Vetites.findByMikor", query = "SELECT v FROM Vetites v WHERE v.mikor = :mikor"),
+    @NamedQuery(name = "Vetites.findFilmInVetites", query = "SELECT v FROM Vetites v WHERE v.filmId = :filmId"),
+    @NamedQuery(name = "Vetites.findTeremInVetites", query = "SELECT v FROM Vetites v WHERE v.teremId = :teremId")})
 public class Vetites implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Film", "Terem", "Mikor"};
@@ -33,7 +35,10 @@ public class Vetites implements Serializable, PersistentEntity {
     @JoinColumn(name = "TEREM_ID", referencedColumnName = "ID")
     @ManyToOne
     private Terem teremId;
-
+    @JoinColumn(name = "SZEK_ID", referencedColumnName = "ID")
+    @ManyToOne
+    private Szek szekId;
+    
     public Vetites() {
     }
 
@@ -72,6 +77,14 @@ public class Vetites implements Serializable, PersistentEntity {
     public void setTeremId(Terem teremId) {
         this.teremId = teremId;
     }
+    
+    public Szek getSzekId() {
+        return szekId;
+    }
+
+    public void setSzekId(Szek szekId) {
+        this.szekId = szekId;
+    }
 
     @Override
     public int hashCode() {
@@ -107,6 +120,8 @@ public class Vetites implements Serializable, PersistentEntity {
                 return teremId;
             case 2:
                 return mikor;
+            case 3:
+                return szekId;
             default:
                 return null;
         }

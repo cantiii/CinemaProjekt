@@ -37,7 +37,7 @@ public class Szek  implements Serializable, PersistentEntity {
     @OneToMany(mappedBy = "szekId")
     private List<Foglalas> foglalasList;
     @OneToMany(mappedBy = "szekId")
-    private List<Szekterem> szekteremList;
+    private List<Vetites> vetitesList;
 
     public Szek() {
     }
@@ -86,12 +86,12 @@ public class Szek  implements Serializable, PersistentEntity {
     }
 
     @XmlTransient
-    public List<Szekterem> getSzekteremList() {
-        return szekteremList;
+    public List<Vetites> getVetitesList() {
+        return vetitesList;
     }
 
-    public void setSzekteremList(List<Szekterem> szekteremList) {
-        this.szekteremList = szekteremList;
+    public void setVetitesList(List<Vetites> vetitesList) {
+        this.vetitesList = vetitesList;
     }
 
     @Override

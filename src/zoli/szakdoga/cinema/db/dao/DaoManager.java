@@ -13,7 +13,6 @@ public class DaoManager {
     private GenericDao<Foglalas> foglalasDao;
     private GenericDao<Mozi> moziDao;
     private GenericDao<Szek> szekDao;
-    private GenericDao<Szekterem> szekTeremDao;
     private GenericDao<Tartalmaz> tartalmazDao;
     private GenericDao<Terem> teremDao;
     private GenericDao<Vetites> vetitesDao;
@@ -51,13 +50,6 @@ public class DaoManager {
             szekDao = new DefaultDao<>(Szek.class);
         }
         return szekDao;
-    }
-
-    public GenericDao<Szekterem> getSzekteremDao() {
-        if (szekTeremDao == null) {
-            szekTeremDao = new DefaultDao<>(Szekterem.class);
-        }
-        return szekTeremDao;
     }
 
     public GenericDao<Tartalmaz> getTartalmazDao() {

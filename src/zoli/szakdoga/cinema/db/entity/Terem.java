@@ -38,8 +38,6 @@ public class Terem  implements Serializable, PersistentEntity {
     private List<Tartalmaz> tartalmazList;
     @OneToMany(mappedBy = "teremId")
     private List<Vetites> vetitesList;
-    @OneToMany(mappedBy = "teremId")
-    private List<Szekterem> szekteremList;
 
     public Terem() {
     }
@@ -94,15 +92,6 @@ public class Terem  implements Serializable, PersistentEntity {
 
     public void setVetitesList(List<Vetites> vetitesList) {
         this.vetitesList = vetitesList;
-    }
-
-    @XmlTransient
-    public List<Szekterem> getSzekteremList() {
-        return szekteremList;
-    }
-
-    public void setSzekteremList(List<Szekterem> szekteremList) {
-        this.szekteremList = szekteremList;
     }
 
     @Override
