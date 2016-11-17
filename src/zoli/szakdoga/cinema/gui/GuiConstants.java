@@ -27,6 +27,9 @@ public class GuiConstants {
     public static final String LOGIN_BUT_TEXT = "Bejelentkezés";
     public static final String REG_BUT_TEXT = "Regisztráció";
 
+    public static final String FOGLALAS_BUT_TEXT = "FOGLALÁS";
+    public static final String JEGY_DB = "Add meg a jegyek darabszámát:";
+    
     public static final String FELVITEL_BUT_TEXT = "Felvitel";
     public static final String TORLES_BUT_TEXT = "TÖRLÉS";
     public static final String FELVITEL_MUSOR_TEXT = "Műsor felvitel";
@@ -43,6 +46,7 @@ public class GuiConstants {
     public static final String TORLES_MOZI_TEXT = "Mozi TÖRLÉS";
     public static final String FELVITEL_TEREM_TEXT = "Terem felvitel";
     public static final String FELVITEL_TEREMHELY_TEXT = "Terem hely felvitel";
+    public static final String NOMOZI = "Nincs még mozi, előbb azt vigyen fel!";
     public static final String TORLES_TEREM_TEXT = "Terem TÖRLÉS";
     public static final String SZEKRENDELES = " darab széket beraktunk a terembe!";
     public static final String FELVITEL_FELHASZNALO_TEXT = "Felhasznaló felvitel";

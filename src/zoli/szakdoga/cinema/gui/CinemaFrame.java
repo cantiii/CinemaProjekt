@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,6 +55,8 @@ public class CinemaFrame extends JFrame {
     private ShowStoryAction showStory;
     private AddAction addAction;
     private DelAction delAction;
+    
+    private FoglalasAction foglalasAction;
 
     private final JButton addMusorButton = new JButton(FELVITEL_MUSOR_TEXT);
     private final JButton addFilmButton = new JButton(FELVITEL_FILM_TEXT);
@@ -63,8 +66,8 @@ public class CinemaFrame extends JFrame {
     private LoginAction logIn;
     private RegAction regIn;
 
+    Integer selectedRow = null;
     private final static Integer[] JOGOK = {1, 2};
-    //private final static Integer[] HELYEK = {25, 50, 80};
 
     public CinemaFrame() {
         initFrame();
@@ -108,7 +111,7 @@ public class CinemaFrame extends JFrame {
     public JTable getTeremTable() {
         return teremTable;
     }
-    
+
     public JTable getSzekTable() {
         return szekTable;
     }
@@ -137,10 +140,9 @@ public class CinemaFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "2");
                 setNorth(MUSOR_MENU_TEXT);
-                loadMusorPanel();
-            }
-        });
-
+                loadMusorPanel();              
+            }          
+        });        
         JMenuItem film = new JMenuItem(new AbstractAction(FILM_MENU_TEXT) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -163,7 +165,7 @@ public class CinemaFrame extends JFrame {
                 setNorth(KAPCSOLAT_MENU_TEXT);
             }
         });
-        
+
         JMenu admin = null;
         if (logIn.getCurrUser().getJog() == 1) {
             admin = new JMenu(ADMIN_MENU_TEXT);
@@ -173,7 +175,6 @@ public class CinemaFrame extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "6");
-                    
                     adminMusorPanel();
                 }
             });
@@ -219,15 +220,15 @@ public class CinemaFrame extends JFrame {
             });
             admin.add(subFelhasznalo);
         }
-        
+
         //aktuális user rendelési története
         JMenuItem tortenet = null;
         if (logIn.getCurrUser().getJog() == 2) {
             tortenet = new JMenuItem(new AbstractAction(TORTENET_MENU_TEXT) {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                cl.show(panelCont, "12");
-                setNorth(TORTENET_MENU_TEXT);
+                    cl.show(panelCont, "12");
+                    setNorth(TORTENET_MENU_TEXT);
                 }
             });
         }
@@ -248,7 +249,7 @@ public class CinemaFrame extends JFrame {
         }
         if (logIn.getCurrUser().getJog() == 2) {
             menuBar.add(tortenet);
-        }     
+        }
         menuBar.add(logout);
         setJMenuBar(menuBar);
     }
@@ -261,7 +262,7 @@ public class CinemaFrame extends JFrame {
         panelCont.add(panelFilm, "3");
         panelCont.add(panelAr, "4");
         panelCont.add(panelKapcsolat, "5");
-        
+
         panelCont.add(panelMusorA, "6");
         panelCont.add(panelFilmA, "7");
         panelCont.add(panelMoziA, "8");
@@ -269,41 +270,42 @@ public class CinemaFrame extends JFrame {
         panelCont.add(panelTartalmazA, "10");
         panelCont.add(panelFelhasznaloA, "11");
         panelCont.add(panelTortenet, "12");
-        
+
         cl.show(panelCont, "5");
 
         add(panelCont, BorderLayout.CENTER);
     }
-    
+
     private void setNorth(String label) {
         JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        
+
         JLabel elem = new JLabel(label);
-        
+
         elem.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
-        
+
         northPanel.add(elem);
         northPanel.setBackground(Color.GRAY);
         add(northPanel, BorderLayout.NORTH);
     }
-    private void setSouth() {       
+
+    private void setSouth() {
         JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        
+
         JLabel udv = new JLabel("ÜDV:");
         JLabel nev = new JLabel(logIn.getCurrUser().getNev());
         JLabel jogszoveg = new JLabel("JOGOSULTSÁGOD:");
         Integer jogInt = logIn.getCurrUser().getJog();
         String jogosultsag = null;
-        if(jogInt == 1) {
+        if (jogInt == 1) {
             jogosultsag = "adminisztrátor";
         } else if (jogInt == 2) {
             jogosultsag = "felhasználó";
         }
         JLabel jog = new JLabel(jogosultsag);
-        
+
         nev.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
         jog.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
-        
+
         southPanel.add(udv);
         southPanel.add(nev);
         southPanel.add(jogszoveg);
@@ -343,7 +345,8 @@ public class CinemaFrame extends JFrame {
 
         musorTable.setModel(model);
         musorTable.setEnabled(false);
-
+        
+        musorTable.addMouseListener(rightClickAction);
         panelMusor.add(MUSOR_MENU_TEXT, new JScrollPane(musorTable));
     }
 
@@ -353,7 +356,7 @@ public class CinemaFrame extends JFrame {
         panelMusorA.add(addMusorButton);
 
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
-        
+
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
             musorTable.setRowSorter(sorter);
@@ -361,7 +364,7 @@ public class CinemaFrame extends JFrame {
 
         musorTable.setModel(model);
         musorTable.getColumnModel().getColumn(2).setCellEditor(new MyDateCell()); // jó dátum és dátum forma
-        
+
         //A filmet és a termet combobox-ból választhatjuk ki
         setComboColumn(musorTable, 0, DaoManager.getInstance().getFilmDao().findAll().toArray());
         setComboColumn(musorTable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
@@ -374,7 +377,7 @@ public class CinemaFrame extends JFrame {
         panelFilm.removeAll();
 
         GenericTableModel<Film> model = new GenericTableModel(DaoManager.getInstance().getFilmDao(), Film.PROPERTY_NAMES);
-        
+
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Film>> sorter = new TableRowSorter<>(model);
             filmTable.setRowSorter(sorter);
@@ -430,7 +433,7 @@ public class CinemaFrame extends JFrame {
         panelTeremA.add(addTeremButton);
 
         GenericTableModel<Terem> model = new GenericTableModel(DaoManager.getInstance().getTeremDao(), Terem.PROPERTY_NAMES);
-        
+
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Terem>> sorter = new TableRowSorter<>(model);
             teremTable.setRowSorter(sorter);
@@ -438,7 +441,7 @@ public class CinemaFrame extends JFrame {
 
         teremTable.setModel(model);
         teremTable.setEnabled(true);
-        
+
         teremTable.addMouseListener(rightClickAction);
         panelTeremA.add(TEREM_MENU_TEXT, new JScrollPane(teremTable));
     }
@@ -456,6 +459,7 @@ public class CinemaFrame extends JFrame {
         tartalmazTable.setModel(model);
 
         setComboColumn(tartalmazTable, 0, DaoManager.getInstance().getMoziDao().findAll().toArray());
+        //mozi függvényében kellene felhozni a termeket
         setComboColumn(tartalmazTable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
 
         tartalmazTable.addMouseListener(rightClickAction);
@@ -495,9 +499,10 @@ public class CinemaFrame extends JFrame {
         showStory = new ShowStoryAction(this);
         addAction = new AddAction(this);
         delAction = new DelAction(this);
-        rightClickAction = new StoryRightClickAction(showStory, delAction, logIn);
+        foglalasAction = new FoglalasAction(this);
+        rightClickAction = new StoryRightClickAction(this, showStory, delAction, logIn, foglalasAction);
     }
-    
+
     // gombok aktíválása
     private void setButtons() {
         addMusorButton.addActionListener(addAction);
