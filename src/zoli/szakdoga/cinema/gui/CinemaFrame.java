@@ -5,8 +5,8 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.*;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,7 +55,7 @@ public class CinemaFrame extends JFrame {
     private ShowStoryAction showStory;
     private AddAction addAction;
     private DelAction delAction;
-    
+
     private FoglalasAction foglalasAction;
 
     private final JButton addMusorButton = new JButton(FELVITEL_MUSOR_TEXT);
@@ -140,9 +140,9 @@ public class CinemaFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "2");
                 setNorth(MUSOR_MENU_TEXT);
-                loadMusorPanel();              
-            }          
-        });        
+                loadMusorPanel();
+            }
+        });
         JMenuItem film = new JMenuItem(new AbstractAction(FILM_MENU_TEXT) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -156,6 +156,7 @@ public class CinemaFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "4");
                 setNorth(AR_MENU_TEXT);
+                loadArPanel();
             }
         });
         JMenuItem kapcsolat = new JMenuItem(new AbstractAction(KAPCSOLAT_MENU_TEXT) {
@@ -163,6 +164,7 @@ public class CinemaFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 cl.show(panelCont, "5");
                 setNorth(KAPCSOLAT_MENU_TEXT);
+                loadKapcsolatPanel();
             }
         });
 
@@ -345,7 +347,7 @@ public class CinemaFrame extends JFrame {
 
         musorTable.setModel(model);
         musorTable.setEnabled(false);
-        
+
         musorTable.addMouseListener(rightClickAction);
         panelMusor.add(MUSOR_MENU_TEXT, new JScrollPane(musorTable));
     }
@@ -484,6 +486,38 @@ public class CinemaFrame extends JFrame {
 
         felhasznaloTable.addMouseListener(rightClickAction);
         panelFelhasznaloA.add(FELHASZNALO_MENU_TEXT, new JScrollPane(felhasznaloTable));
+    }
+
+    public void loadArPanel() {
+        panelAr.removeAll();
+
+        JEditorPane editorPane = new JEditorPane();
+        
+        editorPane.setContentType("text/html");
+        File file = new File("src/html/arInfo.html");
+        try {
+            editorPane.setPage(file.toURI().toURL());
+        } catch (Exception ex) {
+        }
+        editorPane.setEditable(false);
+        
+        panelAr.add(editorPane);
+    }
+    
+    public void loadKapcsolatPanel() {
+        panelKapcsolat.removeAll();
+
+        JEditorPane editorPane = new JEditorPane();
+        
+        editorPane.setContentType("text/html");
+        File file = new File("src/html/kapcsolatInfo.html");
+        try {
+            editorPane.setPage(file.toURI().toURL());
+        } catch (Exception ex) {
+        }
+        editorPane.setEditable(false);
+        
+        panelKapcsolat.add(editorPane);
     }
 
     //Combobox-rt felelös függvény

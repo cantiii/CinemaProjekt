@@ -27,7 +27,7 @@ public class FoglalasAction implements ActionListener {
 
     public FoglalasAction(CinemaFrame parent) {
         this.parent = parent;
-        
+
     }
 
     public void setTable(JTable table) {
@@ -72,13 +72,25 @@ public class FoglalasAction implements ActionListener {
                     }
                 }
                 Integer jegyDarab = null;
+                Integer jegyDiak = null;
+                List<Integer> jegyListaDiak = new ArrayList<>();
                 if (szabadHely < JEGYEK.length) {
                     JEGYEK = jegyAkt.toArray();
                     jegyDarab = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
-                    teremMegjelenetes = new TeremMegjelenites(jegyDarab, valasztottVetites);
+                    for (int i = 0; i < jegyDarab; i++) {
+                        jegyListaDiak.add(i + 1);
+                    }
+                    JEGYEK = jegyListaDiak.toArray();
+                    jegyDiak = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DIAK_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
+                    teremMegjelenetes = new TeremMegjelenites(jegyDarab, jegyDiak, valasztottVetites);
                 } else {
                     jegyDarab = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
-                    teremMegjelenetes = new TeremMegjelenites(jegyDarab, valasztottVetites);
+                    for (int i = 0; i < jegyDarab; i++) {
+                        jegyListaDiak.add(i + 1);
+                    }
+                    JEGYEK = jegyListaDiak.toArray();
+                    jegyDiak = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DIAK_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
+                    teremMegjelenetes = new TeremMegjelenites(jegyDarab, jegyDiak, valasztottVetites);
                 }
             }
         }

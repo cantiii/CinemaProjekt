@@ -10,9 +10,11 @@ public class TeremMegjelenites {
 
     private final Vetites vetites;
     private final Integer jegyDarab;
+    private final Integer jegyDiak;
 
-    public TeremMegjelenites(Integer jegyDarab, Vetites vetites) {
+    public TeremMegjelenites(Integer jegyDarab, Integer jegyDiak, Vetites vetites) {
         this.jegyDarab = jegyDarab;
+        this.jegyDiak = jegyDiak;
         this.vetites = vetites;
     }
 
