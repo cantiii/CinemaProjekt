@@ -38,6 +38,7 @@ public class CinemaFrame extends JFrame {
     private final JPanel panelFilm = new JPanel();
     private final JTable filmTable = new JTable();
 
+    private final JPanel panelWelcome = new JPanel();
     private final JPanel panelMusorA = new JPanel();
     private final JPanel panelFilmA = new JPanel();
     private final JPanel panelMoziA = new JPanel();
@@ -70,6 +71,7 @@ public class CinemaFrame extends JFrame {
 
     Integer selectedRow = null;
     private final static Integer[] JOGOK = {1, 2};
+    private final static Integer[] BOJOGOK = {0, 1, 2};
 
     public CinemaFrame() {
         initFrame();
@@ -96,6 +98,7 @@ public class CinemaFrame extends JFrame {
         setCenter();
         setSouth();
         setActionListeners();
+        loadWelcomePanel();
     }
 
     public JTable getMusorTable() {
@@ -171,7 +174,7 @@ public class CinemaFrame extends JFrame {
         });
 
         JMenu admin = null;
-        if (logIn.getCurrUser().getJog() == 1) {
+        if (logIn.getCurrUser().getJog() == 0 || logIn.getCurrUser().getJog() == 1) {
             admin = new JMenu(ADMIN_MENU_TEXT);
             setNorth(ADMIN_MENU_TEXT);
             //admin menüben vannak almenüpontok, ezek hozzáadása itt történik
@@ -227,7 +230,7 @@ public class CinemaFrame extends JFrame {
 
         //aktuális user rendelési története
         JMenuItem tortenet = null;
-        if (logIn.getCurrUser().getJog() == 2) {
+        if (logIn.getCurrUser().getJog() == 0 || logIn.getCurrUser().getJog() == 2) {
             tortenet = new JMenuItem(new AbstractAction(TORTENET_MENU_TEXT) {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -248,10 +251,10 @@ public class CinemaFrame extends JFrame {
         menuBar.add(film);
         menuBar.add(ar);
         menuBar.add(kapcsolat);
-        if (logIn.getCurrUser().getJog() == 1) {
+        if (logIn.getCurrUser().getJog() == 0 || logIn.getCurrUser().getJog() == 1) {
             menuBar.add(admin);
         }
-        if (logIn.getCurrUser().getJog() == 2) {
+        if (logIn.getCurrUser().getJog() == 0 || logIn.getCurrUser().getJog() == 2) {
             menuBar.add(tortenet);
         }
         menuBar.add(logout);
@@ -262,6 +265,7 @@ public class CinemaFrame extends JFrame {
         // cardLayout kialaítása
         panelCont.setLayout(cl);
 
+        panelCont.add(panelWelcome, "1");
         panelCont.add(panelMusor, "2");
         panelCont.add(panelFilm, "3");
         panelCont.add(panelAr, "4");
@@ -275,7 +279,7 @@ public class CinemaFrame extends JFrame {
         panelCont.add(panelFelhasznaloA, "11");
         panelCont.add(panelTortenet, "12");
 
-        cl.show(panelCont, "5");
+        cl.show(panelCont, "1");
 
         add(panelCont, BorderLayout.CENTER);
     }
@@ -300,7 +304,9 @@ public class CinemaFrame extends JFrame {
         JLabel jogszoveg = new JLabel("JOGOSULTSÁGOD:");
         Integer jogInt = logIn.getCurrUser().getJog();
         String jogosultsag = null;
-        if (jogInt == 1) {
+        if (jogInt == 0) {
+            jogosultsag = "superuser";
+        } else if (jogInt == 1) {
             jogosultsag = "adminisztrátor";
         } else if (jogInt == 2) {
             jogosultsag = "felhasználó";
@@ -316,6 +322,22 @@ public class CinemaFrame extends JFrame {
         southPanel.add(jog);
         southPanel.setBackground(Color.GRAY);
         add(southPanel, BorderLayout.SOUTH);
+    }
+
+    public void loadWelcomePanel() {
+        panelWelcome.removeAll();
+
+        JEditorPane editorPane = new JEditorPane();
+
+        editorPane.setContentType("text/html");
+        File file = new File("src/html/welcome.html");
+        try {
+            editorPane.setPage(file.toURI().toURL());
+        } catch (Exception ex) {
+        }
+        editorPane.setEditable(false);
+
+        panelWelcome.add(editorPane);
     }
 
     //a Müsor/Vetítés adatbázis táblát itt jelenítjük meg a felületre
@@ -402,7 +424,7 @@ public class CinemaFrame extends JFrame {
             sorter.setSortKeys(sortKeys);
         }
 
-        if (logIn.getCurrUser().getJog() == 2) {
+        if (logIn.getCurrUser().getJog() == 0 || logIn.getCurrUser().getJog() == 2) {
             filmTable.addMouseListener(rightClickAction);
         }
         panelFilm.add(FILM_MENU_TEXT, new JScrollPane(filmTable));
@@ -496,7 +518,11 @@ public class CinemaFrame extends JFrame {
         }
 
         //a felhasználói jogok combobox-szal módosíthatok
-        setComboColumn(felhasznaloTable, 1, JOGOK);
+        if (logIn.getCurrUser().getJog() == 0) {
+            setComboColumn(felhasznaloTable, 1, BOJOGOK);
+        } else if (logIn.getCurrUser().getJog() == 1) {
+            setComboColumn(felhasznaloTable, 1, JOGOK);
+        }
 
         felhasznaloTable.addMouseListener(rightClickAction);
         panelFelhasznaloA.add(FELHASZNALO_MENU_TEXT, new JScrollPane(felhasznaloTable));

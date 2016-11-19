@@ -50,7 +50,7 @@ public class StoryRightClickAction extends MouseAdapter {
 
         JMenuItem leiras = null;
         JMenuItem foglalas = null;
-        if (logUser.getCurrUser().getJog() == 2) {
+        if (logUser.getCurrUser().getJog() == 0 || logUser.getCurrUser().getJog() == 2) {
             if(parent.getFilmTable() == (JTable) e.getSource()) {
                 leiras = new JMenuItem(GuiConstants.LEIRAS_MENU_TEXT);
                 showStory.setTable((JTable) e.getSource());
@@ -65,7 +65,7 @@ public class StoryRightClickAction extends MouseAdapter {
         }
 
         JMenuItem torles = null;
-        if (logUser.getCurrUser().getJog() == 1) {
+        if (logUser.getCurrUser().getJog() == 0 || logUser.getCurrUser().getJog() == 1) {
             torles = new JMenuItem(GuiConstants.TORLES_BUT_TEXT);
             delItem.setTable((JTable) e.getSource());
             torles.addActionListener(delItem);
