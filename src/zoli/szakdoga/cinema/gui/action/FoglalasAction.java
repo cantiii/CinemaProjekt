@@ -42,9 +42,13 @@ public class FoglalasAction implements ActionListener {
             //elkérjük a táblánk modeljét, hogy az, illetve sor és oszlopszám alapján megtaláljuk a leírást
             GenericTableModel model = (GenericTableModel) table.getModel();
             Vetites valasztottVetites = (Vetites) model.getRowValue(convertRowIndexToModel);
+            dao = new DefaultDao(Tartalmaz.class);
+            Mozi mozi = (Mozi) dao.findMozibyTerem(valasztottVetites.getTeremId());
             String adatok = "Választott vetítés adatai:"
                     + "\nFILM: "
                     + valasztottVetites.getFilmId()
+                    + "\nMOZI: "
+                    + mozi
                     + "\nTEREM: "
                     + valasztottVetites.getTeremId()
                     + "\nDÁTUM: "
@@ -76,20 +80,32 @@ public class FoglalasAction implements ActionListener {
                 List<Integer> jegyListaDiak = new ArrayList<>();
                 if (szabadHely < JEGYEK.length) {
                     JEGYEK = jegyAkt.toArray();
-                    jegyDarab = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
+                    jegyDarab = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DB + szabadHely + ")", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
+                    if (jegyDarab == null) {
+                        return;
+                    }
                     for (int i = 0; i < jegyDarab; i++) {
                         jegyListaDiak.add(i + 1);
                     }
                     JEGYEK = jegyListaDiak.toArray();
                     jegyDiak = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DIAK_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
+                    if (jegyDiak == null) {
+                        jegyDiak = 0;
+                    }
                     teremMegjelenetes = new TeremMegjelenites(jegyDarab, jegyDiak, valasztottVetites);
                 } else {
-                    jegyDarab = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
+                    jegyDarab = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DB + szabadHely + ")", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
+                    if (jegyDarab == null) {
+                        return;
+                    }
                     for (int i = 0; i < jegyDarab; i++) {
                         jegyListaDiak.add(i + 1);
                     }
                     JEGYEK = jegyListaDiak.toArray();
                     jegyDiak = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DIAK_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
+                    if (jegyDiak == null) {
+                        jegyDiak = 0;
+                    }
                     teremMegjelenetes = new TeremMegjelenites(jegyDarab, jegyDiak, valasztottVetites);
                 }
             }

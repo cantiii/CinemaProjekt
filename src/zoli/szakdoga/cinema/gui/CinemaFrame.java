@@ -9,7 +9,9 @@ import java.awt.event.*;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -321,7 +323,9 @@ public class CinemaFrame extends JFrame {
         panelMusor.removeAll();
         // táblamodel létrehozása és meghatározása
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
-        // szebben ?
+        musorTable.setModel(model);
+        musorTable.setEnabled(false);
+
         // törlésre kiürül, akkor még ott marad a sorter hiba
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
@@ -343,10 +347,12 @@ public class CinemaFrame extends JFrame {
             //fenti szűrő beállítása
             sorter.setRowFilter(filter);
             musorTable.setRowSorter(sorter);
-        }
 
-        musorTable.setModel(model);
-        musorTable.setEnabled(false);
+            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+            int datumOszlop = 2;
+            sortKeys.add(new RowSorter.SortKey(datumOszlop, SortOrder.DESCENDING));
+            sorter.setSortKeys(sortKeys);
+        }
 
         musorTable.addMouseListener(rightClickAction);
         panelMusor.add(MUSOR_MENU_TEXT, new JScrollPane(musorTable));
@@ -358,18 +364,22 @@ public class CinemaFrame extends JFrame {
         panelMusorA.add(addMusorButton);
 
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
-
-        if (model.getRowCount() != 0) {
-            TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
-            musorTable.setRowSorter(sorter);
-        }
-
         musorTable.setModel(model);
         musorTable.getColumnModel().getColumn(2).setCellEditor(new MyDateCell()); // jó dátum és dátum forma
 
         //A filmet és a termet combobox-ból választhatjuk ki
         setComboColumn(musorTable, 0, DaoManager.getInstance().getFilmDao().findAll().toArray());
         setComboColumn(musorTable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
+
+        if (model.getRowCount() != 0) {
+            TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
+            musorTable.setRowSorter(sorter);
+
+            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+            int datumOszlop = 2;
+            sortKeys.add(new RowSorter.SortKey(datumOszlop, SortOrder.DESCENDING));
+            sorter.setSortKeys(sortKeys);
+        }
 
         musorTable.addMouseListener(rightClickAction);
         panelMusorA.add(MUSOR_MENU_TEXT, new JScrollPane(musorTable));
@@ -379,14 +389,18 @@ public class CinemaFrame extends JFrame {
         panelFilm.removeAll();
 
         GenericTableModel<Film> model = new GenericTableModel(DaoManager.getInstance().getFilmDao(), Film.PROPERTY_NAMES);
+        filmTable.setModel(model);
+        filmTable.setEnabled(false);
 
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Film>> sorter = new TableRowSorter<>(model);
             filmTable.setRowSorter(sorter);
-        }
 
-        filmTable.setModel(model);
-        filmTable.setEnabled(false);
+            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+            int filmCimOszlop = 0;
+            sortKeys.add(new RowSorter.SortKey(filmCimOszlop, SortOrder.ASCENDING));
+            sorter.setSortKeys(sortKeys);
+        }
 
         if (logIn.getCurrUser().getJog() == 2) {
             filmTable.addMouseListener(rightClickAction);
@@ -399,14 +413,18 @@ public class CinemaFrame extends JFrame {
         panelFilmA.add(addFilmButton);
 
         GenericTableModel<Film> model = new GenericTableModel(DaoManager.getInstance().getFilmDao(), Film.FULL_PROPERTY_NAMES);
+        filmTable.setModel(model);
+        filmTable.setEnabled(true);
 
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Film>> sorter = new TableRowSorter<>(model);
             filmTable.setRowSorter(sorter);
-        }
 
-        filmTable.setModel(model);
-        filmTable.setEnabled(true);
+            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+            int filmCimOszlop = 0;
+            sortKeys.add(new RowSorter.SortKey(filmCimOszlop, SortOrder.ASCENDING));
+            sorter.setSortKeys(sortKeys);
+        }
 
         filmTable.addMouseListener(rightClickAction);
         panelFilmA.add(FILM_MENU_TEXT, new JScrollPane(filmTable));
@@ -417,14 +435,13 @@ public class CinemaFrame extends JFrame {
         panelMoziA.add(addMoziButton);
 
         GenericTableModel<Mozi> model = new GenericTableModel(DaoManager.getInstance().getMoziDao(), Mozi.PROPERTY_NAMES);
+        moziTable.setModel(model);
+        moziTable.setEnabled(true);
 
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Mozi>> sorter = new TableRowSorter<>(model);
             moziTable.setRowSorter(sorter);
         }
-
-        moziTable.setModel(model);
-        moziTable.setEnabled(true);
 
         moziTable.addMouseListener(rightClickAction);
         panelMoziA.add(MOZI_MENU_TEXT, new JScrollPane(moziTable));
@@ -435,14 +452,13 @@ public class CinemaFrame extends JFrame {
         panelTeremA.add(addTeremButton);
 
         GenericTableModel<Terem> model = new GenericTableModel(DaoManager.getInstance().getTeremDao(), Terem.PROPERTY_NAMES);
+        teremTable.setModel(model);
+        teremTable.setEnabled(true);
 
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Terem>> sorter = new TableRowSorter<>(model);
             teremTable.setRowSorter(sorter);
         }
-
-        teremTable.setModel(model);
-        teremTable.setEnabled(true);
 
         teremTable.addMouseListener(rightClickAction);
         panelTeremA.add(TEREM_MENU_TEXT, new JScrollPane(teremTable));
@@ -452,17 +468,16 @@ public class CinemaFrame extends JFrame {
         panelTartalmazA.removeAll();
 
         GenericTableModel<Tartalmaz> model = new GenericTableModel(DaoManager.getInstance().getTartalmazDao(), Tartalmaz.PROPERTY_NAMES);
-
-        if (model.getRowCount() != 0) {
-            TableRowSorter<GenericTableModel<Tartalmaz>> sorter = new TableRowSorter<>(model);
-            tartalmazTable.setRowSorter(sorter);
-        }
-
         tartalmazTable.setModel(model);
 
         setComboColumn(tartalmazTable, 0, DaoManager.getInstance().getMoziDao().findAll().toArray());
         //mozi függvényében kellene felhozni a termeket
         setComboColumn(tartalmazTable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
+
+        if (model.getRowCount() != 0) {
+            TableRowSorter<GenericTableModel<Tartalmaz>> sorter = new TableRowSorter<>(model);
+            tartalmazTable.setRowSorter(sorter);
+        }
 
         tartalmazTable.addMouseListener(rightClickAction);
         panelTartalmazA.add(HOZZARENDELES_TEXT, new JScrollPane(tartalmazTable));
@@ -472,14 +487,13 @@ public class CinemaFrame extends JFrame {
         panelFelhasznaloA.removeAll();
 
         GenericTableModel<Felhasznalo> model = new GenericTableModel(DaoManager.getInstance().getFelhasznaloDao(), Felhasznalo.PROPERTY_NAMES);
+        felhasznaloTable.setModel(model);
+        felhasznaloTable.setEnabled(true);
 
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Felhasznalo>> sorter = new TableRowSorter<>(model);
             felhasznaloTable.setRowSorter(sorter);
         }
-
-        felhasznaloTable.setModel(model);
-        felhasznaloTable.setEnabled(true);
 
         //a felhasználói jogok combobox-szal módosíthatok
         setComboColumn(felhasznaloTable, 1, JOGOK);
@@ -492,7 +506,7 @@ public class CinemaFrame extends JFrame {
         panelAr.removeAll();
 
         JEditorPane editorPane = new JEditorPane();
-        
+
         editorPane.setContentType("text/html");
         File file = new File("src/html/arInfo.html");
         try {
@@ -500,15 +514,15 @@ public class CinemaFrame extends JFrame {
         } catch (Exception ex) {
         }
         editorPane.setEditable(false);
-        
+
         panelAr.add(editorPane);
     }
-    
+
     public void loadKapcsolatPanel() {
         panelKapcsolat.removeAll();
 
         JEditorPane editorPane = new JEditorPane();
-        
+
         editorPane.setContentType("text/html");
         File file = new File("src/html/kapcsolatInfo.html");
         try {
@@ -516,7 +530,7 @@ public class CinemaFrame extends JFrame {
         } catch (Exception ex) {
         }
         editorPane.setEditable(false);
-        
+
         panelKapcsolat.add(editorPane);
     }
 
