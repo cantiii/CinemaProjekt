@@ -85,15 +85,14 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
     public void removeEntity(int rowIndex) {
         T entity = items.get(rowIndex);
         items.remove(rowIndex); 
-        fireTableDataChanged();
         DAO.delete(entity);
-        //fireTableDataChanged();
+        fireTableDataChanged();
     }
     
     public void removeEntity(T item) {
         items.remove(item);
+        DAO.delete(item); 
         fireTableDataChanged();
-        DAO.delete(item);  
         
     }
     
