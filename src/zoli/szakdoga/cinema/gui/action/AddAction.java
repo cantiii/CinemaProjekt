@@ -235,6 +235,7 @@ public class AddAction implements ActionListener {
                 }
             } else {
                 name = null; // nem lehet default value
+                JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
             }
         }
         return name;

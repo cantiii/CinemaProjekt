@@ -108,7 +108,7 @@ public class Vetites implements Serializable, PersistentEntity {
 
     @Override
     public String toString() {
-        return filmId + " " + teremId + " " + mikor;
+        return "Film: " + filmId + ",  terem: " + teremId + ", dátum: " + mikor;
     }
 
     @Override

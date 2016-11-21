@@ -236,6 +236,7 @@ public class CinemaFrame extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "12");
                     setNorth(TORTENET_MENU_TEXT);
+                    loadTortenetPanel();
                 }
             });
         }
@@ -304,12 +305,18 @@ public class CinemaFrame extends JFrame {
         JLabel jogszoveg = new JLabel("JOGOSULTSÁGOD:");
         Integer jogInt = logIn.getCurrUser().getJog();
         String jogosultsag = null;
-        if (jogInt == 0) {
-            jogosultsag = "superuser";
-        } else if (jogInt == 1) {
-            jogosultsag = "adminisztrátor";
-        } else if (jogInt == 2) {
-            jogosultsag = "felhasználó";
+        switch (jogInt) {
+            case 0:
+                jogosultsag = "superuser";
+                break;
+            case 1:
+                jogosultsag = "adminisztrátor";
+                break;
+            case 2:
+                jogosultsag = "felhasználó";
+                break;
+            default:
+                break;
         }
         JLabel jog = new JLabel(jogosultsag);
 
@@ -396,11 +403,6 @@ public class CinemaFrame extends JFrame {
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
             musorTable.setRowSorter(sorter);
-
-            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-            int datumOszlop = 2;
-            sortKeys.add(new RowSorter.SortKey(datumOszlop, SortOrder.DESCENDING));
-            sorter.setSortKeys(sortKeys);
         }
 
         musorTable.addMouseListener(rightClickAction);
@@ -441,11 +443,6 @@ public class CinemaFrame extends JFrame {
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Film>> sorter = new TableRowSorter<>(model);
             filmTable.setRowSorter(sorter);
-
-            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-            int filmCimOszlop = 0;
-            sortKeys.add(new RowSorter.SortKey(filmCimOszlop, SortOrder.ASCENDING));
-            sorter.setSortKeys(sortKeys);
         }
 
         filmTable.addMouseListener(rightClickAction);
@@ -471,11 +468,6 @@ public class CinemaFrame extends JFrame {
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Mozi>> sorter = new TableRowSorter<>(model);
             moziTable.setRowSorter(sorter);
-
-            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-            int moziOszlop = 0;
-            sortKeys.add(new RowSorter.SortKey(moziOszlop, SortOrder.ASCENDING));
-            sorter.setSortKeys(sortKeys);
         }
 
         moziTable.addMouseListener(rightClickAction);
@@ -493,11 +485,6 @@ public class CinemaFrame extends JFrame {
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Terem>> sorter = new TableRowSorter<>(model);
             teremTable.setRowSorter(sorter);
-
-            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-            int teremOszlop = 0;
-            sortKeys.add(new RowSorter.SortKey(teremOszlop, SortOrder.ASCENDING));
-            sorter.setSortKeys(sortKeys);
         }
 
         teremTable.addMouseListener(rightClickAction);
@@ -517,11 +504,6 @@ public class CinemaFrame extends JFrame {
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Tartalmaz>> sorter = new TableRowSorter<>(model);
             tartalmazTable.setRowSorter(sorter);
-
-            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-            int moziOszlop = 0;
-            sortKeys.add(new RowSorter.SortKey(moziOszlop, SortOrder.ASCENDING));
-            sorter.setSortKeys(sortKeys);
         }
 
         panelTartalmazA.add(HOZZARENDELES_TEXT, new JScrollPane(tartalmazTable));
@@ -537,11 +519,6 @@ public class CinemaFrame extends JFrame {
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Felhasznalo>> sorter = new TableRowSorter<>(model);
             felhasznaloTable.setRowSorter(sorter);
-
-            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-            int nevOszlop = 0;
-            sortKeys.add(new RowSorter.SortKey(nevOszlop, SortOrder.ASCENDING));
-            sorter.setSortKeys(sortKeys);
         }
 
         //a felhasználói jogok combobox-szal módosíthatok
@@ -553,6 +530,22 @@ public class CinemaFrame extends JFrame {
 
         felhasznaloTable.addMouseListener(rightClickAction);
         panelFelhasznaloA.add(FELHASZNALO_MENU_TEXT, new JScrollPane(felhasznaloTable));
+    }
+    
+    public void loadTortenetPanel() {
+        panelTortenet.removeAll();
+
+        Integer loggedUserId = logIn.getCurrUser().getId();
+        
+        GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
+        tortenetTable.setModel(model);
+
+        if (model.getRowCount() != 0) {
+            TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
+            tortenetTable.setRowSorter(sorter);
+        }
+
+        panelTortenet.add(MUSOR_MENU_TEXT, new JScrollPane(tortenetTable));
     }
 
     public void loadArPanel() {
