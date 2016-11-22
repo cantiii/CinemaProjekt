@@ -74,7 +74,7 @@ public class CinemaFrame extends JFrame {
     private final static Integer[] JOGOK = {1, 2};
     private final static Integer[] BOJOGOK = {0, 1, 2};
 
-    public CinemaFrame() {
+    public CinemaFrame() {     
         initFrame();
 
         setStart();
