@@ -42,7 +42,7 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         try {
             entityManager.getTransaction().commit();
         } catch (RollbackException e) {
-            JOptionPane.showMessageDialog(null, GuiConstants.UNIQUE_DATA_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, GuiConstants.DB_DATA_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
         }
     }
 

@@ -1,5 +1,6 @@
 package zoli.szakdoga.cinema.gui;
 
+import zoli.szakdoga.cinema.gui.checker.MyDateCell;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -379,7 +380,7 @@ public class CinemaFrame extends JFrame {
 
             List<RowSorter.SortKey> sortKeys = new ArrayList<>();
             int datumOszlop = 2;
-            sortKeys.add(new RowSorter.SortKey(datumOszlop, SortOrder.DESCENDING));
+            sortKeys.add(new RowSorter.SortKey(datumOszlop, SortOrder.ASCENDING));
             sorter.setSortKeys(sortKeys);
         }
 

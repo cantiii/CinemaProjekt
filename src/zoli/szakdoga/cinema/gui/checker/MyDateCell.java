@@ -1,4 +1,4 @@
-package zoli.szakdoga.cinema.gui.model;
+package zoli.szakdoga.cinema.gui.checker;
 
 import java.awt.Color;
 import java.awt.Component;
