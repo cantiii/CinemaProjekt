@@ -66,7 +66,7 @@ public class AddAction implements ActionListener {
                         vetites.setTeremId(valaszTerem);
                         vetites.setMikor(date);
 
-                        vetitesModel = (GenericTableModel) parent.getMusorTable().getModel();
+                        vetitesModel = (GenericTableModel) parent.getMusorATable().getModel();
                         vetitesModel.addEntity(vetites);
                     }
                 }
@@ -80,7 +80,7 @@ public class AddAction implements ActionListener {
                 film.setHossz(readNumber(FELVITEL_FILMHOSSZ_TEXT));
                 film.setKorhatar(readNumber(FELVITEL_FILMKOR_TEXT));
 
-                GenericTableModel filmModel = (GenericTableModel) parent.getFilmTable().getModel();
+                GenericTableModel filmModel = (GenericTableModel) parent.getFilmATable().getModel();
                 filmModel.addEntity(film);
                 break;
             case FELVITEL_MOZI_TEXT:

@@ -45,7 +45,7 @@ public class DelAction implements ActionListener {
             if (selectedRow > -1) {
                 int convertRowIndexToModel = table.convertRowIndexToModel(selectedRow);
                 GenericTableModel model = (GenericTableModel) table.getModel();
-                if (table == parent.getMusorTable()) {
+                if (table == parent.getMusorATable()) {
                     Terem terem = (Terem) model.getValueAt(selectedRow, 1);
                     Integer ferohely = terem.getFerohely();
 
@@ -61,7 +61,7 @@ public class DelAction implements ActionListener {
                     }
                     JOptionPane.showMessageDialog(parent, terem.getNev() + " teremhez tartozó (" + ferohely + "db) is székek törlődnek!", GuiConstants.TORLES_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
 
-                } else if (table == parent.getFilmTable()) {
+                } else if (table == parent.getFilmATable()) {
                     Film film = (Film) model.getRowValue(selectedRow);
 
                     dao = new DefaultDao(Vetites.class);

@@ -41,7 +41,9 @@ public class CinemaFrame extends JFrame {
 
     private final JPanel panelWelcome = new JPanel();
     private final JPanel panelMusorA = new JPanel();
+    private final JTable musorATable = new JTable();
     private final JPanel panelFilmA = new JPanel();
+    private final JTable filmATable = new JTable();
     private final JPanel panelMoziA = new JPanel();
     private final JTable moziTable = new JTable();
     private final JPanel panelTeremA = new JPanel();
@@ -101,13 +103,21 @@ public class CinemaFrame extends JFrame {
         setActionListeners();
         loadWelcomePanel();
     }
-
+    
     public JTable getMusorTable() {
         return musorTable;
     }
 
     public JTable getFilmTable() {
         return filmTable;
+    }
+
+    public JTable getMusorATable() {
+        return musorATable;
+    }
+
+    public JTable getFilmATable() {
+        return filmATable;
     }
 
     public JTable getMoziTable() {
@@ -394,20 +404,20 @@ public class CinemaFrame extends JFrame {
         panelMusorA.add(addMusorButton);
 
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
-        musorTable.setModel(model);
-        musorTable.getColumnModel().getColumn(2).setCellEditor(new MyDateCell()); // jó dátum és dátum forma
+        musorATable.setModel(model);
+        musorATable.getColumnModel().getColumn(2).setCellEditor(new MyDateCell()); // jó dátum és dátum forma
 
         //A filmet és a termet combobox-ból választhatjuk ki
-        setComboColumn(musorTable, 0, DaoManager.getInstance().getFilmDao().findAll().toArray());
-        setComboColumn(musorTable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
+        setComboColumn(musorATable, 0, DaoManager.getInstance().getFilmDao().findAll().toArray());
+        setComboColumn(musorATable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
 
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
-            musorTable.setRowSorter(sorter);
+            musorATable.setRowSorter(sorter);
         }
 
-        musorTable.addMouseListener(rightClickAction);
-        panelMusorA.add(MUSOR_MENU_TEXT, new JScrollPane(musorTable));
+        musorATable.addMouseListener(rightClickAction);
+        panelMusorA.add(MUSOR_MENU_TEXT, new JScrollPane(musorATable));
     }
 
     public void loadFilmPanel() {
@@ -438,16 +448,16 @@ public class CinemaFrame extends JFrame {
         panelFilmA.add(addFilmButton);
 
         GenericTableModel<Film> model = new GenericTableModel(DaoManager.getInstance().getFilmDao(), Film.FULL_PROPERTY_NAMES);
-        filmTable.setModel(model);
-        filmTable.setEnabled(true);
+        filmATable.setModel(model);
+        filmATable.setEnabled(true);
 
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Film>> sorter = new TableRowSorter<>(model);
-            filmTable.setRowSorter(sorter);
+            filmATable.setRowSorter(sorter);
         }
 
-        filmTable.addMouseListener(rightClickAction);
-        panelFilmA.add(FILM_MENU_TEXT, new JScrollPane(filmTable));
+        filmATable.addMouseListener(rightClickAction);
+        panelFilmA.add(FILM_MENU_TEXT, new JScrollPane(filmATable));
     }
 
     public void adminMoziPanel() {

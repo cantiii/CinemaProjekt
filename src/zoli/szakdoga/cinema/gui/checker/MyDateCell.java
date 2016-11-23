@@ -60,6 +60,7 @@ public class MyDateCell extends DefaultCellEditor {
                 Date date = sample.parse(data);
                 if (date.after(nextCDay) || date.before(nextDay)) {
                     JOptionPane.showMessageDialog(null, GuiConstants.DATE_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                    textField.setBorder(RED);
                     return false;
                 }
             } catch (ParseException e) {
@@ -68,7 +69,8 @@ public class MyDateCell extends DefaultCellEditor {
                 textField.setBorder(RED);
                 return false;
             }
-        }       
+        }
+        textField.setBorder(BLACK);
         return true;
     }
 

@@ -65,7 +65,7 @@ public class StoryRightClickAction extends MouseAdapter {
         }
 
         JMenuItem torles = null;
-        if (logUser.getCurrUser().getJog() == 0 || logUser.getCurrUser().getJog() == 1) {
+        if (logUser.getCurrUser().getJog() == 0 || logUser.getCurrUser().getJog() == 1 && !(parent.getMusorTable() == (JTable) e.getSource())) {
             torles = new JMenuItem(GuiConstants.TORLES_BUT_TEXT);
             delItem.setTable((JTable) e.getSource());
             torles.addActionListener(delItem);

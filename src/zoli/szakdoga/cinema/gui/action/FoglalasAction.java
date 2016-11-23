@@ -27,7 +27,6 @@ public class FoglalasAction implements ActionListener {
 
     public FoglalasAction(CinemaFrame parent) {
         this.parent = parent;
-
     }
 
     public void setTable(JTable table) {
