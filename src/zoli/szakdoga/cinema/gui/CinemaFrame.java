@@ -74,7 +74,7 @@ public class CinemaFrame extends JFrame {
     private final static Integer[] JOGOK = {1, 2};
     private final static Integer[] BOJOGOK = {0, 1, 2};
 
-    public CinemaFrame() {     
+    public CinemaFrame() {
         initFrame();
 
         setStart();
@@ -459,12 +459,10 @@ public class CinemaFrame extends JFrame {
         moziTable.setEnabled(true);
         /**
          * így alkalmazva az újrarajzolásnál nincs NPE (a fentivel ellentétben)
-         * "csak" az utolsó törlésnél
-        try {
-            moziTable.setModel(model);
-            moziTable.setEnabled(true);
-        } catch (NullPointerException ex) {
-        }*/
+         * "csak" az utolsó törlésnél try { moziTable.setModel(model);
+         * moziTable.setEnabled(true); } catch (NullPointerException ex) {
+        }
+         */
 
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Mozi>> sorter = new TableRowSorter<>(model);
@@ -532,12 +530,12 @@ public class CinemaFrame extends JFrame {
         felhasznaloTable.addMouseListener(rightClickAction);
         panelFelhasznaloA.add(FELHASZNALO_MENU_TEXT, new JScrollPane(felhasznaloTable));
     }
-    
+
     public void loadTortenetPanel() {
         panelTortenet.removeAll();
 
         Integer loggedUserId = logIn.getCurrUser().getId();
-        
+
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
         tortenetTable.setModel(model);
 
