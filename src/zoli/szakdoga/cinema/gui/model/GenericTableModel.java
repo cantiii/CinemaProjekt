@@ -46,7 +46,8 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         if (getRowCount() > rowIndex) {
             T item = items.get(rowIndex); // meg van az entitás minden eleme a sor miatt
-            if(!("".equals(aValue))) {
+            if(!(aValue.toString().trim().equals(""))) {
+                
                 item.set(columnIndex, aValue); // az entitás columnIndex. oszlopában megváltoztatja az értéket
                 updateEntity(item, rowIndex);
             }

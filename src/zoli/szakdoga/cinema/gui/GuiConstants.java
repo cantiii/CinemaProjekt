@@ -54,6 +54,7 @@ public class GuiConstants {
     public static final String TORLES_FELHASZNALO_TEXT = "Felhasznaló TÖRLÉS";
     public static final String MOZI_TEREM_TEXT = "Terem hozzárendelés";
     public static final String TORLES = "Biztos törli?";
+    public static final String TORLESFAIL = "Önmagát nem törölheti ki!";
     
     public static final String VALASZTO_TEXT = "Válaszd ki a megfelelő elemet!";
     

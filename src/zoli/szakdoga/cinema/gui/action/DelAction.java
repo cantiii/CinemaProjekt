@@ -22,9 +22,11 @@ public class DelAction implements ActionListener {
     private CinemaFrame parent;
     private JTable table;
     private DefaultDao dao;
+    private LoginAction logUser;
 
-    public DelAction(CinemaFrame parent) {
+    public DelAction(CinemaFrame parent, LoginAction logUser) {
         this.parent = parent;
+        this.logUser = logUser;
     }
 
     public void setTable(JTable table) {
@@ -139,6 +141,12 @@ public class DelAction implements ActionListener {
                             vetitesModel.removeEntity(vetites.get(i));
                         }           
                         teremModel.removeEntity(terem.get(t));
+                    }
+                } else if (table == parent.getFelhasznaloTable()) {
+                    Felhasznalo felhasznalo = (Felhasznalo) model.getRowValue(selectedRow);
+                    if (felhasznalo.getId() == logUser.getCurrUser().getId()) {
+                        JOptionPane.showMessageDialog(parent, GuiConstants.TORLESFAIL, GuiConstants.TORLES_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+                        return;
                     }
                 }
                 //a GenericTableModel osztály removeEntity függvénye végzi a törlést

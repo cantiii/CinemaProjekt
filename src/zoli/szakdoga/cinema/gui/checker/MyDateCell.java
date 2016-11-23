@@ -68,7 +68,7 @@ public class MyDateCell extends DefaultCellEditor {
                 textField.setBorder(RED);
                 return false;
             }
-        }
+        }       
         return true;
     }
 

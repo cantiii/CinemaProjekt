@@ -593,7 +593,7 @@ public class CinemaFrame extends JFrame {
     private void setActionListeners() {
         showStory = new ShowStoryAction(this);
         addAction = new AddAction(this);
-        delAction = new DelAction(this);
+        delAction = new DelAction(this, logIn);
         foglalasAction = new FoglalasAction(this);
         rightClickAction = new StoryRightClickAction(this, showStory, delAction, logIn, foglalasAction);
     }
