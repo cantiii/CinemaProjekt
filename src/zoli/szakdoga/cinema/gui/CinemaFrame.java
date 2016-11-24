@@ -1,5 +1,8 @@
 package zoli.szakdoga.cinema.gui;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import zoli.szakdoga.cinema.gui.checker.MyDateCell;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -8,6 +11,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,6 +21,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.html.parser.DTDConstants;
 import zoli.szakdoga.cinema.db.dao.DaoManager;
 import zoli.szakdoga.cinema.db.entity.*;
 import static zoli.szakdoga.cinema.gui.GuiConstants.*;
@@ -59,6 +64,7 @@ public class CinemaFrame extends JFrame {
 
     private final JTextField filterText = new JTextField();
     private final JButton keresoButton = new JButton("Keress !");
+    private final JButton pdfButton = new JButton("PDF");
 
     private MouseAdapter rightClickAction;
     private ShowStoryAction showStory;
@@ -408,9 +414,41 @@ public class CinemaFrame extends JFrame {
                 }
             });
 
+            pdfButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        int count = musorTable.getRowCount();
+                        Document dok = new Document();
+                        PdfWriter.getInstance(dok, new FileOutputStream("musor.pdf"));
+                        dok.open();
+                        PdfPTable tab = new PdfPTable(3);
+                        tab.addCell("FILM");
+                        tab.addCell("TEREM");
+                        tab.addCell("DÁTUM");
+                        for (int i = 0; i < count; i++) {
+                            Object obj1 = musorTable.getModel().getValueAt(i, 0);
+                            Object obj2 = musorTable.getModel().getValueAt(i, 1);
+                            Object obj3 = musorTable.getModel().getValueAt(i, 2);
+
+                            String value1 = obj1.toString();
+                            String value2 = obj2.toString();
+                            String value3 = obj3.toString();
+                            tab.addCell(value1);
+                            tab.addCell(value2);
+                            tab.addCell(value3);
+                        }
+                        dok.add(tab);
+                        dok.close();
+                    } catch (Exception ex) {
+                    }
+                }
+            });
+
             Box keresoPanel = new Box(BoxLayout.Y_AXIS);
             keresoPanel.add(filterText);
             keresoPanel.add(keresoButton);
+            keresoPanel.add(pdfButton);
             panelMusor.add(keresoPanel, BorderLayout.WEST);
         }
 
@@ -468,9 +506,53 @@ public class CinemaFrame extends JFrame {
                 }
             });
 
+            pdfButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        int count = filmTable.getRowCount();
+                        Document dok = new Document();
+                        PdfWriter.getInstance(dok, new FileOutputStream("filmek.pdf"));
+                        dok.open();
+                        PdfPTable tab = new PdfPTable(6);
+                        tab.addCell("CIM");
+                        tab.addCell("RENDEZO");
+                        tab.addCell("SZINESZ");
+                        tab.addCell("HOSSZ");
+                        tab.addCell("KORHATAR");
+                        tab.addCell("LEIRAS");
+                        for (int i = 0; i < count; i++) {
+                            Object obj1 = filmTable.getModel().getValueAt(i, 0);
+                            Object obj2 = filmTable.getModel().getValueAt(i, 1);
+                            Object obj3 = filmTable.getModel().getValueAt(i, 2);
+                            Object obj4 = filmTable.getModel().getValueAt(i, 3);
+                            Object obj5 = filmTable.getModel().getValueAt(i, 4);
+                            Object obj6 = filmTable.getModel().getValueAt(i, 5);
+
+                            String value1 = obj1.toString();
+                            String value2 = obj2.toString();
+                            String value3 = obj3.toString();
+                            String value4 = obj4.toString();
+                            String value5 = obj5.toString();
+                            String value6 = obj6.toString();
+                            tab.addCell(value1);
+                            tab.addCell(value2);
+                            tab.addCell(value3);
+                            tab.addCell(value4);
+                            tab.addCell(value5);
+                            tab.addCell(value6);
+                        }
+                        dok.add(tab);
+                        dok.close();
+                    } catch (Exception ex) {
+                    }
+                }
+            });
+
             Box keresoPanel = new Box(BoxLayout.Y_AXIS);
             keresoPanel.add(filterText);
             keresoPanel.add(keresoButton);
+            keresoPanel.add(pdfButton);
             panelFilm.add(keresoPanel, BorderLayout.WEST);
         }
 
