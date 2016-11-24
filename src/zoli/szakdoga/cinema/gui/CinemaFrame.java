@@ -57,6 +57,9 @@ public class CinemaFrame extends JFrame {
     private final JPanel panelTortenet = new JPanel();
     private final JTable tortenetTable = new JTable();
 
+    private final JTextField filterText = new JTextField();
+    private final JButton keresoButton = new JButton("Keress !");
+
     private MouseAdapter rightClickAction;
     private ShowStoryAction showStory;
     private AddAction addAction;
@@ -103,7 +106,7 @@ public class CinemaFrame extends JFrame {
         setActionListeners();
         loadWelcomePanel();
     }
-    
+
     public JTable getMusorTable() {
         return musorTable;
     }
@@ -392,6 +395,23 @@ public class CinemaFrame extends JFrame {
             int datumOszlop = 2;
             sortKeys.add(new RowSorter.SortKey(datumOszlop, SortOrder.ASCENDING));
             sorter.setSortKeys(sortKeys);
+
+            filterText.setText(MUSOR_MENU_TEXT);
+            keresoButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String text = filterText.getText();
+                    if (text.length() == 0) {
+                        sorter.setRowFilter(null);
+                    } else {
+                        sorter.setRowFilter(RowFilter.regexFilter(text));
+                    }
+                }
+            });
+
+            Box keresoPanel = new Box(BoxLayout.Y_AXIS);
+            keresoPanel.add(filterText);
+            keresoPanel.add(keresoButton);
+            panelMusor.add(keresoPanel, BorderLayout.WEST);
         }
 
         musorTable.addMouseListener(rightClickAction);
@@ -435,6 +455,23 @@ public class CinemaFrame extends JFrame {
             int filmCimOszlop = 0;
             sortKeys.add(new RowSorter.SortKey(filmCimOszlop, SortOrder.ASCENDING));
             sorter.setSortKeys(sortKeys);
+
+            filterText.setText(FILM_MENU_TEXT);
+            keresoButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String keresText = filterText.getText();
+                    if (keresText.length() == 0) {
+                        sorter.setRowFilter(null);
+                    } else {
+                        sorter.setRowFilter(RowFilter.regexFilter(keresText));
+                    }
+                }
+            });
+
+            Box keresoPanel = new Box(BoxLayout.Y_AXIS);
+            keresoPanel.add(filterText);
+            keresoPanel.add(keresoButton);
+            panelFilm.add(keresoPanel, BorderLayout.WEST);
         }
 
         if (logIn.getCurrUser().getJog() == 0 || logIn.getCurrUser().getJog() == 2) {
@@ -470,8 +507,7 @@ public class CinemaFrame extends JFrame {
         /**
          * így alkalmazva az újrarajzolásnál nincs NPE (a fentivel ellentétben)
          * "csak" az utolsó törlésnél try { moziTable.setModel(model);
-         * moziTable.setEnabled(true); } catch (NullPointerException ex) {
-        }
+         * moziTable.setEnabled(true); } catch (NullPointerException ex) { }
          */
 
         if (model.getRowCount() != 0) {
@@ -544,8 +580,6 @@ public class CinemaFrame extends JFrame {
     public void loadTortenetPanel() {
         panelTortenet.removeAll();
 
-        Integer loggedUserId = logIn.getCurrUser().getId();
-
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
         tortenetTable.setModel(model);
 
@@ -553,7 +587,6 @@ public class CinemaFrame extends JFrame {
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
             tortenetTable.setRowSorter(sorter);
         }
-
         panelTortenet.add(MUSOR_MENU_TEXT, new JScrollPane(tortenetTable));
     }
 
