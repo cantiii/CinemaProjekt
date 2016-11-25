@@ -5,6 +5,7 @@ package zoli.szakdoga.cinema.gui;
  * @author pappz
  */
 public class GuiConstants {
+
     public static final int FRAME_WIDTH = 800;
     public static final int FRAME_HEIGHT = 600;
 
@@ -26,11 +27,13 @@ public class GuiConstants {
 
     public static final String LOGIN_BUT_TEXT = "Bejelentkezés";
     public static final String REG_BUT_TEXT = "Regisztráció";
+    public static final String KERES_BUT_TEXT = "Keresés";
+    public static final String PDF_BUT_TEXT = "PDF";
 
     public static final String FOGLALAS_BUT_TEXT = "FOGLALÁS";
     public static final String JEGY_DB = "Jegyek darabszámát(szabadhely: ";
     public static final String JEGY_DIAK_DB = "Ebből a diák:";
-    
+
     public static final String FELVITEL_BUT_TEXT = "Felvitel";
     public static final String TORLES_BUT_TEXT = "TÖRLÉS";
     public static final String FELVITEL_MUSOR_TEXT = "Műsor felvitel";
@@ -55,9 +58,9 @@ public class GuiConstants {
     public static final String MOZI_TEREM_TEXT = "Terem hozzárendelés";
     public static final String TORLES = "Biztos törli?";
     public static final String TORLESFAIL = "Önmagát nem törölheti ki!";
-    
+
     public static final String VALASZTO_TEXT = "Válaszd ki a megfelelő elemet!";
-    
+
     public static final String LENGHT_ERROR = "Nem megfelelő hosszúság!";
     public static final String FORMAT_ERROR = "Nem jó formátum, helyesen: ÉÉÉÉ/HH/NN";
     public static final String DATE_ERROR = "Nem jó időintervallum!\n(MIN: +1nap, MAX: +60 nap)";

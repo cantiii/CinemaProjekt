@@ -1,6 +1,7 @@
 package zoli.szakdoga.cinema.gui;
 
 import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import zoli.szakdoga.cinema.gui.checker.MyDateCell;
@@ -11,6 +12,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,7 +23,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
-import javax.swing.text.html.parser.DTDConstants;
 import zoli.szakdoga.cinema.db.dao.DaoManager;
 import zoli.szakdoga.cinema.db.entity.*;
 import static zoli.szakdoga.cinema.gui.GuiConstants.*;
@@ -63,8 +64,8 @@ public class CinemaFrame extends JFrame {
     private final JTable tortenetTable = new JTable();
 
     private final JTextField filterText = new JTextField();
-    private final JButton keresoButton = new JButton("Keress !");
-    private final JButton pdfButton = new JButton("PDF");
+    private final JButton keresoButton = new JButton(KERES_BUT_TEXT);
+    private final JButton pdfButton = new JButton(PDF_BUT_TEXT);
 
     private MouseAdapter rightClickAction;
     private ShowStoryAction showStory;
@@ -440,7 +441,7 @@ public class CinemaFrame extends JFrame {
                         }
                         dok.add(tab);
                         dok.close();
-                    } catch (Exception ex) {
+                    } catch (FileNotFoundException | DocumentException ex) {
                     }
                 }
             });
@@ -544,7 +545,7 @@ public class CinemaFrame extends JFrame {
                         }
                         dok.add(tab);
                         dok.close();
-                    } catch (Exception ex) {
+                    } catch (FileNotFoundException | DocumentException ex) {
                     }
                 }
             });
