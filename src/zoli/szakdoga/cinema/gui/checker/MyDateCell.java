@@ -70,8 +70,8 @@ public class MyDateCell extends DefaultCellEditor {
                 return false;
             }
         }
-        textField.setBorder(BLACK);
-        return true;
+        //semmiképp sem TRUE, akkor nem mentődik!
+        return super.stopCellEditing();
     }
 
     @Override

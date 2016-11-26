@@ -405,6 +405,7 @@ public class CinemaFrame extends JFrame {
 
             filterText.setText(MUSOR_MENU_TEXT);
             keresoButton.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     String text = filterText.getText();
                     if (text.length() == 0) {
@@ -469,11 +470,6 @@ public class CinemaFrame extends JFrame {
         //A filmet és a termet combobox-ból választhatjuk ki
         setComboColumn(musorATable, 0, DaoManager.getInstance().getFilmDao().findAll().toArray());
         setComboColumn(musorATable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
-
-        if (model.getRowCount() != 0) {
-            TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
-            musorATable.setRowSorter(sorter);
-        }
 
         musorATable.addMouseListener(rightClickAction);
         panelMusorA.add(MUSOR_MENU_TEXT, new JScrollPane(musorATable));
@@ -571,11 +567,6 @@ public class CinemaFrame extends JFrame {
         filmATable.setModel(model);
         filmATable.setEnabled(true);
 
-        if (model.getRowCount() != 0) {
-            TableRowSorter<GenericTableModel<Film>> sorter = new TableRowSorter<>(model);
-            filmATable.setRowSorter(sorter);
-        }
-
         filmATable.addMouseListener(rightClickAction);
         panelFilmA.add(FILM_MENU_TEXT, new JScrollPane(filmATable));
     }
@@ -587,16 +578,6 @@ public class CinemaFrame extends JFrame {
         GenericTableModel<Mozi> model = new GenericTableModel(DaoManager.getInstance().getMoziDao(), Mozi.PROPERTY_NAMES);
         moziTable.setModel(model);
         moziTable.setEnabled(true);
-        /**
-         * így alkalmazva az újrarajzolásnál nincs NPE (a fentivel ellentétben)
-         * "csak" az utolsó törlésnél try { moziTable.setModel(model);
-         * moziTable.setEnabled(true); } catch (NullPointerException ex) { }
-         */
-
-        if (model.getRowCount() != 0) {
-            TableRowSorter<GenericTableModel<Mozi>> sorter = new TableRowSorter<>(model);
-            moziTable.setRowSorter(sorter);
-        }
 
         moziTable.addMouseListener(rightClickAction);
         panelMoziA.add(MOZI_MENU_TEXT, new JScrollPane(moziTable));
@@ -609,11 +590,6 @@ public class CinemaFrame extends JFrame {
         GenericTableModel<Terem> model = new GenericTableModel(DaoManager.getInstance().getTeremDao(), Terem.PROPERTY_NAMES);
         teremTable.setModel(model);
         teremTable.setEnabled(true);
-
-        if (model.getRowCount() != 0) {
-            TableRowSorter<GenericTableModel<Terem>> sorter = new TableRowSorter<>(model);
-            teremTable.setRowSorter(sorter);
-        }
 
         teremTable.addMouseListener(rightClickAction);
         panelTeremA.add(TEREM_MENU_TEXT, new JScrollPane(teremTable));
@@ -643,11 +619,6 @@ public class CinemaFrame extends JFrame {
         GenericTableModel<Felhasznalo> model = new GenericTableModel(DaoManager.getInstance().getFelhasznaloDao(), Felhasznalo.PROPERTY_NAMES);
         felhasznaloTable.setModel(model);
         felhasznaloTable.setEnabled(true);
-
-        if (model.getRowCount() != 0) {
-            TableRowSorter<GenericTableModel<Felhasznalo>> sorter = new TableRowSorter<>(model);
-            felhasznaloTable.setRowSorter(sorter);
-        }
 
         //a felhasználói jogok combobox-szal módosíthatok
         if (logIn.getCurrUser().getJog() == 0) {
