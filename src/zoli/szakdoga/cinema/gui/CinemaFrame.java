@@ -10,20 +10,27 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import zoli.szakdoga.cinema.db.dao.DaoManager;
+import zoli.szakdoga.cinema.db.dao.DefaultDao;
 import zoli.szakdoga.cinema.db.entity.*;
 import static zoli.szakdoga.cinema.gui.GuiConstants.*;
 import zoli.szakdoga.cinema.gui.action.*;
@@ -67,6 +74,15 @@ public class CinemaFrame extends JFrame {
     private final JButton keresoButton = new JButton(KERES_BUT_TEXT);
     private final JButton pdfButton = new JButton(PDF_BUT_TEXT);
 
+    private final JButton foglalButton = new JButton(FOGLALAS_BUT_TEXT);
+    private final JPanel panelFoglal = new JPanel();
+    private DefaultDao dao;
+    private static final Object[] JEGYEK = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    private Integer jegyDarab = null;
+    private List<JButton> szekek = new ArrayList<>();
+    private MouseAdapter leftClickAction;
+    private JLabel szekLabel = new JLabel();
+
     private MouseAdapter rightClickAction;
     private ShowStoryAction showStory;
     private AddAction addAction;
@@ -82,7 +98,7 @@ public class CinemaFrame extends JFrame {
     private LoginAction logIn;
     private RegAction regIn;
 
-    Integer selectedRow = null;
+    //Integer selectedRow = null;
     private final static Integer[] JOGOK = {1, 2};
     private final static Integer[] BOJOGOK = {0, 1, 2};
 
@@ -301,13 +317,15 @@ public class CinemaFrame extends JFrame {
         panelCont.add(panelFelhasznaloA, "11");
         panelCont.add(panelTortenet, "12");
 
+        panelCont.add(panelFoglal, "20");
+
         cl.show(panelCont, "1");
 
         add(panelCont, BorderLayout.CENTER);
     }
 
     private void setNorth(String label) {
-        JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
         JLabel elem = new JLabel(label);
 
@@ -319,7 +337,7 @@ public class CinemaFrame extends JFrame {
     }
 
     private void setSouth() {
-        JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
         JLabel udv = new JLabel("ÜDV:");
         JLabel nev = new JLabel(logIn.getCurrUser().getNev());
@@ -375,6 +393,7 @@ public class CinemaFrame extends JFrame {
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
         musorTable.setModel(model);
         musorTable.setEnabled(false);
+        musorTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // törlésre kiürül, akkor még ott marad a sorter hiba
         if (model.getRowCount() != 0) {
@@ -448,6 +467,7 @@ public class CinemaFrame extends JFrame {
             });
 
             Box keresoPanel = new Box(BoxLayout.Y_AXIS);
+            keresoPanel.add(foglalButton);
             keresoPanel.add(filterText);
             keresoPanel.add(keresoButton);
             keresoPanel.add(pdfButton);
@@ -691,6 +711,7 @@ public class CinemaFrame extends JFrame {
         delAction = new DelAction(this, logIn);
         foglalasAction = new FoglalasAction(this);
         rightClickAction = new StoryRightClickAction(this, showStory, delAction, logIn, foglalasAction);
+
     }
 
     // gombok aktíválása
@@ -699,6 +720,184 @@ public class CinemaFrame extends JFrame {
         addFilmButton.addActionListener(addAction);
         addMoziButton.addActionListener(addAction);
         addTeremButton.addActionListener(addAction);
+
+        foglalButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setNorth(" V Á S Z O N ");
+                Vetites vetites = loadJegy();
+                if (vetites == null) {
+                    JOptionPane.showMessageDialog(panelCont, GuiConstants.FOGLALAS_FAIL, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                } else {
+                    try {
+                        loadElrendezes(vetites);
+                    } catch (IOException ex) {
+                    }
+
+                }
+            }
+        });
     }
 
+    private Vetites loadJegy() {
+        int selectedRow = musorTable.getSelectedRow();
+        if (selectedRow > -1) {
+            int convertRowIndexToModel = musorTable.convertRowIndexToModel(selectedRow);
+            //elkérjük a táblánk modeljét, hogy az, illetve sor és oszlopszám alapján megtaláljuk a leírást
+            GenericTableModel model = (GenericTableModel) musorTable.getModel();
+            Vetites valasztottVetites = (Vetites) model.getRowValue(convertRowIndexToModel);
+            dao = new DefaultDao(Tartalmaz.class);
+            Mozi mozi = (Mozi) dao.findMozibyTerem(valasztottVetites.getTeremId());
+            String adatok = "Választott vetítés adatai:"
+                    + "\nFILM: "
+                    + valasztottVetites.getFilmId()
+                    + "\nMOZI: "
+                    + mozi
+                    + "\nTEREM: "
+                    + valasztottVetites.getTeremId()
+                    + "\nDÁTUM: "
+                    + valasztottVetites.getMikor();
+            int answer = JOptionPane.showConfirmDialog(panelCont, adatok, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.YES_NO_OPTION);
+            if (answer == JOptionPane.OK_OPTION) {
+                Szek kezdoSzek = valasztottVetites.getSzekId();
+                Integer ferohely = valasztottVetites.getTeremId().getFerohely();
+                Integer vegSzekId = kezdoSzek.getId() + (ferohely - 1);
+                dao = new DefaultDao(Szek.class);
+                Szek vegSzek = (Szek) dao.findById(vegSzekId);
+
+                List<Szek> szekLista = new ArrayList<>();
+                for (int i = kezdoSzek.getId(); i <= vegSzek.getId(); i++) {
+                    Szek add = (Szek) dao.findById(i);
+                    szekLista.add(add);
+                }
+
+                int szabadHely = 0;
+                List<Integer> jegyAkt = new ArrayList<>();
+                for (int j = 0; j < szekLista.size(); j++) {
+                    if (szekLista.get(j).getFoglalt() == false) {
+                        szabadHely++;
+                        jegyAkt.add(szabadHely);
+                    }
+                }
+
+                Integer jegyDiak = null;
+                List<Integer> jegyListaDiak = new ArrayList<>();
+                if (szabadHely < JEGYEK.length) {
+                    Object[] jegyLista = jegyAkt.toArray();
+                    jegyDarab = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DB + szabadHely + ")", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, jegyLista, jegyLista[0]);
+                    if (jegyDarab == null) {
+                        return null;
+                    }
+                    for (int i = 0; i < jegyDarab; i++) {
+                        jegyListaDiak.add(i);
+                    }
+                    jegyListaDiak.add(jegyDarab);
+                    jegyLista = jegyListaDiak.toArray();
+                    jegyDiak = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DIAK_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, jegyLista, jegyLista[0]);
+                    if (jegyDiak == null) {
+                        jegyDiak = 0;
+                    }
+                } else {
+                    jegyDarab = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DB + szabadHely + ")", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
+                    if (jegyDarab == null) {
+                        return null;
+                    }
+                    for (int i = 0; i < jegyDarab; i++) {
+                        jegyListaDiak.add(i);
+                    }
+                    jegyListaDiak.add(jegyDarab);
+                    Object[] jegyLista = jegyListaDiak.toArray();
+                    jegyDiak = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DIAK_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, jegyLista, jegyLista[0]);
+                    if (jegyDiak == null) {
+                        jegyDiak = 0;
+                    }
+                }
+            }
+            if (jegyDarab == null) {
+                return null;
+            } else {
+                return valasztottVetites;
+            }
+        }
+        return null;
+    }
+
+    private void loadElrendezes(Vetites vetites) throws IOException {
+        panelFoglal.removeAll();
+        Szek kezdoSzek = vetites.getSzekId();
+        Integer ferohely = vetites.getTeremId().getFerohely();
+        Integer vegSzekId = kezdoSzek.getId() + (ferohely - 1);
+        dao = new DefaultDao(Szek.class);
+        Szek vegSzek = (Szek) dao.findById(vegSzekId);
+
+        List<Szek> szekLista = new ArrayList<>();
+        for (int i = kezdoSzek.getId(); i <= vegSzek.getId(); i++) {
+            Szek add = (Szek) dao.findById(i);
+            szekLista.add(add);
+        }
+
+        switch (ferohely) {
+            case 25:
+                panelFoglal.setLayout(new GridLayout(5, 5));
+                break;
+            case 50:
+                panelFoglal.setLayout(new GridLayout(10, 5));
+
+                break;
+            case 80:
+                panelFoglal.setLayout(new GridLayout(10, 8));
+                break;
+        }
+
+        BufferedImage szabadSzek = ImageIO.read(new File("src/pic/szszabad.png"));
+        BufferedImage foglaltSzek = ImageIO.read(new File("src/pic/szfoglalt.png"));
+
+        for (Integer j = 0; j < szekLista.size(); j++) {
+            Integer szekSzam = szekLista.get(j).getSzekszam();
+            if (szekLista.get(j).getFoglalt() == true) {
+                szekLabel = new JLabel(szekSzam.toString(), new ImageIcon(foglaltSzek), 0);
+                panelFoglal.add(szekLabel);
+            } else {
+                szekLabel = new JLabel(szekSzam.toString(), new ImageIcon(szabadSzek), 0);
+                szekLabel.addMouseListener(new LeftClickAction(szekLista.get(j), szekLabel, jegyDarab));
+                panelFoglal.add(szekLabel);
+            }
+        }
+
+        cl.show(panelCont, "20");
+        setHelp();
+    }
+
+    private void setHelp() {
+        JPanel helpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        
+        BufferedImage szabadSzek = null;
+        BufferedImage foglaltSzek = null;
+        BufferedImage xSzek = null;
+        try {
+            szabadSzek = ImageIO.read(new File("src/pic/szszabad.png"));
+            foglaltSzek = ImageIO.read(new File("src/pic/szfoglalt.png"));
+            xSzek = ImageIO.read(new File("src/pic/szx.png"));
+        } catch (IOException ex) {
+        }
+
+        JLabel fog = new JLabel("Foglalt:");
+        fog.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+        JLabel szabad = new JLabel("Szabad:");
+        szabad.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+        JLabel jelolt = new JLabel("Kijelölt:");
+        jelolt.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+
+        helpPanel.add(fog);
+        helpPanel.add(new JLabel(new ImageIcon(foglaltSzek)));
+        
+        helpPanel.add(szabad);
+        helpPanel.add(new JLabel(new ImageIcon(szabadSzek)));
+        
+        helpPanel.add(jelolt);
+        helpPanel.add(new JLabel(new ImageIcon(xSzek)));
+        
+        helpPanel.setBackground(Color.GRAY);
+        add(helpPanel, BorderLayout.SOUTH);
+    }
 }

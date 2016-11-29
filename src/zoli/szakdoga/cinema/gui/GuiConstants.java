@@ -33,6 +33,7 @@ public class GuiConstants {
     public static final String FOGLALAS_BUT_TEXT = "FOGLALÁS";
     public static final String JEGY_DB = "Jegyek darabszámát(szabadhely: ";
     public static final String JEGY_DIAK_DB = "Ebből a diák:";
+    public static final String FOGLALAS_FAIL = "Előbb válasszon ki egy vetítést!";
 
     public static final String FELVITEL_BUT_TEXT = "Felvitel";
     public static final String TORLES_BUT_TEXT = "TÖRLÉS";

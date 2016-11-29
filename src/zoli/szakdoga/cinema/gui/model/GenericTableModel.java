@@ -108,5 +108,10 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
         DAO.update(entity);
         fireTableRowsUpdated(0, items.size() - 1);
     }
+    
+    public void updateSzek(T szek) {
+        DAO.update(szek);
+        fireTableRowsUpdated(0, items.size() - 1);
+    }
 
 }
