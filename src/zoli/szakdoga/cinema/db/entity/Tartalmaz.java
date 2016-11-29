@@ -14,7 +14,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Tartalmaz.findAll", query = "SELECT t FROM Tartalmaz t"),
     @NamedQuery(name = "Tartalmaz.findById", query = "SELECT t FROM Tartalmaz t WHERE t.id = :id"),
-    @NamedQuery(name = "Tartalmaz.findMoziById", query = "SELECT t FROM Tartalmaz t WHERE t.moziId = :moziId")})
+    @NamedQuery(name = "Tartalmaz.findMoziById", query = "SELECT t FROM Tartalmaz t WHERE t.moziId = :moziId"),
+    @NamedQuery(name = "Tartalmaz.findMoziByTerem", query = "SELECT t FROM Tartalmaz t WHERE t.teremId = :teremId")})
 public class Tartalmaz implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Mozi", "Terem"};

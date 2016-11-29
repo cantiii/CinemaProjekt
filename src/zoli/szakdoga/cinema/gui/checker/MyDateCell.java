@@ -1,4 +1,4 @@
-package zoli.szakdoga.cinema.gui.model;
+package zoli.szakdoga.cinema.gui.checker;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -60,6 +60,7 @@ public class MyDateCell extends DefaultCellEditor {
                 Date date = sample.parse(data);
                 if (date.after(nextCDay) || date.before(nextDay)) {
                     JOptionPane.showMessageDialog(null, GuiConstants.DATE_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                    textField.setBorder(RED);
                     return false;
                 }
             } catch (ParseException e) {
@@ -69,7 +70,8 @@ public class MyDateCell extends DefaultCellEditor {
                 return false;
             }
         }
-        return true;
+        //semmiképp sem TRUE, akkor nem mentődik!
+        return super.stopCellEditing();
     }
 
     @Override

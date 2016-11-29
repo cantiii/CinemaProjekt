@@ -22,9 +22,11 @@ public class DelAction implements ActionListener {
     private CinemaFrame parent;
     private JTable table;
     private DefaultDao dao;
+    private LoginAction logUser;
 
-    public DelAction(CinemaFrame parent) {
+    public DelAction(CinemaFrame parent, LoginAction logUser) {
         this.parent = parent;
+        this.logUser = logUser;
     }
 
     public void setTable(JTable table) {
@@ -43,7 +45,7 @@ public class DelAction implements ActionListener {
             if (selectedRow > -1) {
                 int convertRowIndexToModel = table.convertRowIndexToModel(selectedRow);
                 GenericTableModel model = (GenericTableModel) table.getModel();
-                if (table == parent.getMusorTable()) {
+                if (table == parent.getMusorATable()) {
                     Terem terem = (Terem) model.getValueAt(selectedRow, 1);
                     Integer ferohely = terem.getFerohely();
 
@@ -59,7 +61,7 @@ public class DelAction implements ActionListener {
                     }
                     JOptionPane.showMessageDialog(parent, terem.getNev() + " teremhez tartozó (" + ferohely + "db) is székek törlődnek!", GuiConstants.TORLES_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
 
-                } else if (table == parent.getFilmTable()) {
+                } else if (table == parent.getFilmATable()) {
                     Film film = (Film) model.getRowValue(selectedRow);
 
                     dao = new DefaultDao(Vetites.class);
@@ -87,23 +89,24 @@ public class DelAction implements ActionListener {
 
                     dao = new DefaultDao(Vetites.class);
                     List<Vetites> vetites = dao.findTeremInVetites(terem);
+                    if(vetites.size() > 0) {
+                        GenericTableModel<Vetites> vetitesModel = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
 
-                    GenericTableModel<Vetites> vetitesModel = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
+                        for (int i = 0; i < vetites.size(); i++) {
+                            Szek kezdoSzek = vetites.get(i).getSzekId();
+                            Integer ferohely = vetites.get(i).getTeremId().getFerohely();
+                            Integer vegSzekId = kezdoSzek.getId() + (ferohely - 1);
+                            dao = new DefaultDao(Szek.class);
+                            Szek vegSzek = (Szek) dao.findById(vegSzekId);
 
-                    for (int i = 0; i < vetites.size(); i++) {
-                        Szek kezdoSzek = vetites.get(i).getSzekId();
-                        Integer ferohely = vetites.get(i).getTeremId().getFerohely();
-                        Integer vegSzekId = kezdoSzek.getId() + (ferohely - 1);
-                        dao = new DefaultDao(Szek.class);
-                        Szek vegSzek = (Szek) dao.findById(vegSzekId);
+                            GenericTableModel<Szek> szekModel = new GenericTableModel(DaoManager.getInstance().getSzekDao(), Szek.PROPERTY_NAMES);
+                            for (int j = kezdoSzek.getId(); j <= vegSzek.getId(); j++) {
+                                szekModel.removeEntity((Szek) dao.findById(j));
+                            }
+                            JOptionPane.showMessageDialog(parent, vetites.get(i).getTeremId().getNev() + " teremhez tartozó (" + ferohely + "db) is székek törlődnek!", GuiConstants.TORLES_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
 
-                        GenericTableModel<Szek> szekModel = new GenericTableModel(DaoManager.getInstance().getSzekDao(), Szek.PROPERTY_NAMES);
-                        for (int j = kezdoSzek.getId(); j <= vegSzek.getId(); j++) {
-                            szekModel.removeEntity((Szek) dao.findById(j));
+                            vetitesModel.removeEntity(vetites.get(i));
                         }
-                        JOptionPane.showMessageDialog(parent, vetites.get(i).getTeremId().getNev() + " teremhez tartozó (" + ferohely + "db) is székek törlődnek!", GuiConstants.TORLES_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
-
-                        vetitesModel.removeEntity(vetites.get(i));
                     }
                 } else if (table == parent.getMoziTable()) {
                     Mozi mozi = (Mozi) model.getRowValue(selectedRow);
@@ -139,6 +142,12 @@ public class DelAction implements ActionListener {
                             vetitesModel.removeEntity(vetites.get(i));
                         }           
                         teremModel.removeEntity(terem.get(t));
+                    }
+                } else if (table == parent.getFelhasznaloTable()) {
+                    Felhasznalo felhasznalo = (Felhasznalo) model.getRowValue(selectedRow);
+                    if (felhasznalo.getId() == logUser.getCurrUser().getId()) {
+                        JOptionPane.showMessageDialog(parent, GuiConstants.TORLESFAIL, GuiConstants.TORLES_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+                        return;
                     }
                 }
                 //a GenericTableModel osztály removeEntity függvénye végzi a törlést

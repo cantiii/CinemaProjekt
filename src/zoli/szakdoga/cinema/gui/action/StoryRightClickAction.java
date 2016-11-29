@@ -8,6 +8,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import zoli.szakdoga.cinema.gui.CinemaFrame;
 import zoli.szakdoga.cinema.gui.GuiConstants;
 
 /**
@@ -18,14 +19,18 @@ import zoli.szakdoga.cinema.gui.GuiConstants;
  */
 public class StoryRightClickAction extends MouseAdapter {
 
+    private CinemaFrame parent;
     private ShowStoryAction showStory;
     private DelAction delItem;
     private LoginAction logUser;
+    private FoglalasAction foglalasAction;
 
-    public StoryRightClickAction(ShowStoryAction showStory, DelAction delItem, LoginAction logUser) {
+    public StoryRightClickAction(CinemaFrame parent, ShowStoryAction showStory, DelAction delItem, LoginAction logUser, FoglalasAction foglalasAction) {
+        this.parent = parent;
         this.showStory = showStory;
         this.delItem = delItem;
         this.logUser = logUser;
+        this.foglalasAction = foglalasAction;
     }
 
     @Override
@@ -44,15 +49,23 @@ public class StoryRightClickAction extends MouseAdapter {
         JPopupMenu popup = new JPopupMenu();
 
         JMenuItem leiras = null;
-        if (logUser.getCurrUser().getJog() == 2) {
-            leiras = new JMenuItem(GuiConstants.LEIRAS_MENU_TEXT);
-            showStory.setTable((JTable) e.getSource());
-            leiras.addActionListener(showStory);
-            popup.add(leiras);
+        JMenuItem foglalas = null;
+        if (logUser.getCurrUser().getJog() == 0 || logUser.getCurrUser().getJog() == 2) {
+            if(parent.getFilmTable() == (JTable) e.getSource()) {
+                leiras = new JMenuItem(GuiConstants.LEIRAS_MENU_TEXT);
+                showStory.setTable((JTable) e.getSource());
+                leiras.addActionListener(showStory);
+                popup.add(leiras);
+            } else if (parent.getMusorTable() == (JTable) e.getSource()) {
+                foglalas = new JMenuItem(GuiConstants.FOGLALAS_BUT_TEXT);
+                foglalasAction.setTable((JTable) e.getSource());
+                foglalas.addActionListener(foglalasAction);
+                popup.add(foglalas);
+            }
         }
 
         JMenuItem torles = null;
-        if (logUser.getCurrUser().getJog() == 1) {
+        if (logUser.getCurrUser().getJog() == 0 || logUser.getCurrUser().getJog() == 1 && !(parent.getMusorTable() == (JTable) e.getSource())) {
             torles = new JMenuItem(GuiConstants.TORLES_BUT_TEXT);
             delItem.setTable((JTable) e.getSource());
             torles.addActionListener(delItem);

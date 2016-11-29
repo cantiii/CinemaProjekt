@@ -42,7 +42,7 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         try {
             entityManager.getTransaction().commit();
         } catch (RollbackException e) {
-            JOptionPane.showMessageDialog(null, GuiConstants.UNIQUE_DATA_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, GuiConstants.DB_DATA_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -131,6 +131,24 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         } else {
             return true;
         }
+    }
+    
+    /**
+     * 
+     * @param name - Terem entitás, amelyről megszeretnénk tudni, hogy melyik Mozihoz tartozik
+     * @return - A keresett Mozi
+     */
+    public Mozi findMozibyTerem(Terem terem) {
+        Tartalmaz result;
+        try {
+            Query query = getEntityManager()
+                    .createNamedQuery("Tartalmaz.findMoziByTerem")
+                    .setParameter("teremId", terem);
+            result = (Tartalmaz) query.getSingleResult();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        return result.getMoziId();
     }
 
     /**

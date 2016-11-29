@@ -17,7 +17,8 @@ import zoli.szakdoga.cinema.gui.model.GenericTableModel;
 
 /**
  *
- * @author pappz A különböző felvitelekért felelős osztály
+ * @author pappz
+ * A különböző felvitelekért felelős osztály
  */
 public class AddAction implements ActionListener {
 
@@ -52,7 +53,7 @@ public class AddAction implements ActionListener {
                         GenericTableModel vetitesModel = null;
                         for (int i = 0; i < valaszTerem.getFerohely(); i++) {
                             szekek = new Szek();
-                            szekek.setSor(i);
+                            szekek.setSzekszam(i + 1);
                             szekModel = new GenericTableModel(DaoManager.getInstance().getSzekDao(), Szek.PROPERTY_NAMES);
                             szekModel.addEntity(szekek);
                             if (i == 0) {
@@ -65,7 +66,7 @@ public class AddAction implements ActionListener {
                         vetites.setTeremId(valaszTerem);
                         vetites.setMikor(date);
 
-                        vetitesModel = (GenericTableModel) parent.getMusorTable().getModel();
+                        vetitesModel = (GenericTableModel) parent.getMusorATable().getModel();
                         vetitesModel.addEntity(vetites);
                     }
                 }
@@ -79,7 +80,7 @@ public class AddAction implements ActionListener {
                 film.setHossz(readNumber(FELVITEL_FILMHOSSZ_TEXT));
                 film.setKorhatar(readNumber(FELVITEL_FILMKOR_TEXT));
 
-                GenericTableModel filmModel = (GenericTableModel) parent.getFilmTable().getModel();
+                GenericTableModel filmModel = (GenericTableModel) parent.getFilmATable().getModel();
                 filmModel.addEntity(film);
                 break;
             case FELVITEL_MOZI_TEXT:
@@ -96,11 +97,11 @@ public class AddAction implements ActionListener {
                 Integer helyekSzama = readHely();
                 terem.setFerohely(helyekSzama);
 
-                GenericTableModel teremModel = (GenericTableModel) parent.getTeremTable().getModel();
-                teremModel.addEntity(terem);
-
                 Mozi valaszMozi = readMozi();
                 if (valaszMozi != null) {
+                    GenericTableModel teremModel = (GenericTableModel) parent.getTeremTable().getModel();
+                    teremModel.addEntity(terem);
+
                     Tartalmaz tartalmaz = new Tartalmaz();
                     tartalmaz.setMoziId(valaszMozi);
                     tartalmaz.setTeremId(terem);
@@ -121,7 +122,7 @@ public class AddAction implements ActionListener {
         while (name == null) {
             name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
             if (name != null && !name.trim().equals("")) {
-                if (name.length() <= 3 || name.length() > 20) {
+                if (name.length() < 3 || name.length() > 20) {
                     JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                     name = null;
                 } else {
@@ -145,7 +146,7 @@ public class AddAction implements ActionListener {
                 while (name == null) {
                     name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
                     if (name != null && !name.trim().equals("")) {
-                        if (name.length() <= 3 || name.length() > 20) {
+                        if (name.length() < 3 || name.length() > 20) {
                             JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                             name = null;
                         } else if (dao.findMozi(name)) {
@@ -165,7 +166,7 @@ public class AddAction implements ActionListener {
                 while (name == null) {
                     name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
                     if (name != null && !name.trim().equals("")) {
-                        if (name.length() <= 3 || name.length() > 20) {
+                        if (name.length() < 3 || name.length() > 20) {
                             JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                             name = null;
                         } else if (dao.findTerem(name)) {
@@ -185,7 +186,7 @@ public class AddAction implements ActionListener {
                 while (name == null) {
                     name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
                     if (name != null && !name.trim().equals("")) {
-                        if (name.length() <= 3 || name.length() > 20) {
+                        if (name.length() < 3 || name.length() > 20) {
                             JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                             name = null;
                         } else if (dao.findFilm(name)) {
@@ -235,6 +236,7 @@ public class AddAction implements ActionListener {
                 }
             } else {
                 name = null; // nem lehet default value
+                JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
             }
         }
         return name;
@@ -289,8 +291,13 @@ public class AddAction implements ActionListener {
      */
     private Mozi readMozi() {
         Object[] mozik = DaoManager.getInstance().getMoziDao().findAll().toArray();
-        Mozi mozi = (Mozi) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, mozik, mozik[0]);
-        return mozi;
+        if (mozik.length == 0) {
+            JOptionPane.showMessageDialog(parent, GuiConstants.NOMOZI, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+            return null;
+        } else {
+            Mozi mozi = (Mozi) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, mozik, mozik[0]);
+            return mozi;
+        }
     }
 
     /**

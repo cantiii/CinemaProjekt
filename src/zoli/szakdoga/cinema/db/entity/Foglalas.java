@@ -14,11 +14,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Foglalas.findAll", query = "SELECT f FROM Foglalas f"),
-    @NamedQuery(name = "Foglalas.findById", query = "SELECT f FROM Foglalas f WHERE f.id = :id"),
-    @NamedQuery(name = "Foglalas.findByMikor", query = "SELECT f FROM Foglalas f WHERE f.mikor = :mikor")})
+    @NamedQuery(name = "Foglalas.findById", query = "SELECT f FROM Foglalas f WHERE f.id = :id")})
 public class Foglalas  implements Serializable, PersistentEntity {
 
-    public static final String PROPERTY_NAMES[] = {"Felhasználó", "Mikor", "Szék"};
+    public static final String PROPERTY_NAMES[] = {"Felhasználó", "Szék"};
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -26,9 +25,6 @@ public class Foglalas  implements Serializable, PersistentEntity {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Column(name = "MIKOR")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date mikor;
     @JoinColumn(name = "FELHASZNALO_ID", referencedColumnName = "ID")
     @ManyToOne
     private Felhasznalo felhasznaloId;
@@ -49,14 +45,6 @@ public class Foglalas  implements Serializable, PersistentEntity {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Date getMikor() {
-        return mikor;
-    }
-
-    public void setMikor(Date mikor) {
-        this.mikor = mikor;
     }
 
     public Felhasznalo getFelhasznaloId() {
@@ -97,7 +85,7 @@ public class Foglalas  implements Serializable, PersistentEntity {
 
     @Override
     public String toString() {
-        return felhasznaloId + " " + mikor + " " + szekId;
+        return felhasznaloId + " " + szekId;
     }
 
     @Override
@@ -106,8 +94,6 @@ public class Foglalas  implements Serializable, PersistentEntity {
             case 0:
                 return felhasznaloId;
             case 1:
-                return mikor;
-            case 2:
                 return szekId;
             default:
                 return null;
@@ -121,9 +107,6 @@ public class Foglalas  implements Serializable, PersistentEntity {
                 setFelhasznaloId((Felhasznalo) value);
                 break;
             case 1:
-                setMikor((Date) value);
-                break;
-            case 2:
                 setSzekId((Szek) value);
                 break;
         }

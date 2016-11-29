@@ -1,5 +1,7 @@
 package zoli.szakdoga.cinema;
 
+import javax.swing.SwingUtilities;
+import zoli.szakdoga.cinema.db.init.DatabaseInitializer;
 import zoli.szakdoga.cinema.gui.CinemaFrame;
 
 /**
@@ -8,8 +10,17 @@ import zoli.szakdoga.cinema.gui.CinemaFrame;
  */
 public class CinemaProjekt {
     
+    private static boolean kellInit = false;
+    
     public static void main(String[] args) {
-        CinemaFrame frame = new CinemaFrame();
-        frame.setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if(kellInit) {
+                    DatabaseInitializer.getInstance().init();
+                }
+                new CinemaFrame().setVisible(true);
+            }
+        });
     }
 }

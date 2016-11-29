@@ -46,8 +46,11 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         if (getRowCount() > rowIndex) {
             T item = items.get(rowIndex); // meg van az entitás minden eleme a sor miatt
-            item.set(columnIndex, aValue); // az entitás columnIndex. oszlopában megváltoztatja az értéket
-            updateEntity(item, rowIndex);
+            if(!(aValue.toString().trim().equals(""))) {
+                
+                item.set(columnIndex, aValue); // az entitás columnIndex. oszlopában megváltoztatja az értéket
+                updateEntity(item, rowIndex);
+            }
         }
     }
 
@@ -85,16 +88,14 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
     public void removeEntity(int rowIndex) {
         T entity = items.get(rowIndex);
         items.remove(rowIndex); 
-        fireTableDataChanged();
         DAO.delete(entity);
-        //fireTableDataChanged();
+        fireTableDataChanged();        
     }
     
     public void removeEntity(T item) {
         items.remove(item);
-        fireTableDataChanged();
-        DAO.delete(item);  
-        
+        DAO.delete(item); 
+        fireTableDataChanged();      
     }
     
     /**
@@ -105,7 +106,7 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
     public void updateEntity(T item, int rowIndex) {
         T entity = items.get(rowIndex);
         DAO.update(entity);
-        fireTableDataChanged();
+        fireTableRowsUpdated(0, items.size() - 1);
     }
 
 }
