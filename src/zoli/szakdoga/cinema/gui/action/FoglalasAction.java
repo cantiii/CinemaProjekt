@@ -1,14 +1,20 @@
 package zoli.szakdoga.cinema.gui.action;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import zoli.szakdoga.cinema.db.dao.DefaultDao;
-import zoli.szakdoga.cinema.db.entity.*;
-import zoli.szakdoga.cinema.gui.CinemaFrame;
+import javax.swing.SwingUtilities;
+import zoli.szakdoga.cinema.db.dao.DaoManager;
+import zoli.szakdoga.cinema.db.entity.Foglalas;
+import zoli.szakdoga.cinema.db.entity.Szek;
 import zoli.szakdoga.cinema.gui.GuiConstants;
 import zoli.szakdoga.cinema.gui.model.GenericTableModel;
 
@@ -16,98 +22,75 @@ import zoli.szakdoga.cinema.gui.model.GenericTableModel;
  *
  * @author pappz
  */
-public class FoglalasAction implements ActionListener {
+public class FoglalasAction extends MouseAdapter {
 
-    private static Object[] JEGYEK = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    private Szek szek;
+    private JLabel szekLabel;
+    private Integer jegyDarab;
+    private static int foglalDarab = 0;
+    private static List<Szek> kijeloltSzekLista = new ArrayList<>();
+    private LoginAction logUser;
 
-    private CinemaFrame parent;
-    private JTable table;
-    private DefaultDao dao;
-    private TeremMegjelenites teremMegjelenetes;
-
-    public FoglalasAction(CinemaFrame parent) {
-        this.parent = parent;
+    public FoglalasAction(Szek szek, JLabel szekLabel, Integer jegyDarab, LoginAction logUser) {
+        this.szek = szek;
+        this.szekLabel = szekLabel;
+        this.jegyDarab = jegyDarab;
+        this.logUser = logUser;
     }
 
-    public void setTable(JTable table) {
-        this.table = table;
-    }
+    public void mousePressed(MouseEvent e) {
+        if (jegyDarab != foglalDarab) {
+            BufferedImage xSzek = null;
+            BufferedImage szSzek = null;
+            try {
+                xSzek = ImageIO.read(new File("src/pic/szx.png"));
+                szSzek = ImageIO.read(new File("src/pic/szszabad.png"));
+            } catch (IOException ex) {
+            }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow > -1) {
-            int convertRowIndexToModel = table.convertRowIndexToModel(selectedRow);
-            //elkérjük a táblánk modeljét, hogy az, illetve sor és oszlopszám alapján megtaláljuk a leírást
-            GenericTableModel model = (GenericTableModel) table.getModel();
-            Vetites valasztottVetites = (Vetites) model.getRowValue(convertRowIndexToModel);
-            dao = new DefaultDao(Tartalmaz.class);
-            Mozi mozi = (Mozi) dao.findMozibyTerem(valasztottVetites.getTeremId());
-            String adatok = "Választott vetítés adatai:"
-                    + "\nFILM: "
-                    + valasztottVetites.getFilmId()
-                    + "\nMOZI: "
-                    + mozi
-                    + "\nTEREM: "
-                    + valasztottVetites.getTeremId()
-                    + "\nDÁTUM: "
-                    + valasztottVetites.getMikor();
-            int answer = JOptionPane.showConfirmDialog(parent, adatok, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.YES_NO_OPTION);
-            if (answer == JOptionPane.OK_OPTION) {
-                Szek kezdoSzek = valasztottVetites.getSzekId();
-                Integer ferohely = valasztottVetites.getTeremId().getFerohely();
-                Integer vegSzekId = kezdoSzek.getId() + (ferohely - 1);
-                dao = new DefaultDao(Szek.class);
-                Szek vegSzek = (Szek) dao.findById(vegSzekId);
-
-                List<Szek> szekLista = new ArrayList<>();
-                for (int i = kezdoSzek.getId(); i <= vegSzek.getId(); i++) {
-                    Szek add = (Szek) dao.findById(i);
-                    szekLista.add(add);
-                }
-
-                int szabadHely = 0;
-                List<Integer> jegyAkt = new ArrayList<>();
-                for (int j = 0; j < szekLista.size(); j++) {
-                    if (szekLista.get(j).getFoglalt() == false) {
-                        szabadHely++;
-                        jegyAkt.add(szabadHely);
-                    }
-                }
-                Integer jegyDarab = null;
-                Integer jegyDiak = null;
-                List<Integer> jegyListaDiak = new ArrayList<>();
-                if (szabadHely < JEGYEK.length) {
-                    JEGYEK = jegyAkt.toArray();
-                    jegyDarab = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DB + szabadHely + ")", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
-                    if (jegyDarab == null) {
-                        return;
-                    }
-                    for (int i = 0; i < jegyDarab; i++) {
-                        jegyListaDiak.add(i + 1);
-                    }
-                    JEGYEK = jegyListaDiak.toArray();
-                    jegyDiak = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DIAK_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
-                    if (jegyDiak == null) {
-                        jegyDiak = 0;
-                    }
-                    teremMegjelenetes = new TeremMegjelenites(jegyDarab, jegyDiak, valasztottVetites);
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                if (kijeloltSzekLista.contains(szek)) {
+                    JOptionPane.showMessageDialog(null, "foglalt már", GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    jegyDarab = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DB + szabadHely + ")", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
-                    if (jegyDarab == null) {
-                        return;
+                    ImageIcon xIcon = new ImageIcon(xSzek);
+                    szekLabel.setIcon(xIcon);
+                    foglalDarab = foglalDarab + 1;
+                    kijeloltSzekLista.add(szek);
+                    if (jegyDarab == foglalDarab) {
+                        veglegesit();
                     }
-                    for (int i = 0; i < jegyDarab; i++) {
-                        jegyListaDiak.add(i + 1);
-                    }
-                    JEGYEK = jegyListaDiak.toArray();
-                    jegyDiak = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.JEGY_DIAK_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
-                    if (jegyDiak == null) {
-                        jegyDiak = 0;
-                    }
-                    teremMegjelenetes = new TeremMegjelenites(jegyDarab, jegyDiak, valasztottVetites);
                 }
             }
+//            if (SwingUtilities.isRightMouseButton(e)) {
+//                int answer = JOptionPane.showConfirmDialog(null, GuiConstants.TORLES, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.YES_NO_OPTION);
+//                if (answer == JOptionPane.OK_OPTION) {
+//                    ImageIcon szIcon = new ImageIcon(szSzek);
+//                    szekLabel.setIcon(szIcon);
+//                    foglalDarab = foglalDarab - 1;
+//                }
+//            }
+        }
+    }
+
+    public void veglegesit() {
+        int answer = JOptionPane.showConfirmDialog(null, "Mentés?", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.YES_NO_OPTION);
+        GenericTableModel<Szek> szekModel = null;
+        GenericTableModel<Foglalas> foglalasModel = null;
+        if (answer == JOptionPane.OK_OPTION) {
+            for (int i = 0; i < kijeloltSzekLista.size(); i++) {
+                szekModel = new GenericTableModel(DaoManager.getInstance().getSzekDao(), Szek.PROPERTY_NAMES);               
+                kijeloltSzekLista.get(i).setFoglalt(true);
+                szekModel.updateSzek(kijeloltSzekLista.get(i));
+                
+                foglalasModel = new GenericTableModel(DaoManager.getInstance().getFoglalasDao(), Foglalas.PROPERTY_NAMES);
+                Foglalas foglalas = new Foglalas();
+                foglalas.setFelhasznaloId(logUser.getCurrUser());
+                foglalas.setSzekId(szek);
+                foglalasModel.addEntity(foglalas);
+            }
+            JOptionPane.showMessageDialog(null, "mentve", GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+            kijeloltSzekLista.clear();
+            foglalDarab = 0;
         }
     }
 }

@@ -22,8 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -80,15 +78,12 @@ public class CinemaFrame extends JFrame {
     private static final Object[] JEGYEK = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     private Integer jegyDarab = null;
     private List<JButton> szekek = new ArrayList<>();
-    private MouseAdapter leftClickAction;
     private JLabel szekLabel = new JLabel();
 
     private MouseAdapter rightClickAction;
     private ShowStoryAction showStory;
     private AddAction addAction;
     private DelAction delAction;
-
-    private FoglalasAction foglalasAction;
 
     private final JButton addMusorButton = new JButton(FELVITEL_MUSOR_TEXT);
     private final JButton addFilmButton = new JButton(FELVITEL_FILM_TEXT);
@@ -367,6 +362,7 @@ public class CinemaFrame extends JFrame {
         southPanel.add(jogszoveg);
         southPanel.add(jog);
         southPanel.setBackground(Color.GRAY);
+
         add(southPanel, BorderLayout.SOUTH);
     }
 
@@ -709,9 +705,7 @@ public class CinemaFrame extends JFrame {
         showStory = new ShowStoryAction(this);
         addAction = new AddAction(this);
         delAction = new DelAction(this, logIn);
-        foglalasAction = new FoglalasAction(this);
-        rightClickAction = new StoryRightClickAction(this, showStory, delAction, logIn, foglalasAction);
-
+        rightClickAction = new StoryRightClickAction(this, showStory, delAction, logIn);
     }
 
     // gombok aktíválása
@@ -724,8 +718,8 @@ public class CinemaFrame extends JFrame {
         foglalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setNorth(" V Á S Z O N ");
                 Vetites vetites = loadJegy();
+                setHelp();
                 if (vetites == null) {
                     JOptionPane.showMessageDialog(panelCont, GuiConstants.FOGLALAS_FAIL, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                 } else {
@@ -780,36 +774,41 @@ public class CinemaFrame extends JFrame {
                     }
                 }
 
-                Integer jegyDiak = null;
-                List<Integer> jegyListaDiak = new ArrayList<>();
-                if (szabadHely < JEGYEK.length) {
-                    Object[] jegyLista = jegyAkt.toArray();
-                    jegyDarab = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DB + szabadHely + ")", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, jegyLista, jegyLista[0]);
-                    if (jegyDarab == null) {
-                        return null;
-                    }
-                    for (int i = 0; i < jegyDarab; i++) {
-                        jegyListaDiak.add(i);
-                    }
-                    jegyListaDiak.add(jegyDarab);
-                    jegyLista = jegyListaDiak.toArray();
-                    jegyDiak = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DIAK_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, jegyLista, jegyLista[0]);
-                    if (jegyDiak == null) {
-                        jegyDiak = 0;
-                    }
+                if (szabadHely == 0) {
+                    JOptionPane.showMessageDialog(null, "megtelt", GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+                    return null;
                 } else {
-                    jegyDarab = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DB + szabadHely + ")", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
-                    if (jegyDarab == null) {
-                        return null;
-                    }
-                    for (int i = 0; i < jegyDarab; i++) {
-                        jegyListaDiak.add(i);
-                    }
-                    jegyListaDiak.add(jegyDarab);
-                    Object[] jegyLista = jegyListaDiak.toArray();
-                    jegyDiak = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DIAK_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, jegyLista, jegyLista[0]);
-                    if (jegyDiak == null) {
-                        jegyDiak = 0;
+                    Integer jegyDiak = null;
+                    List<Integer> jegyListaDiak = new ArrayList<>();
+                    if (szabadHely < JEGYEK.length) {
+                        Object[] jegyLista = jegyAkt.toArray();
+                        jegyDarab = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DB + szabadHely + ")", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, jegyLista, jegyLista[0]);
+                        if (jegyDarab == null) {
+                            return null;
+                        }
+                        for (int i = 0; i < jegyDarab; i++) {
+                            jegyListaDiak.add(i);
+                        }
+                        jegyListaDiak.add(jegyDarab);
+                        jegyLista = jegyListaDiak.toArray();
+                        jegyDiak = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DIAK_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, jegyLista, jegyLista[0]);
+                        if (jegyDiak == null) {
+                            jegyDiak = 0;
+                        }
+                    } else {
+                        jegyDarab = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DB + szabadHely + ")", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
+                        if (jegyDarab == null) {
+                            return null;
+                        }
+                        for (int i = 0; i < jegyDarab; i++) {
+                            jegyListaDiak.add(i);
+                        }
+                        jegyListaDiak.add(jegyDarab);
+                        Object[] jegyLista = jegyListaDiak.toArray();
+                        jegyDiak = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DIAK_DB, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, jegyLista, jegyLista[0]);
+                        if (jegyDiak == null) {
+                            jegyDiak = 0;
+                        }
                     }
                 }
             }
@@ -859,18 +858,18 @@ public class CinemaFrame extends JFrame {
                 panelFoglal.add(szekLabel);
             } else {
                 szekLabel = new JLabel(szekSzam.toString(), new ImageIcon(szabadSzek), 0);
-                szekLabel.addMouseListener(new LeftClickAction(szekLista.get(j), szekLabel, jegyDarab));
+                szekLabel.addMouseListener(new FoglalasAction(szekLista.get(j), szekLabel, jegyDarab, logIn));
                 panelFoglal.add(szekLabel);
             }
         }
-
-        cl.show(panelCont, "20");
         setHelp();
+        cl.show(panelCont, "20");
+        
     }
 
     private void setHelp() {
-        JPanel helpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        
+        JPanel helpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
         BufferedImage szabadSzek = null;
         BufferedImage foglaltSzek = null;
         BufferedImage xSzek = null;
@@ -890,14 +889,15 @@ public class CinemaFrame extends JFrame {
 
         helpPanel.add(fog);
         helpPanel.add(new JLabel(new ImageIcon(foglaltSzek)));
-        
+
         helpPanel.add(szabad);
         helpPanel.add(new JLabel(new ImageIcon(szabadSzek)));
-        
+
         helpPanel.add(jelolt);
         helpPanel.add(new JLabel(new ImageIcon(xSzek)));
-        
+
         helpPanel.setBackground(Color.GRAY);
-        add(helpPanel, BorderLayout.SOUTH);
+
+        add(helpPanel, BorderLayout.CENTER);
     }
 }

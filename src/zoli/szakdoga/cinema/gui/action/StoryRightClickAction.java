@@ -23,14 +23,12 @@ public class StoryRightClickAction extends MouseAdapter {
     private ShowStoryAction showStory;
     private DelAction delItem;
     private LoginAction logUser;
-    private FoglalasAction foglalasAction;
 
-    public StoryRightClickAction(CinemaFrame parent, ShowStoryAction showStory, DelAction delItem, LoginAction logUser, FoglalasAction foglalasAction) {
+    public StoryRightClickAction(CinemaFrame parent, ShowStoryAction showStory, DelAction delItem, LoginAction logUser) {
         this.parent = parent;
         this.showStory = showStory;
         this.delItem = delItem;
         this.logUser = logUser;
-        this.foglalasAction = foglalasAction;
     }
 
     @Override
@@ -49,18 +47,12 @@ public class StoryRightClickAction extends MouseAdapter {
         JPopupMenu popup = new JPopupMenu();
 
         JMenuItem leiras = null;
-        JMenuItem foglalas = null;
         if (logUser.getCurrUser().getJog() == 0 || logUser.getCurrUser().getJog() == 2) {
             if(parent.getFilmTable() == (JTable) e.getSource()) {
                 leiras = new JMenuItem(GuiConstants.LEIRAS_MENU_TEXT);
                 showStory.setTable((JTable) e.getSource());
                 leiras.addActionListener(showStory);
                 popup.add(leiras);
-            } else if (parent.getMusorTable() == (JTable) e.getSource()) {
-                foglalas = new JMenuItem(GuiConstants.FOGLALAS_BUT_TEXT);
-                foglalasAction.setTable((JTable) e.getSource());
-                foglalas.addActionListener(foglalasAction);
-                popup.add(foglalas);
             }
         }
 
