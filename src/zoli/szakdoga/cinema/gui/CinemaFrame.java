@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,6 +26,8 @@ import java.util.Date;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
@@ -80,6 +83,7 @@ public class CinemaFrame extends JFrame {
     private Integer jegyDarab = null;
     private List<JButton> szekek = new ArrayList<>();
     private JLabel szekLabel = new JLabel();
+    private JToolBar helpToolbar = new JToolBar();
 
     private MouseAdapter rightClickAction;
     private ShowStoryAction showStory;
@@ -179,6 +183,7 @@ public class CinemaFrame extends JFrame {
                 cl.show(panelCont, "2");
                 setNorth(MUSOR_MENU_TEXT);
                 loadMusorPanel();
+                getContentPane().remove(helpToolbar);
             }
         });
         JMenuItem film = new JMenuItem(new AbstractAction(FILM_MENU_TEXT) {
@@ -187,6 +192,7 @@ public class CinemaFrame extends JFrame {
                 cl.show(panelCont, "3");
                 setNorth(FILM_MENU_TEXT);
                 loadFilmPanel();
+                getContentPane().remove(helpToolbar);
             }
         });
         JMenuItem ar = new JMenuItem(new AbstractAction(AR_MENU_TEXT) {
@@ -195,6 +201,7 @@ public class CinemaFrame extends JFrame {
                 cl.show(panelCont, "4");
                 setNorth(AR_MENU_TEXT);
                 loadArPanel();
+                getContentPane().remove(helpToolbar);
             }
         });
         JMenuItem kapcsolat = new JMenuItem(new AbstractAction(KAPCSOLAT_MENU_TEXT) {
@@ -203,6 +210,7 @@ public class CinemaFrame extends JFrame {
                 cl.show(panelCont, "5");
                 setNorth(KAPCSOLAT_MENU_TEXT);
                 loadKapcsolatPanel();
+                getContentPane().remove(helpToolbar);
             }
         });
 
@@ -216,6 +224,7 @@ public class CinemaFrame extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "6");
                     adminMusorPanel();
+                    getContentPane().remove(helpToolbar);
                 }
             });
             admin.add(subMusor);
@@ -224,6 +233,7 @@ public class CinemaFrame extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "7");
                     adminFilmPanel();
+                    getContentPane().remove(helpToolbar);
                 }
             });
             admin.add(subFilm);
@@ -232,6 +242,7 @@ public class CinemaFrame extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "8");
                     adminMoziPanel();
+                    getContentPane().remove(helpToolbar);
                 }
             });
             admin.add(subMozi);
@@ -240,6 +251,7 @@ public class CinemaFrame extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "9");
                     adminTeremPanel();
+                    getContentPane().remove(helpToolbar);
                 }
             });
             admin.add(subTerem);
@@ -248,6 +260,7 @@ public class CinemaFrame extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "10");
                     adminTartalmazPanel();
+                    getContentPane().remove(helpToolbar);
                 }
             });
             admin.add(subTartalmaz);
@@ -256,6 +269,7 @@ public class CinemaFrame extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     cl.show(panelCont, "11");
                     adminFelhasznaloPanel();
+                    getContentPane().remove(helpToolbar);
                 }
             });
             admin.add(subFelhasznalo);
@@ -270,6 +284,7 @@ public class CinemaFrame extends JFrame {
                     cl.show(panelCont, "12");
                     setNorth(TORTENET_MENU_TEXT);
                     loadTortenetPanel();
+                    getContentPane().remove(helpToolbar);
                 }
             });
         }
@@ -405,7 +420,7 @@ public class CinemaFrame extends JFrame {
                     c.setTime(yesterday);
                     c.add(Calendar.DATE, -1);
                     yesterday = c.getTime();
-                    
+
                     String myDate = (String) entry.getValue(2);
                     SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
                     Date date = null;
@@ -731,8 +746,8 @@ public class CinemaFrame extends JFrame {
                 Vetites vetites = loadJegy();
                 if (vetites == null) {
                     JOptionPane.showMessageDialog(panelCont, GuiConstants.FOGLALAS_FAIL, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
-                } else if (jegyDarab == null){
-                     JOptionPane.showMessageDialog(panelCont, GuiConstants.JEGY_FAIL, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                } else if (jegyDarab == null) {
+                    JOptionPane.showMessageDialog(panelCont, GuiConstants.JEGY_FAIL, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                 } else {
                     try {
                         loadElrendezes(vetites);
@@ -871,42 +886,85 @@ public class CinemaFrame extends JFrame {
                 panelFoglal.add(szekLabel);
             }
         }
-        //setHelp();
+        setHelp();
         cl.show(panelCont, "20");
     }
 
     private void setHelp() {
-        JPanel helpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        helpToolbar = new JToolBar(JToolBar.VERTICAL);
+        helpToolbar.setFloatable(false);
 
+        BufferedImage help = null;
         BufferedImage szabadSzek = null;
         BufferedImage foglaltSzek = null;
         BufferedImage xSzek = null;
+        BufferedImage jobbKlikk = null;
+        BufferedImage balKlikk = null;
         try {
+            help = ImageIO.read(new File("src/pic/help.png"));
             szabadSzek = ImageIO.read(new File("src/pic/szszabad.png"));
             foglaltSzek = ImageIO.read(new File("src/pic/szfoglalt.png"));
             xSzek = ImageIO.read(new File("src/pic/szx.png"));
+            jobbKlikk = ImageIO.read(new File("src/pic/right.png"));
+            balKlikk = ImageIO.read(new File("src/pic/left.png"));
         } catch (IOException ex) {
         }
 
         Font stilusHelp = new Font(Font.SANS_SERIF, Font.BOLD, 12);
+        Border borderToText = new EmptyBorder(new Insets(25, 0, 0, 0));
+        Border borderToPic = new EmptyBorder(new Insets(0, 5, 0, 0));
+
+        JLabel helpLabel = new JLabel(new ImageIcon(help));
+        helpLabel.setBorder(borderToPic);
+        helpToolbar.add(helpLabel);
 
         JLabel fog = new JLabel("Foglalt:");
         fog.setFont(stilusHelp);
+        fog.setBorder(borderToText);
+        helpToolbar.add(fog);
+        JLabel foglaltSzekLabel = new JLabel(new ImageIcon(foglaltSzek));
+        foglaltSzekLabel.setBorder(borderToPic);
+        helpToolbar.add(foglaltSzekLabel);
+
         JLabel szabad = new JLabel("Szabad:");
         szabad.setFont(stilusHelp);
+        szabad.setBorder(borderToText);
+        helpToolbar.add(szabad);
+        JLabel szabadSzekLabel = new JLabel(new ImageIcon(szabadSzek));
+        szabadSzekLabel.setBorder(borderToPic);
+        helpToolbar.add(szabadSzekLabel);
+
         JLabel jelolt = new JLabel("Kijelölt:");
         jelolt.setFont(stilusHelp);
+        jelolt.setBorder(borderToText);
+        helpToolbar.add(jelolt);
+        JLabel xSzekLabel = new JLabel(new ImageIcon(xSzek));
+        xSzekLabel.setBorder(borderToPic);
+        helpToolbar.add(xSzekLabel);
 
-        helpPanel.add(fog);
-        helpPanel.add(new JLabel(new ImageIcon(foglaltSzek)));
+        JLabel bal = new JLabel("Foglal:");
+        bal.setFont(stilusHelp);
+        bal.setBorder(borderToText);
+        helpToolbar.add(bal);
+        JLabel balKlikkLabel = new JLabel(new ImageIcon(balKlikk));
+        balKlikkLabel.setBorder(borderToPic);
+        helpToolbar.add(balKlikkLabel);
+        JLabel klikk1 = new JLabel("katt bal");
+        klikk1.setFont(stilusHelp);
+        helpToolbar.add(klikk1);
 
-        helpPanel.add(szabad);
-        helpPanel.add(new JLabel(new ImageIcon(szabadSzek)));
+        JLabel jobb = new JLabel("Töröl:");
+        jobb.setFont(stilusHelp);
+        jobb.setBorder(borderToText);
+        helpToolbar.add(jobb);
+        JLabel jobbKlikkLabel = new JLabel(new ImageIcon(jobbKlikk));
+        jobbKlikkLabel.setBorder(borderToPic);
+        helpToolbar.add(jobbKlikkLabel);
+        JLabel klikk2 = new JLabel("katt jobb");
+        klikk2.setFont(stilusHelp);
+        helpToolbar.add(klikk2);
 
-        helpPanel.add(jelolt);
-        helpPanel.add(new JLabel(new ImageIcon(xSzek)));
-
-        helpPanel.setBackground(Color.GRAY);
-        panelFoglal.add(helpPanel, BorderLayout.SOUTH);
+        helpToolbar.setBackground(Color.GRAY);
+        add(helpToolbar, BorderLayout.WEST);
     }
 }
