@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -324,7 +325,8 @@ public class CinemaFrame extends JFrame {
 
         JLabel elem = new JLabel(label);
 
-        elem.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+        Font stilusNorth = new Font(Font.SANS_SERIF, Font.BOLD, 12);
+        elem.setFont(stilusNorth);
 
         northPanel.add(elem);
         northPanel.setBackground(Color.GRAY);
@@ -354,8 +356,10 @@ public class CinemaFrame extends JFrame {
         }
         JLabel jog = new JLabel(jogosultsag);
 
-        nev.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
-        jog.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+        Font stilusSouth = new Font(Font.SANS_SERIF, Font.BOLD, 12);
+
+        nev.setFont(stilusSouth);
+        jog.setFont(stilusSouth);
 
         southPanel.add(udv);
         southPanel.add(nev);
@@ -389,7 +393,6 @@ public class CinemaFrame extends JFrame {
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
         musorTable.setModel(model);
         musorTable.setEnabled(false);
-        musorTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // törlésre kiürül, akkor még ott marad a sorter hiba
         if (model.getRowCount() != 0) {
@@ -397,7 +400,12 @@ public class CinemaFrame extends JFrame {
             //régi dátum kiszűrés, hogy a felhasználót ne zavarják, amár amúgy sem aktuális vetítések
             RowFilter<Object, Object> filter = new RowFilter<Object, Object>() {
                 public boolean include(RowFilter.Entry entry) {
-                    Date today = new Date();
+                    Date yesterday = new Date();
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(yesterday);
+                    c.add(Calendar.DATE, -1);
+                    yesterday = c.getTime();
+                    
                     String myDate = (String) entry.getValue(2);
                     SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
                     Date date = null;
@@ -406,7 +414,7 @@ public class CinemaFrame extends JFrame {
                     } catch (ParseException ex) {
                     }
                     // ha régebbi, mint a mai nap nem kerül ki a felületre
-                    return date.after(today);
+                    return date.after(yesterday);
                 }
             };
             //fenti szűrő beállítása
@@ -463,7 +471,9 @@ public class CinemaFrame extends JFrame {
             });
 
             Box keresoPanel = new Box(BoxLayout.Y_AXIS);
-            keresoPanel.add(foglalButton);
+            if (logIn.getCurrUser().getJog() == 0 || logIn.getCurrUser().getJog() == 2) {
+                keresoPanel.add(foglalButton);
+            }
             keresoPanel.add(filterText);
             keresoPanel.add(keresoButton);
             keresoPanel.add(pdfButton);
@@ -719,9 +729,10 @@ public class CinemaFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Vetites vetites = loadJegy();
-                setHelp();
                 if (vetites == null) {
                     JOptionPane.showMessageDialog(panelCont, GuiConstants.FOGLALAS_FAIL, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                } else if (jegyDarab == null){
+                     JOptionPane.showMessageDialog(panelCont, GuiConstants.JEGY_FAIL, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                 } else {
                     try {
                         loadElrendezes(vetites);
@@ -775,7 +786,7 @@ public class CinemaFrame extends JFrame {
                 }
 
                 if (szabadHely == 0) {
-                    JOptionPane.showMessageDialog(null, "megtelt", GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, GuiConstants.TEREM_MEGTELT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
                     return null;
                 } else {
                     Integer jegyDiak = null;
@@ -784,7 +795,7 @@ public class CinemaFrame extends JFrame {
                         Object[] jegyLista = jegyAkt.toArray();
                         jegyDarab = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DB + szabadHely + ")", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, jegyLista, jegyLista[0]);
                         if (jegyDarab == null) {
-                            return null;
+                            return valasztottVetites;
                         }
                         for (int i = 0; i < jegyDarab; i++) {
                             jegyListaDiak.add(i);
@@ -798,7 +809,7 @@ public class CinemaFrame extends JFrame {
                     } else {
                         jegyDarab = (Integer) JOptionPane.showInputDialog(panelCont, GuiConstants.JEGY_DB + szabadHely + ")", GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, JEGYEK, JEGYEK[0]);
                         if (jegyDarab == null) {
-                            return null;
+                            return valasztottVetites;
                         }
                         for (int i = 0; i < jegyDarab; i++) {
                             jegyListaDiak.add(i);
@@ -811,12 +822,10 @@ public class CinemaFrame extends JFrame {
                         }
                     }
                 }
-            }
-            if (jegyDarab == null) {
+            } else if (answer == JOptionPane.NO_OPTION) {
                 return null;
-            } else {
-                return valasztottVetites;
             }
+            return valasztottVetites;
         }
         return null;
     }
@@ -862,13 +871,12 @@ public class CinemaFrame extends JFrame {
                 panelFoglal.add(szekLabel);
             }
         }
-        setHelp();
+        //setHelp();
         cl.show(panelCont, "20");
-        
     }
 
     private void setHelp() {
-        JPanel helpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        JPanel helpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         BufferedImage szabadSzek = null;
         BufferedImage foglaltSzek = null;
@@ -880,12 +888,14 @@ public class CinemaFrame extends JFrame {
         } catch (IOException ex) {
         }
 
+        Font stilusHelp = new Font(Font.SANS_SERIF, Font.BOLD, 12);
+
         JLabel fog = new JLabel("Foglalt:");
-        fog.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+        fog.setFont(stilusHelp);
         JLabel szabad = new JLabel("Szabad:");
-        szabad.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+        szabad.setFont(stilusHelp);
         JLabel jelolt = new JLabel("Kijelölt:");
-        jelolt.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+        jelolt.setFont(stilusHelp);
 
         helpPanel.add(fog);
         helpPanel.add(new JLabel(new ImageIcon(foglaltSzek)));
@@ -897,7 +907,6 @@ public class CinemaFrame extends JFrame {
         helpPanel.add(new JLabel(new ImageIcon(xSzek)));
 
         helpPanel.setBackground(Color.GRAY);
-
-        add(helpPanel, BorderLayout.CENTER);
+        panelFoglal.add(helpPanel, BorderLayout.SOUTH);
     }
 }
