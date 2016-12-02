@@ -21,12 +21,14 @@ public class StoryRightClickAction extends MouseAdapter {
 
     private CinemaFrame parent;
     private ShowStoryAction showStory;
+    private ShowSzekekAction showSzekek;
     private DelAction delItem;
     private LoginAction logUser;
 
-    public StoryRightClickAction(CinemaFrame parent, ShowStoryAction showStory, DelAction delItem, LoginAction logUser) {
+    public StoryRightClickAction(CinemaFrame parent, ShowStoryAction showStory, ShowSzekekAction showSzekek, DelAction delItem, LoginAction logUser) {
         this.parent = parent;
         this.showStory = showStory;
+        this.showSzekek = showSzekek;
         this.delItem = delItem;
         this.logUser = logUser;
     }
@@ -46,7 +48,7 @@ public class StoryRightClickAction extends MouseAdapter {
     private void createPopup(MouseEvent e) {
         JPopupMenu popup = new JPopupMenu();
 
-        JMenuItem leiras = null;
+        JMenuItem leiras = null;       
         if (logUser.getCurrUser().getJog() == 0 || logUser.getCurrUser().getJog() == 2) {
             if(parent.getFilmTable() == (JTable) e.getSource()) {
                 leiras = new JMenuItem(GuiConstants.LEIRAS_MENU_TEXT);
@@ -55,6 +57,14 @@ public class StoryRightClickAction extends MouseAdapter {
                 popup.add(leiras);
             }
         }
+        
+        JMenuItem szekek = null;
+        if(parent.getTortenetTable()== (JTable) e.getSource()) {
+                szekek = new JMenuItem(GuiConstants.SZEK_MENU_TEXT);
+                showSzekek.setTable((JTable) e.getSource());
+                szekek.addActionListener(showSzekek);
+                popup.add(szekek);
+            }
 
         JMenuItem torles = null;
         if (logUser.getCurrUser().getJog() == 0 || logUser.getCurrUser().getJog() == 1 && !(parent.getMusorTable() == (JTable) e.getSource())) {

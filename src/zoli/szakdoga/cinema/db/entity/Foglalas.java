@@ -13,8 +13,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Foglalas.findAll", query = "SELECT f FROM Foglalas f"),
-    @NamedQuery(name = "Foglalas.findById", query = "SELECT f FROM Foglalas f WHERE f.id = :id")})
-public class Foglalas  implements Serializable, PersistentEntity {
+    @NamedQuery(name = "Foglalas.findById", query = "SELECT f FROM Foglalas f WHERE f.id = :id"),
+    @NamedQuery(name = "Foglalas.findSzekById", query = "SELECT f FROM Foglalas f WHERE f.szekId = :szekId"),})
+public class Foglalas implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Felhasználó", "Szék"};
 
@@ -84,7 +85,7 @@ public class Foglalas  implements Serializable, PersistentEntity {
 
     @Override
     public String toString() {
-        return felhasznaloId + " " + szekId;
+        return ""+szekId+" ";
     }
 
     @Override

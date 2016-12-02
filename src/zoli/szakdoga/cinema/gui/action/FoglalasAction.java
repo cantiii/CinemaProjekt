@@ -92,7 +92,7 @@ public class FoglalasAction extends MouseAdapter {
                 foglalasModel = new GenericTableModel(DaoManager.getInstance().getFoglalasDao(), Foglalas.PROPERTY_NAMES);
                 Foglalas foglalas = new Foglalas();
                 foglalas.setFelhasznaloId(logUser.getCurrUser());
-                foglalas.setSzekId(szek);
+                foglalas.setSzekId(kijeloltSzekLista.get(i));
                 foglalasModel.addEntity(foglalas);
             }
 

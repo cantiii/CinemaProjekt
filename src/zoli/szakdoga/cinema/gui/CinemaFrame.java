@@ -87,6 +87,7 @@ public class CinemaFrame extends JFrame {
 
     private MouseAdapter rightClickAction;
     private ShowStoryAction showStory;
+    private ShowSzekekAction showSzekek;
     private AddAction addAction;
     private DelAction delAction;
 
@@ -160,6 +161,10 @@ public class CinemaFrame extends JFrame {
 
     public JTable getTartalmazTable() {
         return tartalmazTable;
+    }
+
+    public JTable getTortenetTable() {
+        return tortenetTable;
     }
 
     public JTable getFelhasznaloTable() {
@@ -681,8 +686,32 @@ public class CinemaFrame extends JFrame {
         if (model.getRowCount() != 0) {
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
             tortenetTable.setRowSorter(sorter);
+
+            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+            int datumOszlop = 2;
+            sortKeys.add(new RowSorter.SortKey(datumOszlop, SortOrder.ASCENDING));
+            sorter.setSortKeys(sortKeys);
+
+            filterText.setText(TORTENET_MENU_TEXT);
+            keresoButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String text = filterText.getText();
+                    if (text.length() == 0) {
+                        sorter.setRowFilter(null);
+                    } else {
+                        sorter.setRowFilter(RowFilter.regexFilter(text));
+                    }
+                }
+            });
+            
+            Box keresoPanel = new Box(BoxLayout.Y_AXIS);
+            keresoPanel.add(filterText);
+            keresoPanel.add(keresoButton);
+            panelTortenet.add(keresoPanel, BorderLayout.WEST);
         }
-        panelTortenet.add(MUSOR_MENU_TEXT, new JScrollPane(tortenetTable));
+        tortenetTable.addMouseListener(rightClickAction);
+        panelTortenet.add(TORTENET_MENU_TEXT, new JScrollPane(tortenetTable));
     }
 
     public void loadArPanel() {
@@ -728,9 +757,10 @@ public class CinemaFrame extends JFrame {
     //actionListener-ek aktiválása
     private void setActionListeners() {
         showStory = new ShowStoryAction(this);
+        showSzekek = new ShowSzekekAction(this, logIn);
         addAction = new AddAction(this);
         delAction = new DelAction(this, logIn);
-        rightClickAction = new StoryRightClickAction(this, showStory, delAction, logIn);
+        rightClickAction = new StoryRightClickAction(this, showStory, showSzekek, delAction, logIn);
     }
 
     // gombok aktíválása

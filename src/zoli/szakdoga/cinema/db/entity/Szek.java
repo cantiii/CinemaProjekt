@@ -116,7 +116,7 @@ public class Szek  implements Serializable, PersistentEntity {
 
     @Override
     public String toString() {
-        return szekszam + ". sor, " + foglalt + ". oszlop";
+        return "" + szekszam + ". szék";
     }
 
     @Override

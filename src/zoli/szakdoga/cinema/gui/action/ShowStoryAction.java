@@ -10,8 +10,8 @@ import zoli.szakdoga.cinema.gui.model.GenericTableModel;
 
 /**
  *
- * @author pappz Ennek az osztálynak a segítségével tudjuk a film leírását
- * előhozni a felületre
+ * @author pappz 
+ * Ennek az osztálynak a segítségével tudjuk a film leírását előhozni a felületre
  */
 public class ShowStoryAction implements ActionListener {
 

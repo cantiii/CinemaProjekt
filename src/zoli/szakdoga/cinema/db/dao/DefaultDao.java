@@ -135,7 +135,7 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
     
     /**
      * 
-     * @param name - Terem entitás, amelyről megszeretnénk tudni, hogy melyik Mozihoz tartozik
+     * @param - Terem entitás, amelyről megszeretnénk tudni, hogy melyik Mozihoz tartozik
      * @return - A keresett Mozi
      */
     public Mozi findMozibyTerem(Terem terem) {
@@ -149,6 +149,24 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
             result = null;
         }
         return result.getMoziId();
+    }
+    
+        /**
+     * 
+     * @param - Szek entitás, amelyről megszeretnénk tudni, hogy melyik Felhasznalóhoz tartozik
+     * @return - A keresett felhasznaló
+     */
+    public Foglalas findFoglalasBySzek(Szek szek) {
+        Foglalas result;
+        try {
+            Query query = getEntityManager()
+                    .createNamedQuery("Foglalas.findSzekById")
+                    .setParameter("szekId", szek);
+            result = (Foglalas) query.getSingleResult();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        return result;
     }
 
     /**
