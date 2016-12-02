@@ -43,16 +43,18 @@ import zoli.szakdoga.cinema.gui.model.*;
  * @author Zoli
  */
 public class CinemaFrame extends JFrame {
-
-    private final JPanel panelCont = new JPanel();
-    private final JPanel panelAr = new JPanel();
-    private final JPanel panelKapcsolat = new JPanel();
     private final CardLayout cl = new CardLayout();
+    private final JPanel panelCont = new JPanel();
 
     private final JPanel panelMusor = new JPanel();
     private final JTable musorTable = new JTable();
     private final JPanel panelFilm = new JPanel();
     private final JTable filmTable = new JTable();
+    private final JPanel panelAr = new JPanel();
+    private final JPanel panelKapcsolat = new JPanel();
+    private final JPanel panelTortenet = new JPanel();
+    private final JTable tortenetTable = new JTable();
+    private final JPanel panelKoszonet = new JPanel();
 
     private final JPanel panelWelcome = new JPanel();
     private final JPanel panelMusorA = new JPanel();
@@ -68,9 +70,6 @@ public class CinemaFrame extends JFrame {
     private final JTable felhasznaloTable = new JTable();
     private final JPanel panelTartalmazA = new JPanel();
     private final JTable tartalmazTable = new JTable();
-
-    private final JPanel panelTortenet = new JPanel();
-    private final JTable tortenetTable = new JTable();
 
     private final JTextField filterText = new JTextField();
     private final JButton keresoButton = new JButton(KERES_BUT_TEXT);
@@ -324,6 +323,7 @@ public class CinemaFrame extends JFrame {
         panelCont.add(panelFilm, "3");
         panelCont.add(panelAr, "4");
         panelCont.add(panelKapcsolat, "5");
+        panelCont.add(panelKoszonet, "99");
 
         panelCont.add(panelMusorA, "6");
         panelCont.add(panelFilmA, "7");
@@ -704,7 +704,7 @@ public class CinemaFrame extends JFrame {
                     }
                 }
             });
-            
+
             Box keresoPanel = new Box(BoxLayout.Y_AXIS);
             keresoPanel.add(filterText);
             keresoPanel.add(keresoButton);
@@ -744,6 +744,22 @@ public class CinemaFrame extends JFrame {
         editorPane.setEditable(false);
 
         panelKapcsolat.add(editorPane);
+    }
+
+    public void loadKoszonetPanel() {
+        panelKoszonet.removeAll();
+
+        JEditorPane editorPane = new JEditorPane();
+
+        editorPane.setContentType("text/html");
+        File file = new File("src/html/koszonet.html");
+        try {
+            editorPane.setPage(file.toURI().toURL());
+        } catch (Exception ex) {
+        }
+        editorPane.setEditable(false);
+
+        panelKoszonet.add(editorPane);
     }
 
     //Combobox-rt felelös függvény
@@ -912,7 +928,7 @@ public class CinemaFrame extends JFrame {
                 panelFoglal.add(szekLabel);
             } else {
                 szekLabel = new JLabel(szekSzam.toString(), new ImageIcon(szabadSzek), 0);
-                szekLabel.addMouseListener(new FoglalasAction(szekLista.get(j), szekLabel, jegyDarab, logIn));
+                szekLabel.addMouseListener(new FoglalasAction(this, szekLista.get(j), szekLabel, jegyDarab, logIn));
                 panelFoglal.add(szekLabel);
             }
         }
@@ -996,5 +1012,12 @@ public class CinemaFrame extends JFrame {
 
         helpToolbar.setBackground(Color.GRAY);
         add(helpToolbar, BorderLayout.WEST);
+    }
+
+    public void removeElrendezes() {
+        cl.show(panelCont, "99");
+        setNorth(KOSZONET_TEXT);
+        loadKoszonetPanel();
+        getContentPane().remove(helpToolbar);
     }
 }

@@ -39,6 +39,8 @@ public class GuiConstants {
     public static final String FOGLALT_SZEK = "Szék már foglalt!";
     public static final String FOGLALAS_MENTES = "Véglegesíti a foglalást?";
     public static final String FOGLALAS_VEGE = "A szekék lefoglalva!";
+    public static final String KOSZONET_TEXT = "Köszönjük!";
+    
     public static final String SZEK_MENU_TEXT = "Székeim";
     public static final String NOSZEK = "Nincs erre a vetítésre foglalásom!";
 

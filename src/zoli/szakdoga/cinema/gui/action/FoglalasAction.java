@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 import zoli.szakdoga.cinema.db.dao.DaoManager;
 import zoli.szakdoga.cinema.db.entity.Foglalas;
 import zoli.szakdoga.cinema.db.entity.Szek;
+import zoli.szakdoga.cinema.gui.CinemaFrame;
 import zoli.szakdoga.cinema.gui.GuiConstants;
 import zoli.szakdoga.cinema.gui.model.GenericTableModel;
 
@@ -24,6 +25,7 @@ import zoli.szakdoga.cinema.gui.model.GenericTableModel;
  */
 public class FoglalasAction extends MouseAdapter {
 
+    private CinemaFrame parent;
     private Szek szek;
     private JLabel szekLabel;
     private Integer jegyDarab;
@@ -32,7 +34,8 @@ public class FoglalasAction extends MouseAdapter {
     private static List<JLabel> labelLista = new ArrayList<>();
     private LoginAction logUser;
 
-    public FoglalasAction(Szek szek, JLabel szekLabel, Integer jegyDarab, LoginAction logUser) {
+    public FoglalasAction(CinemaFrame parent, Szek szek, JLabel szekLabel, Integer jegyDarab, LoginAction logUser) {
+        this.parent = parent;
         this.szek = szek;
         this.szekLabel = szekLabel;
         this.jegyDarab = jegyDarab;
@@ -111,6 +114,7 @@ public class FoglalasAction extends MouseAdapter {
             kijeloltSzekLista.clear();
             foglalDarab = 0;
             jegyDarab = 0;
+            parent.removeElrendezes();           
         } else if (answer == JOptionPane.NO_OPTION) {
             BufferedImage szSzek = null;
             try {
@@ -118,15 +122,15 @@ public class FoglalasAction extends MouseAdapter {
             } catch (IOException ex) {
             }
             ImageIcon szIcon = new ImageIcon(szSzek);
-            
+
             for (int i = 0; i < labelLista.size(); i++) {
                 labelLista.get(i).setIcon(szIcon);
                 labelLista.get(i).revalidate();
             }
-            
+
             labelLista.clear();
             foglalDarab = 0;
-            kijeloltSzekLista.clear();
+            kijeloltSzekLista.clear();            
         }
     }
 }
