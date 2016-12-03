@@ -56,9 +56,12 @@ public class RegAction {
                     return name;
                 }
                 // mindenképp szükséges valamit megadni, hogy regisztrálni tudjunk
-            } else {
+            } else if (name != null && name.trim().equals("")) {
                 JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_REQUIRED, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                 name = null;
+            } else if (name == null) {
+                JOptionPane.showMessageDialog(parent, GuiConstants.EXIT, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
             }
         }
         return name;

@@ -15,11 +15,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Vetites.findAll", query = "SELECT v FROM Vetites v"),
     @NamedQuery(name = "Vetites.findById", query = "SELECT v FROM Vetites v WHERE v.id = :id"),
     @NamedQuery(name = "Vetites.findByMikor", query = "SELECT v FROM Vetites v WHERE v.mikor = :mikor"),
+    @NamedQuery(name = "Vetites.findByIdo", query = "SELECT v FROM Vetites v WHERE v.ido = :ido"),
     @NamedQuery(name = "Vetites.findFilmInVetites", query = "SELECT v FROM Vetites v WHERE v.filmId = :filmId"),
     @NamedQuery(name = "Vetites.findTeremInVetites", query = "SELECT v FROM Vetites v WHERE v.teremId = :teremId")})
 public class Vetites implements Serializable, PersistentEntity {
 
-    public static final String PROPERTY_NAMES[] = {"Film", "Terem", "Mikor"};
+    public static final String PROPERTY_NAMES[] = {"Film", "Terem", "Mikor", "Időpont"};
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -29,6 +30,8 @@ public class Vetites implements Serializable, PersistentEntity {
     private Integer id;
     @Column(name = "MIKOR")
     private String mikor;
+    @Column(name = "IDO")
+    private String ido;
     @JoinColumn(name = "FILM_ID", referencedColumnName = "ID")
     @ManyToOne
     private Film filmId;
@@ -38,7 +41,7 @@ public class Vetites implements Serializable, PersistentEntity {
     @JoinColumn(name = "SZEK_ID", referencedColumnName = "ID")
     @ManyToOne
     private Szek szekId;
-    
+
     public Vetites() {
     }
 
@@ -46,6 +49,7 @@ public class Vetites implements Serializable, PersistentEntity {
         this.id = id;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }
@@ -60,6 +64,14 @@ public class Vetites implements Serializable, PersistentEntity {
 
     public void setMikor(String mikor) {
         this.mikor = mikor;
+    }
+
+    public String getIdo() {
+        return ido;
+    }
+
+    public void setIdo(String ido) {
+        this.ido = ido;
     }
 
     public Film getFilmId() {
@@ -77,7 +89,7 @@ public class Vetites implements Serializable, PersistentEntity {
     public void setTeremId(Terem teremId) {
         this.teremId = teremId;
     }
-    
+
     public Szek getSzekId() {
         return szekId;
     }
@@ -121,6 +133,8 @@ public class Vetites implements Serializable, PersistentEntity {
             case 2:
                 return mikor;
             case 3:
+                return ido;
+            case 4:
                 return szekId;
             default:
                 return null;
@@ -138,6 +152,9 @@ public class Vetites implements Serializable, PersistentEntity {
                 break;
             case 2:
                 setMikor((String) value);
+                break;
+            case 3:
+                setIdo((String) value);
                 break;
         }
     }

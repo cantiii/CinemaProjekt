@@ -17,8 +17,7 @@ import zoli.szakdoga.cinema.gui.model.GenericTableModel;
 
 /**
  *
- * @author pappz
- * A különböző felvitelekért felelős osztály
+ * @author pappz A különböző felvitelekért felelős osztály
  */
 public class AddAction implements ActionListener {
 
@@ -38,6 +37,7 @@ public class AddAction implements ActionListener {
             case FELVITEL_MUSOR_TEXT:
                 //bekérünk egy időpontot
                 String date = readDate(FELVITEL_DATUM_TEXT);
+                String time = readTime(FELVITEL_IDO_TEXT);
                 // a dátum függvényében listázzuk a termeket
                 Terem valaszTerem = readTerem(date);
                 if (valaszTerem != null) {
@@ -65,6 +65,7 @@ public class AddAction implements ActionListener {
                         vetites.setFilmId(valaszFilm);
                         vetites.setTeremId(valaszTerem);
                         vetites.setMikor(date);
+                        vetites.setIdo(time);
 
                         vetitesModel = (GenericTableModel) parent.getMusorATable().getModel();
                         vetitesModel.addEntity(vetites);
@@ -262,8 +263,6 @@ public class AddAction implements ActionListener {
 
         Calendar c = Calendar.getInstance();
         c.setTime(nextDay);
-        //c.add(Calendar.DATE, 1);
-        //nextDay = c.getTime();
 
         c.add(Calendar.DATE, 60);
         nextCDay = c.getTime();
@@ -282,6 +281,12 @@ public class AddAction implements ActionListener {
             return false;
         }
         return true;
+    }
+
+    public String readTime(String label) {
+        final Object[] IDO = {"18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30"};
+        String time = (String) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, IDO, IDO[0]);
+        return time;
     }
 
     /**

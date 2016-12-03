@@ -17,6 +17,7 @@ public class GuiConstants {
     public static final String ADMIN_MENU_TEXT = "Admin";
     public static final String TORTENET_MENU_TEXT = "Történet";
     public static final String LOGOUT_MENU_TEXT = "Logout";
+    public static final String EXIT = "Kilépés, az alkalmazás leáll...";
 
     public static final String MOZI_MENU_TEXT = "Mozi";
     public static final String TEREM_MENU_TEXT = "Terem";
@@ -49,6 +50,7 @@ public class GuiConstants {
     public static final String FELVITEL_MUSOR_TEXT = "Műsor felvitel";
     public static final String TORLES_MUSOR_TEXT = "Műsor TÖRLÉS";
     public static final String FELVITEL_DATUM_TEXT = "Dátum felvitel";
+    public static final String FELVITEL_IDO_TEXT = "Időpont felvitel";
     public static final String FELVITEL_FILM_TEXT = "Film felvitel";
     public static final String FELVITEL_FILMRENDEZO_TEXT = "Rendező felvitel";
     public static final String FELVITEL_FILMSZINESZ_TEXT = "Színész felvitel";
@@ -81,7 +83,7 @@ public class GuiConstants {
     public static final String NOMORE_ROOM_ERROR = "Nincs használható terem!";
 
     public static final String USERNAME_TEXT = "Felhasználónév:";
-    public static final String USERNAME_LENGHT = "Nem megfelelő hosszúságú felhasználónév!";
+    public static final String USERNAME_LENGHT = "Min hossz: 3 betű, max: 10";
     public static final String FAIL = "HIBA!";
     public static final String USERNAME_REQUIRED = "Név megadása kötelező!";
     public static final String USERNAME_TAKEN = "A felhasznalónév már foglalt!";

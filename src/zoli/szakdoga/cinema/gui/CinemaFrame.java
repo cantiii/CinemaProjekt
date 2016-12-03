@@ -101,6 +101,7 @@ public class CinemaFrame extends JFrame {
     //Integer selectedRow = null;
     private final static Integer[] JOGOK = {1, 2};
     private final static Integer[] BOJOGOK = {0, 1, 2};
+    private final static Object[] IDO = {"18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30"};
 
     public CinemaFrame() {
         initFrame();
@@ -467,21 +468,25 @@ public class CinemaFrame extends JFrame {
                         Document dok = new Document();
                         PdfWriter.getInstance(dok, new FileOutputStream("musor.pdf"));
                         dok.open();
-                        PdfPTable tab = new PdfPTable(3);
+                        PdfPTable tab = new PdfPTable(4);
                         tab.addCell("FILM");
                         tab.addCell("TEREM");
                         tab.addCell("DÁTUM");
+                        tab.addCell("IDŐPONT");
                         for (int i = 0; i < count; i++) {
                             Object obj1 = musorTable.getModel().getValueAt(i, 0);
                             Object obj2 = musorTable.getModel().getValueAt(i, 1);
                             Object obj3 = musorTable.getModel().getValueAt(i, 2);
+                            Object obj4 = musorTable.getModel().getValueAt(i, 3);
 
                             String value1 = obj1.toString();
                             String value2 = obj2.toString();
                             String value3 = obj3.toString();
+                            String value4 = obj4.toString();
                             tab.addCell(value1);
                             tab.addCell(value2);
                             tab.addCell(value3);
+                            tab.addCell(value4);
                         }
                         dok.add(tab);
                         dok.close();
@@ -511,11 +516,11 @@ public class CinemaFrame extends JFrame {
 
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
         musorATable.setModel(model);
-        musorATable.getColumnModel().getColumn(2).setCellEditor(new MyDateCell()); // jó dátum és dátum forma
 
         //A filmet és a termet combobox-ból választhatjuk ki
         setComboColumn(musorATable, 0, DaoManager.getInstance().getFilmDao().findAll().toArray());
-        setComboColumn(musorATable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
+        musorATable.getColumnModel().getColumn(2).setCellEditor(new MyDateCell()); // jó dátum és dátum forma
+        setComboColumn(musorATable, 3, IDO);
 
         musorATable.addMouseListener(rightClickAction);
         panelMusorA.add(MUSOR_MENU_TEXT, new JScrollPane(musorATable));
@@ -539,6 +544,7 @@ public class CinemaFrame extends JFrame {
 
             filterText.setText(FILM_MENU_TEXT);
             keresoButton.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     String keresText = filterText.getText();
                     if (keresText.length() == 0) {
@@ -822,7 +828,9 @@ public class CinemaFrame extends JFrame {
                     + "\nTEREM: "
                     + valasztottVetites.getTeremId()
                     + "\nDÁTUM: "
-                    + valasztottVetites.getMikor();
+                    + valasztottVetites.getMikor()
+                    +" - "
+                    + valasztottVetites.getIdo();
             int answer = JOptionPane.showConfirmDialog(panelCont, adatok, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.OK_OPTION) {
                 Szek kezdoSzek = valasztottVetites.getSzekId();

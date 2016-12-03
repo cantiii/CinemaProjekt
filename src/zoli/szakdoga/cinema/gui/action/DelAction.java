@@ -50,7 +50,7 @@ public class DelAction implements ActionListener {
                     Integer ferohely = terem.getFerohely();
 
                     dao = new DefaultDao(Szek.class);
-                    Szek kezdoSzek = (Szek) model.getValueAt(selectedRow, 3);
+                    Szek kezdoSzek = (Szek) model.getValueAt(selectedRow, 4);
                     Integer vegSzekId = kezdoSzek.getId() + (ferohely - 1);
                     Szek vegSzek = (Szek) dao.findById(vegSzekId);
 
