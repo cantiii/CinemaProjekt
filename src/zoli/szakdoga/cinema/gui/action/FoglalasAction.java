@@ -29,10 +29,10 @@ public class FoglalasAction extends MouseAdapter {
     private Szek szek;
     private JLabel szekLabel;
     private Integer jegyDarab;
-    private static int foglalDarab = 0;
-    private static List<Szek> kijeloltSzekLista = new ArrayList<>();
-    private static List<JLabel> labelLista = new ArrayList<>();
     private LoginAction logUser;
+    private static int foglalDarab;
+    private static List<Szek> kijeloltSzekLista;
+    private static List<JLabel> labelLista;
 
     public FoglalasAction(CinemaFrame parent, Szek szek, JLabel szekLabel, Integer jegyDarab, LoginAction logUser) {
         this.parent = parent;
@@ -40,8 +40,13 @@ public class FoglalasAction extends MouseAdapter {
         this.szekLabel = szekLabel;
         this.jegyDarab = jegyDarab;
         this.logUser = logUser;
+
+        foglalDarab = 0;
+        kijeloltSzekLista = new ArrayList<>();
+        labelLista = new ArrayList<>();
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         if (jegyDarab != foglalDarab) {
             BufferedImage xSzek = null;
@@ -114,7 +119,7 @@ public class FoglalasAction extends MouseAdapter {
             kijeloltSzekLista.clear();
             foglalDarab = 0;
             jegyDarab = 0;
-            parent.removeElrendezes();           
+            parent.removeElrendezes();
         } else if (answer == JOptionPane.NO_OPTION) {
             BufferedImage szSzek = null;
             try {
@@ -130,7 +135,7 @@ public class FoglalasAction extends MouseAdapter {
 
             labelLista.clear();
             foglalDarab = 0;
-            kijeloltSzekLista.clear();            
+            kijeloltSzekLista.clear();
         }
     }
 }
