@@ -433,6 +433,7 @@ public class CinemaFrame extends JFrame {
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
             //régi dátum kiszűrés, hogy a felhasználót ne zavarják, amár amúgy sem aktuális vetítések
             RowFilter<Object, Object> filter = new RowFilter<Object, Object>() {
+                @Override
                 public boolean include(RowFilter.Entry entry) {
                     Date yesterday = new Date();
                     Calendar c = Calendar.getInstance();
@@ -868,7 +869,7 @@ public class CinemaFrame extends JFrame {
                 }
 
                 if (szabadHely == 0) {
-                    JOptionPane.showMessageDialog(null, GuiConstants.TEREM_MEGTELT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, GuiConstants.TEREM_MEGTELT, GuiConstants.FAIL, JOptionPane.INFORMATION_MESSAGE);
                     return null;
                 } else {
                     Integer jegyDiak = null;

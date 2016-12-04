@@ -59,7 +59,7 @@ public class FoglalasAction extends MouseAdapter {
 
             if (SwingUtilities.isLeftMouseButton(e)) {
                 if (kijeloltSzekLista.contains(szek)) {
-                    JOptionPane.showMessageDialog(null, GuiConstants.FOGLALT_SZEK, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, GuiConstants.FOGLALT_SZEK, GuiConstants.FAIL, JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     ImageIcon xIcon = new ImageIcon(xSzek);
                     szekLabel.setIcon(xIcon);

@@ -55,7 +55,7 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return !PROPERTY_NAMES[columnIndex].equals("Férőhely"); // jobb megoldás ?
+        return !PROPERTY_NAMES[columnIndex].equals("Férőhely");
     }
 
     @Override
