@@ -63,6 +63,7 @@ public class GuiConstants {
     public static final String FELVITEL_TEREM_TEXT = "Terem felvitel";
     public static final String FELVITEL_TEREMHELY_TEXT = "Terem hely felvitel";
     public static final String NOMOZI = "Nincs még mozi, előbb azt vigyen fel!";
+    public static final String NOFILM = "Nincs még film, előbb azt vigyen fel!";
     public static final String TORLES_TEREM_TEXT = "Terem TÖRLÉS";
     public static final String SZEKRENDELES = " darab széket beraktunk a terembe!";
     public static final String FELVITEL_FELHASZNALO_TEXT = "Felhasznaló felvitel";

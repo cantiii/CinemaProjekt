@@ -70,7 +70,6 @@ public class MyDateCell extends DefaultCellEditor {
                 return false;
             }
         }
-        //semmiképp sem TRUE, akkor nem mentődik!
         return super.stopCellEditing();
     }
 

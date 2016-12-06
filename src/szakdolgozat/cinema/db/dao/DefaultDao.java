@@ -84,18 +84,6 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         }
         return result;
     }
-    
-    public List<Szek> findAll(Terem id) {
-        List<Szek> result = null;
-        try {
-            Query query = getEntityManager()
-                    .createNamedQuery("Szekterem.findTeremById")
-                    .setParameter("teremId", id);
-            result = (List<Szek>) query.getResultList();
-        } catch (NoResultException e) {
-        }
-        return result;
-    }
 
     /**
      * 
@@ -289,23 +277,6 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
                     .createNamedQuery("Vetites.findTeremInVetites")
                     .setParameter("teremId", teremId);
             result = (List<Vetites>) query.getResultList();
-        } catch (NoResultException e) {
-            result = null;
-        }
-        if (result == null) {
-            return null;
-        } else {
-            return result;
-        }
-    }
-    
-    public Terem findTeremId(String name) {
-        Terem result;
-        try {
-            Query query = getEntityManager()
-                    .createNamedQuery("Terem.findByNev")
-                    .setParameter("nev", name);
-            result = (Terem) query.getSingleResult();
         } catch (NoResultException e) {
             result = null;
         }

@@ -2,12 +2,7 @@ package szakdolgozat.cinema.gui.action;
 
 import szakdolgozat.cinema.gui.GuiConstants;
 import szakdolgozat.cinema.gui.CinemaFrame;
-import szakdolgozat.cinema.db.entity.Szek;
-import szakdolgozat.cinema.db.entity.Vetites;
-import szakdolgozat.cinema.db.entity.Terem;
-import szakdolgozat.cinema.db.entity.Tartalmaz;
-import szakdolgozat.cinema.db.entity.Film;
-import szakdolgozat.cinema.db.entity.Mozi;
+import szakdolgozat.cinema.db.entity.*;
 import szakdolgozat.cinema.db.dao.DaoManager;
 import szakdolgozat.cinema.db.dao.DefaultDao;
 import java.awt.event.ActionEvent;
@@ -27,8 +22,6 @@ import szakdolgozat.cinema.gui.model.GenericTableModel;
  * @author pappz A különböző felvitelekért felelős osztály
  */
 public class AddAction implements ActionListener {
-
-    private final static Object[] HELYEK = {25, 50, 80};
 
     private CinemaFrame parent;
     private DefaultDao dao;
@@ -252,11 +245,6 @@ public class AddAction implements ActionListener {
 
     //Itt döntjük el, hogy jó-e a megadott dátum
     public boolean dateFormat(String dateIn) {
-        //ha az null volt, akkor egyértelműen hiba
-        if (dateIn == null) {
-            JOptionPane.showMessageDialog(parent, GuiConstants.FORMAT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
         /**
          * ha nem üres a mező akkor jöhetnek az ellenőrzések meghatározzuk az
          * intervallumut, amiben a vetítás szerepelhet múltbeli, illetve
@@ -298,7 +286,6 @@ public class AddAction implements ActionListener {
 
     /**
      * Mozi entitások beolvasása és megjelenításe
-     *
      * @return - a legördülő listából kiválasztott mozi elem
      */
     private Mozi readMozi() {
@@ -313,8 +300,8 @@ public class AddAction implements ActionListener {
     }
 
     /**
-     * Terem lista az időpont függvényében vetítés >> dátum a prio, mert az nap
-     * 1 terem csak 1x használható
+     * Terem lista az időpont függvényében vetítés >> dátum a prio,
+     * mert az nap 1 terem csak 1x használható
      *
      * @param date - A vetítés dátuma, ez szűri le a termeket
      * @return - kiválasztott terem entitás
@@ -353,16 +340,21 @@ public class AddAction implements ActionListener {
 
     /**
      * Film entitások beolvasása és megjelenításe
-     *
      * @return - a legördülő listából kiválasztott film elem
      */
     private Film readFilm() {
         Object[] filmek = DaoManager.getInstance().getFilmDao().findAll().toArray();
-        Film film = (Film) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, filmek, filmek[0]);
-        return film;
+        if (filmek.length == 0) {
+            JOptionPane.showMessageDialog(parent, GuiConstants.NOFILM, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+            return null;
+        } else {
+            Film film = (Film) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, filmek, filmek[0]);
+            return film;
+        }
     }
 
     private Integer readHely() {
+        final Object[] HELYEK = {25, 50, 80};
         Integer hely = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, HELYEK, HELYEK[0]);
         return hely;
     }

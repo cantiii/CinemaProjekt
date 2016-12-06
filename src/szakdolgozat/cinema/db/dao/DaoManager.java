@@ -88,7 +88,6 @@ public class DaoManager {
     }
 
     private static class DaoManagerHolder {
-
         private static final DaoManager INSTANCE = new DaoManager();
     }
 }

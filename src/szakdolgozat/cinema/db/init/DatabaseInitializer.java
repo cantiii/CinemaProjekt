@@ -49,11 +49,11 @@ public class DatabaseInitializer {
         }
 
         List<Mozi> mozik = new ArrayList<>();
-        mozik.add(createGroup("Magyar"));
-        mozik.add(createGroup("Angol"));
-        mozik.add(createGroup("Spanyol"));
-        mozik.add(createGroup("Olasz"));
-        mozik.add(createGroup("Német"));
+        mozik.add(createMozi("Magyar"));
+        mozik.add(createMozi("Angol"));
+        mozik.add(createMozi("Spanyol"));
+        mozik.add(createMozi("Olasz"));
+        mozik.add(createMozi("Német"));
 
         for (Mozi mozi : mozik) {
             DaoManager.getInstance().getMoziDao().create(mozi);
@@ -113,7 +113,7 @@ public class DatabaseInitializer {
         return film;
     }
 
-    private Mozi createGroup(String nev) {
+    private Mozi createMozi(String nev) {
         Mozi mozi = new Mozi();
         mozi.setNev(nev);
         return mozi;
