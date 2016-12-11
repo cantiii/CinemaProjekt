@@ -1,21 +1,8 @@
 package szakdolgozat.cinema.gui;
 
 import szakdolgozat.cinema.gui.model.GenericTableModel;
-import szakdolgozat.cinema.gui.action.ShowSzekekAction;
-import szakdolgozat.cinema.gui.action.ShowStoryAction;
-import szakdolgozat.cinema.gui.action.StoryRightClickAction;
-import szakdolgozat.cinema.gui.action.FoglalasAction;
-import szakdolgozat.cinema.gui.action.DelAction;
-import szakdolgozat.cinema.gui.action.RegAction;
-import szakdolgozat.cinema.gui.action.LoginAction;
-import szakdolgozat.cinema.gui.action.AddAction;
-import szakdolgozat.cinema.db.entity.Szek;
-import szakdolgozat.cinema.db.entity.Vetites;
-import szakdolgozat.cinema.db.entity.Terem;
-import szakdolgozat.cinema.db.entity.Tartalmaz;
-import szakdolgozat.cinema.db.entity.Felhasznalo;
-import szakdolgozat.cinema.db.entity.Film;
-import szakdolgozat.cinema.db.entity.Mozi;
+import szakdolgozat.cinema.gui.action.*;
+import szakdolgozat.cinema.db.entity.*;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.PdfPTable;
@@ -111,7 +98,6 @@ public class CinemaFrame extends JFrame {
     private LoginAction logIn;
     private RegAction regIn;
 
-    //Integer selectedRow = null;
     private final static Integer[] JOGOK = {1, 2};
     private final static Integer[] BOJOGOK = {0, 1, 2};
     private final static Object[] IDO = {"18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30"};
