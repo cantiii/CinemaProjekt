@@ -8,7 +8,8 @@ import szakdolgozat.cinema.gui.GuiConstants;
 
 /**
  *
- * @author Zoli A bejelentkezésért felelős osztályja a programnak
+ * @author Papp Zoltán - VMW84B
+ * A bejelentkezésért felelős osztályja a programnak
  */
 public class LoginAction {
 

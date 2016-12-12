@@ -5,7 +5,10 @@ import szakdolgozat.cinema.gui.CinemaFrame;
 
 /**
  *
- * @author Zoli
+ * @author Papp Zoltán - VMW84B
+ * Szakdolgozat
+ * Grafikus felületű jegyfoglaló és kezelő rendszer Java programozási nyelven
+ * Budapest, 2016
  */
 public class CinemaProjekt {
 

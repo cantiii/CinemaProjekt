@@ -21,7 +21,9 @@ import szakdolgozat.cinema.gui.model.GenericTableModel;
 
 /**
  *
- * @author pappz
+ * @author Papp Zoltán - VMW84B
+ * Szék kijelölés, törlés
+ * Foglalás mentése, véglegesítése
  */
 public class FoglalasAction extends MouseAdapter {
 
@@ -56,7 +58,12 @@ public class FoglalasAction extends MouseAdapter {
                 szSzek = ImageIO.read(new File("src/pic/szszabad.png"));
             } catch (IOException ex) {
             }
-
+            
+            /**
+             * Ha bal egérgomb és már kijelölt, akkor tájékoztatás
+             * Ellenkező eseten kijelölés ha jegydarab egyenlő a kijelölt szék mennyiséggel
+             * foglalás esetleges véglegesítése
+             */
             if (SwingUtilities.isLeftMouseButton(e)) {
                 if (kijeloltSzekLista.contains(szek)) {
                     JOptionPane.showMessageDialog(null, GuiConstants.FOGLALT_SZEK, GuiConstants.FAIL, JOptionPane.INFORMATION_MESSAGE);
@@ -71,6 +78,10 @@ public class FoglalasAction extends MouseAdapter {
                     }
                 }
             }
+            /**
+             * Jobb egérgombnál, ha még nincs kijelölve, action sincs
+             * ellenkező esetben kijelölést lehet visszavonni
+             */
             if (SwingUtilities.isRightMouseButton(e)) {
                 if (kijeloltSzekLista.contains(szek)) {
                     int answer = JOptionPane.showConfirmDialog(null, GuiConstants.TORLES, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.YES_NO_OPTION);
@@ -86,6 +97,16 @@ public class FoglalasAction extends MouseAdapter {
         }
     }
 
+    /**
+     * Ha a showConfirmDialog-ban OK válasz:
+     * - kijelölt székeket update-li foglaltra
+     * - Foglalás táblaba felviszi az adatokat
+     * - felületen beállítja foglaltra a székeket
+     * - törli a panelt
+     * Ha NO válasz:
+     * - megszünteti a kijelöléseket
+     * - újra leehet kezdeni a folyamatot
+     */
     public void veglegesit() {
         int answer = JOptionPane.showConfirmDialog(null, GuiConstants.FOGLALAS_MENTES, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.YES_NO_OPTION);
 

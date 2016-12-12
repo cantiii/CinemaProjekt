@@ -3,16 +3,14 @@ package szakdolgozat.cinema.db.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Zoli
+ * @author Papp Zoltán - VMW84B
  */
 @Entity
 @Table(name = "TEREM")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Terem.findAll", query = "SELECT t FROM Terem t"),
     @NamedQuery(name = "Terem.findById", query = "SELECT t FROM Terem t WHERE t.id = :id"),

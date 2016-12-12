@@ -19,7 +19,8 @@ import szakdolgozat.cinema.gui.model.GenericTableModel;
 
 /**
  *
- * @author pappz A különböző felvitelekért felelős osztály
+ * @author Papp Zoltán - VMW84B
+ * A különböző felvitelekért felelős osztály
  */
 public class AddAction implements ActionListener {
 
@@ -136,7 +137,7 @@ public class AddAction implements ActionListener {
 
     /**
      *
-     * @param label -
+     * @param label - Labelről tudjuk meg, hogy mit is kell beolvasni
      * @return
      */
     private String readUniqueString(String label) {
@@ -278,6 +279,11 @@ public class AddAction implements ActionListener {
         return true;
     }
 
+    /**
+     * 
+     * Vetítés kezdési időpontja
+     * @return - választott időpont
+     */
     public String readTime(String label) {
         final Object[] IDO = {"18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30"};
         String time = (String) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, IDO, IDO[0]);
@@ -353,6 +359,11 @@ public class AddAction implements ActionListener {
         }
     }
 
+    /**
+     * 
+     * Terem befogadóképsessége
+     * @return - kiválasztott férőhelyek száma
+     */
     private Integer readHely() {
         final Object[] HELYEK = {25, 50, 80};
         Integer hely = (Integer) JOptionPane.showInputDialog(parent, GuiConstants.VALASZTO_TEXT, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.QUESTION_MESSAGE, null, HELYEK, HELYEK[0]);

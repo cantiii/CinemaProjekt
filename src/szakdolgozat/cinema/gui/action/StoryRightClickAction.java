@@ -45,6 +45,11 @@ public class StoryRightClickAction extends MouseAdapter {
         }
     }
 
+    /**
+     * 
+     * @param e 
+     * Tábla és jogosultság függvényében megjeleníti a kontextmenüt
+     */
     private void createPopup(MouseEvent e) {
         JPopupMenu popup = new JPopupMenu();
 

@@ -11,7 +11,7 @@ import szakdolgozat.cinema.db.entity.Mozi;
 
 /**
  *
- * @author pappz
+ * @author Papp Zoltán - VMW84B
  */
 public class DaoManager {
 

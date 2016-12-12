@@ -1,12 +1,6 @@
 package szakdolgozat.cinema.gui.action;
 
-import szakdolgozat.cinema.db.entity.Szek;
-import szakdolgozat.cinema.db.entity.Vetites;
-import szakdolgozat.cinema.db.entity.Terem;
-import szakdolgozat.cinema.db.entity.Tartalmaz;
-import szakdolgozat.cinema.db.entity.Felhasznalo;
-import szakdolgozat.cinema.db.entity.Film;
-import szakdolgozat.cinema.db.entity.Mozi;
+import szakdolgozat.cinema.db.entity.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -21,7 +15,8 @@ import szakdolgozat.cinema.gui.model.GenericTableModel;
 
 /**
  *
- * @author pappz A törlések megvalósítását végző osztály
+ * @author Papp Zoltán - VMW84B
+ * A törlések megvalósítását végző osztály
  */
 public class DelAction implements ActionListener {
 

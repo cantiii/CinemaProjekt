@@ -8,7 +8,7 @@ import szakdolgozat.cinema.db.dao.GenericDao;
 
 /**
  *
- * @author Zoli
+ * @author Papp Zoltán - VMW84B
  */
 public class GenericTableModel<T extends PersistentEntity> extends AbstractTableModel {
 
@@ -46,6 +46,7 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         if (getRowCount() > rowIndex) {
             T item = items.get(rowIndex); // meg van az entitás minden eleme a sor miatt
+            //üres stringre nem módosít
             if(!(aValue.toString().trim().equals(""))) {               
                 item.set(columnIndex, aValue); // az entitás columnIndex. oszlopában megváltoztatja az értéket
                 updateEntity(item, rowIndex);
@@ -91,6 +92,10 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
         fireTableDataChanged();        
     }
     
+    /**
+     * Ez akkor kell, ha nem sor alapján tőrlünk
+     * @param item 
+     */
     public void removeEntity(T item) {
         items.remove(item);
         DAO.delete(item); 
@@ -108,6 +113,10 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
         fireTableRowsUpdated(0, items.size() - 1);
     }
     
+    /**
+     * Ez akkor kell, ha nem sor alapján update-elünk
+     * @param szek 
+     */
     public void updateSzek(T szek) {
         DAO.update(szek);
         fireTableRowsUpdated(0, items.size() - 1);

@@ -10,7 +10,7 @@ import szakdolgozat.cinema.gui.model.GenericTableModel;
 
 /**
  *
- * @author pappz 
+ * @author Papp Zoltán - VMW84B
  * Ennek az osztálynak a segítségével tudjuk a film leírását előhozni a felületre
  */
 public class ShowStoryAction implements ActionListener {

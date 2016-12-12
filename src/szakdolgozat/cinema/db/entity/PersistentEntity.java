@@ -4,7 +4,7 @@ import javax.persistence.MappedSuperclass;
 
 /**
  *
- * @author pappz
+ * @author Papp Zoltán - VMW84B
  */
 @MappedSuperclass
 public interface PersistentEntity {

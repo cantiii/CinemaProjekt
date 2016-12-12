@@ -14,6 +14,12 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import szakdolgozat.cinema.gui.GuiConstants;
 
+/**
+ * 
+ * @author Papp Zoltán - VMW84B
+ * Vetítés dátumának szerkesztését ellenőrző osztály
+ */
+
 public class MyDateCell extends DefaultCellEditor {
 
     private static final Border RED = new LineBorder(Color.RED);
@@ -55,8 +61,10 @@ public class MyDateCell extends DefaultCellEditor {
             nextCDay = c.getTime();
 
             try {
-                //ha nem valid dátum formátum, akkor ParseException
-                //ha rendben van akkor kilép és felülírja a régi dátumot
+                /**
+                * ha nem valid dátum formátum, akkor ParseException
+                * ha rendben van akkor kilép és felülírja a régi dátumot
+                */
                 Date date = sample.parse(data);
                 if (date.after(nextCDay) || date.before(nextDay)) {
                     JOptionPane.showMessageDialog(null, GuiConstants.DATE_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);

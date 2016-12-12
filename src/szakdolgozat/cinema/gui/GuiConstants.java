@@ -2,7 +2,9 @@ package szakdolgozat.cinema.gui;
 
 /**
  *
- * @author pappz
+ * @author Papp Zoltán - VMW84B
+ * Felületen megtalálható gombok, menüpontok konstansai,
+ * valamint tájékoztató-, hibaüzenetek szövegei.
  */
 public class GuiConstants {
 
@@ -30,6 +32,7 @@ public class GuiConstants {
     public static final String REG_BUT_TEXT = "Regisztráció";
     public static final String KERES_BUT_TEXT = "Keresés";
     public static final String PDF_BUT_TEXT = "PDF";
+    public static final String NODATA = "Nincs megjeleníthető adat!";
 
     public static final String FOGLALAS_BUT_TEXT = "FOGLALÁS";
     public static final String TEREM_MEGTELT = "Sajnáljuk, a vetítés megtelt!";

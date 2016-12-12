@@ -22,7 +22,7 @@ import szakdolgozat.cinema.gui.GuiConstants;
 
 /**
  *
- * @author pappz
+ * @author Papp Zoltán - VMW84B
  */
 public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
 
@@ -73,6 +73,11 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         return getEntityManager().find(CLASS, id);
     }
 
+    /**
+     * 
+     * @param id - Mozi elem, melynek a termeire vagyunk kiváncsiak
+     * @return - A mozihoz kapcsolodó termek listája
+     */
     public List<T> findAll(Mozi id) {
         List<T> result = null;
         try {
@@ -147,7 +152,7 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         return result.getMoziId();
     }
     
-        /**
+    /**
      * 
      * @param - Szek entitás, amelyről megszeretnénk tudni, hogy melyik Felhasznalóhoz tartozik
      * @return - A keresett felhasznaló
@@ -187,6 +192,7 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
             return result;
         }
     }
+    
     /**
      * 
      * @param name - Film entitás neve, amelyről megszeretnénk tudni, hogy létezik-e
@@ -208,6 +214,7 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
             return true;
         }
     }
+    
     /**
      * 
      * @param name - Név amit szeretnénk leellenőrizni, hogy szerepel-e már az adatbázisban
@@ -230,6 +237,7 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
             return true;
         }
     }
+    
     /**
      * 
      * @param name - LoginAction-nél szükséges ellenőrzés, hogy olyan névvel jelentkezzünk be, amit tartalmaz a db
@@ -253,6 +261,11 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         }
     }
     
+    /**
+     * 
+     * @param filmId - Film, melynek Vetítéseit szeretnénk megtekinteni
+     * @return - A film vetítések listája
+     */
     public List<Vetites> findFilmInVetites(Film filmId) {
         List<Vetites> result;
         try {
@@ -270,6 +283,11 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         }
     }
     
+    /**
+     * 
+     * @param teremId - Terem, melynek Vetítéseit szeretnénk megtekinteni
+     * @return - A teremben lévő vetítések listája
+     */
     public List<Vetites> findTeremInVetites(Terem teremId) {
         List<Vetites> result;
         try {

@@ -11,7 +11,8 @@ import java.util.List;
 
 /**
  *
- * @author Zoli
+ * @author Papp Zoltán - VMW84B
+ * Adatbázis feltöltése adatokkal
  */
 public class DatabaseInitializer {
 
@@ -22,6 +23,10 @@ public class DatabaseInitializer {
         upload();
     }
 
+    /**
+     * Az adott entitásoknak megfelelő listát feltölti adatokkal,
+     * majd azokat az adatbázisba is felviszi
+     */
     private void upload() {
         List<Felhasznalo> felhasznalok = new ArrayList<>();
         felhasznalok.add(createFelhasznalo("superuser", 0));
@@ -33,16 +38,16 @@ public class DatabaseInitializer {
         }
 
         List<Film> filmek = new ArrayList<>();
-        filmek.add(createFilm("A remény rabjai", "Frank Darabont", "Tim Robbins", "1994 - dráma, krimi", 140, 16));
-        filmek.add(createFilm("A keresztapa", "Francis Coppola", "Marlon Brando", "1972 - bünűgy, dráma", 180, 18));
-        filmek.add(createFilm("A sötét lovag", "Christopher Nolan", "Christian Bale", "2008 - akció", 155, 16));
-        filmek.add(createFilm("Schindler listája", "Steven Spielberg", "Liam Neeson", "1993 - történemi", 200, 12));
-        filmek.add(createFilm("Ponyvaregény", "Quentin Tarantino", "John Travolta", "1994 - dráma", 150, 18));
-        filmek.add(createFilm("A Gyűrűk Ura", "Peter Jackson", "Marlon Brando", "2003 - kalanad, fantazi", 201, 12));
-        filmek.add(createFilm("Harcosok klubja", "David Fincher", "Brad Pitt", "1999 - dráma", 140, 16));
-        filmek.add(createFilm("Csillagok háborúja", "George Lucas", "Harrison Ford", "1977 - sci-fi, kaland", 120, 8));
-        filmek.add(createFilm("Mátrix", "Wachowski Brothers", "Keanu Reeves", "1999 - akció", 155, 12));
-        filmek.add(createFilm("Forrest Gump", "Robert Zemeckis", "Tom Hanks", "1994 - vígjáték, dráma", 139, 8));
+        filmek.add(createFilm("A remény rabjai", "Frank Darabont", "Tim Robbins", "1994-dráma, krimi", 140, 16));
+        filmek.add(createFilm("A keresztapa", "Francis Coppola", "Marlon Brando", "1972-bünűgy, dráma", 180, 18));
+        filmek.add(createFilm("A sötét lovag", "Christopher Nolan", "Christian Bale", "2008-akció", 155, 16));
+        filmek.add(createFilm("Schindler listája", "Steven Spielberg", "Liam Neeson", "1993-történemi", 200, 12));
+        filmek.add(createFilm("Ponyvaregény", "Quentin Tarantino", "John Travolta", "1994-dráma", 150, 18));
+        filmek.add(createFilm("A Gyűrűk Ura", "Peter Jackson", "Elijah Wood", "2003-kaland, fantazi", 201, 12));
+        filmek.add(createFilm("Harcosok klubja", "David Fincher", "Brad Pitt", "1999-dráma", 140, 16));
+        filmek.add(createFilm("Csillagok háborúja", "George Lucas", "Harrison Ford", "1977-sci-fi, kaland", 120, 8));
+        filmek.add(createFilm("Mátrix", "Wachowski Brothers", "Keanu Reeves", "1999-akció", 155, 12));
+        filmek.add(createFilm("Forrest Gump", "Robert Zemeckis", "Tom Hanks", "1994-vígjáték, dráma", 139, 8));
 
         for (Film film : filmek) {
             DaoManager.getInstance().getFilmDao().create(film);
@@ -94,14 +99,29 @@ public class DatabaseInitializer {
         }
 
     }
-
+    /**
+     * 
+     * @param nev - felhasználó név
+     * @param jog - felhasználó joga
+     * @return - Felhasználó példány
+    */
     private Felhasznalo createFelhasznalo(String nev, Integer jog) {
         Felhasznalo felhasznalo = new Felhasznalo();
         felhasznalo.setNev(nev);
         felhasznalo.setJog(jog);
         return felhasznalo;
     }
-
+    
+    /**
+     * 
+     * @param cim - film címe
+     * @param rendezo - film rendezője
+     * @param szines - film főszereplője
+     * @param leiras - film leírása
+     * @param hossz - film hossza
+     * @param kor - film korhatár, mely alatt nem ajánlott a megtekintés
+     * @return 
+     */
     private Film createFilm(String cim, String rendezo, String szines, String leiras, Integer hossz, Integer kor) {
         Film film = new Film();
         film.setCim(cim);
@@ -113,12 +133,23 @@ public class DatabaseInitializer {
         return film;
     }
 
+    /**
+     * 
+     * @param nev - mozi neve
+     * @return 
+     */
     private Mozi createMozi(String nev) {
         Mozi mozi = new Mozi();
         mozi.setNev(nev);
         return mozi;
     }
 
+    /**
+     * 
+     * @param nev - terem neve
+     * @param ferohely - terem befogadó kapacítása
+     * @return 
+     */
     private Terem createTerem(String nev, Integer ferohely) {
         Terem terem = new Terem();
         terem.setNev(nev);
@@ -126,6 +157,12 @@ public class DatabaseInitializer {
         return terem;
     }
 
+    /**
+     * 
+     * @param mozi - Mozi objektum
+     * @param terem - Terem objektum
+     * @return 
+     */
     private Tartalmaz createTartalmaz(Mozi mozi, Terem terem) {
         Tartalmaz tartalmaz = new Tartalmaz();
         tartalmaz.setMoziId(mozi);

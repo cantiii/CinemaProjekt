@@ -40,7 +40,7 @@ import static szakdolgozat.cinema.gui.GuiConstants.*;
 
 /**
  *
- * @author Zoli
+ * @author Papp Zoltán - VMW84B
  */
 public class CinemaFrame extends JFrame {
     private final CardLayout cl = new CardLayout();
@@ -297,6 +297,7 @@ public class CinemaFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setStart();
+                getContentPane().remove(helpToolbar);
             }
         });
 
@@ -340,6 +341,7 @@ public class CinemaFrame extends JFrame {
         add(panelCont, BorderLayout.CENTER);
     }
 
+    //tájékozást segítő panel
     private void setNorth(String label) {
         JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
@@ -353,6 +355,7 @@ public class CinemaFrame extends JFrame {
         add(northPanel, BorderLayout.NORTH);
     }
 
+    //bejelentkezett felhasználó infomációi panel
     private void setSouth() {
         JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
@@ -411,11 +414,10 @@ public class CinemaFrame extends JFrame {
         panelMusor.removeAll();
         // táblamodel létrehozása és meghatározása
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
-        musorTable.setModel(model);
-        musorTable.setEnabled(false);
-
-        // törlésre kiürül, akkor még ott marad a sorter hiba
         if (model.getRowCount() != 0) {
+            musorTable.setModel(model);
+            musorTable.setEnabled(false);
+
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
             //régi dátum kiszűrés, hogy a felhasználót ne zavarják, amár amúgy sem aktuális vetítések
             RowFilter<Object, Object> filter = new RowFilter<Object, Object>() {
@@ -503,6 +505,8 @@ public class CinemaFrame extends JFrame {
             keresoPanel.add(keresoButton);
             keresoPanel.add(pdfButton);
             panelMusor.add(keresoPanel, BorderLayout.WEST);
+        } else {
+            JOptionPane.showMessageDialog(panelCont, GuiConstants.NODATA, GuiConstants.FRAME_TITLE, JOptionPane.INFORMATION_MESSAGE);
         }
 
         musorTable.addMouseListener(rightClickAction);
@@ -530,10 +534,11 @@ public class CinemaFrame extends JFrame {
         panelFilm.removeAll();
 
         GenericTableModel<Film> model = new GenericTableModel(DaoManager.getInstance().getFilmDao(), Film.PROPERTY_NAMES);
-        filmTable.setModel(model);
-        filmTable.setEnabled(false);
 
         if (model.getRowCount() != 0) {
+            filmTable.setModel(model);
+            filmTable.setEnabled(false);
+
             TableRowSorter<GenericTableModel<Film>> sorter = new TableRowSorter<>(model);
             filmTable.setRowSorter(sorter);
 
@@ -603,6 +608,8 @@ public class CinemaFrame extends JFrame {
             keresoPanel.add(keresoButton);
             keresoPanel.add(pdfButton);
             panelFilm.add(keresoPanel, BorderLayout.WEST);
+        } else {
+            JOptionPane.showMessageDialog(panelCont, GuiConstants.NODATA, GuiConstants.FRAME_TITLE, JOptionPane.INFORMATION_MESSAGE);
         }
 
         if (logIn.getCurrUser().getJog() == 0 || logIn.getCurrUser().getJog() == 2) {
@@ -657,11 +664,6 @@ public class CinemaFrame extends JFrame {
         //mozi függvényében kellene felhozni a termeket
         setComboColumn(tartalmazTable, 1, DaoManager.getInstance().getTeremDao().findAll().toArray());
 
-        if (model.getRowCount() != 0) {
-            TableRowSorter<GenericTableModel<Tartalmaz>> sorter = new TableRowSorter<>(model);
-            tartalmazTable.setRowSorter(sorter);
-        }
-
         panelTartalmazA.add(HOZZARENDELES_TEXT, new JScrollPane(tartalmazTable));
     }
 
@@ -687,9 +689,10 @@ public class CinemaFrame extends JFrame {
         panelTortenet.removeAll();
 
         GenericTableModel<Vetites> model = new GenericTableModel(DaoManager.getInstance().getVetitesDao(), Vetites.PROPERTY_NAMES);
-        tortenetTable.setModel(model);
 
         if (model.getRowCount() != 0) {
+            tortenetTable.setModel(model);
+
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
             tortenetTable.setRowSorter(sorter);
 
@@ -715,7 +718,10 @@ public class CinemaFrame extends JFrame {
             keresoPanel.add(filterText);
             keresoPanel.add(keresoButton);
             panelTortenet.add(keresoPanel, BorderLayout.WEST);
+        } else {
+            JOptionPane.showMessageDialog(panelCont, GuiConstants.NODATA, GuiConstants.FRAME_TITLE, JOptionPane.INFORMATION_MESSAGE);
         }
+
         tortenetTable.addMouseListener(rightClickAction);
         panelTortenet.add(TORTENET_MENU_TEXT, new JScrollPane(tortenetTable));
     }
@@ -829,7 +835,7 @@ public class CinemaFrame extends JFrame {
                     + valasztottVetites.getTeremId()
                     + "\nDÁTUM: "
                     + valasztottVetites.getMikor()
-                    +" - "
+                    + " - "
                     + valasztottVetites.getIdo();
             int answer = JOptionPane.showConfirmDialog(panelCont, adatok, GuiConstants.FOGLALAS_BUT_TEXT, JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.OK_OPTION) {
@@ -844,7 +850,8 @@ public class CinemaFrame extends JFrame {
                     Szek add = (Szek) dao.findById(i);
                     szekLista.add(add);
                 }
-
+                
+                //szabadhelyek számának összegyűjtése
                 int szabadHely = 0;
                 List<Integer> jegyAkt = new ArrayList<>();
                 for (int j = 0; j < szekLista.size(); j++) {
@@ -854,9 +861,11 @@ public class CinemaFrame extends JFrame {
                     }
                 }
 
+                //ha nincs szabadhely tájékoztatás
                 if (szabadHely == 0) {
                     JOptionPane.showMessageDialog(null, GuiConstants.TEREM_MEGTELT, GuiConstants.FAIL, JOptionPane.INFORMATION_MESSAGE);
                     return null;
+                //ellenkező esetben jegyek darabszámának megadása
                 } else {
                     Integer jegyDiak = null;
                     List<Integer> jegyListaDiak = new ArrayList<>();
@@ -899,6 +908,7 @@ public class CinemaFrame extends JFrame {
         return null;
     }
 
+    //terem székeinek lekérése, elrendezése, foglaltságok jelölése
     private void loadElrendezes(Vetites vetites) throws IOException {
         panelFoglal.removeAll();
         Szek kezdoSzek = vetites.getSzekId();
@@ -944,6 +954,7 @@ public class CinemaFrame extends JFrame {
         cl.show(panelCont, "20");
     }
 
+    //súgó panel
     private void setHelp() {
         helpToolbar = new JToolBar(JToolBar.VERTICAL);
         helpToolbar.setFloatable(false);

@@ -5,7 +5,7 @@ import szakdolgozat.cinema.db.entity.PersistentEntity;
 
 /**
  *
- * @author pappz
+ * @author Papp Zoltán - VMW84B
  */
 public interface GenericDao<T extends PersistentEntity> {
 

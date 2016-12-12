@@ -17,7 +17,8 @@ import szakdolgozat.cinema.gui.model.GenericTableModel;
 
 /**
  *
- * @author pappz
+ * @author Papp Zoltán - VMW84B
+ * Történet panelen mutatja meg, hogy volt-e szék foglalásunk egy adott vetítésre
  */
 public class ShowSzekekAction implements ActionListener {
 
@@ -41,7 +42,7 @@ public class ShowSzekekAction implements ActionListener {
         if (selectedRow > -1) {
             int convertRowIndexToModel = table.convertRowIndexToModel(selectedRow);
             GenericTableModel model = (GenericTableModel) table.getModel();
-
+            //terem függvényében összegyűjti a hozzá tartozó székeket
             Terem terem = (Terem) model.getValueAt(convertRowIndexToModel, 1);
             Integer ferohely = terem.getFerohely();
 
@@ -66,15 +67,17 @@ public class ShowSzekekAction implements ActionListener {
                     foglaltSzekLista.add(add);
                 }
             }
-
+            //ahol a saját id szerepel, azokat a székeket gyűjti össze
             List<Foglalas> sajatSzekLista = new ArrayList<>();
             for (int i = 0; i < foglaltSzekLista.size(); i++) {
                 if (Objects.equals(foglaltSzekLista.get(i).getFelhasznaloId().getId(), logUser.getCurrUser().getId())) {
                     sajatSzekLista.add(foglaltSzekLista.get(i));
                 }
             }
+            //ha nem üres, akkor kiírásra kerül a lista
             if (!sajatSzekLista.isEmpty()) {
                 JOptionPane.showMessageDialog(parent, sajatSzekLista.toString() + " - (db:" + sajatSzekLista.size() + ")", GuiConstants.SZEK_MENU_TEXT, JOptionPane.INFORMATION_MESSAGE);
+            //ellenkező esetben tájékoztatás, hogy erre még nem volt foglalás
             } else {
                 JOptionPane.showMessageDialog(parent, GuiConstants.NOSZEK, GuiConstants.SZEK_MENU_TEXT, JOptionPane.INFORMATION_MESSAGE);
             }

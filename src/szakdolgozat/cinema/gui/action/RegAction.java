@@ -10,7 +10,7 @@ import szakdolgozat.cinema.gui.model.GenericTableModel;
 
 /**
  *
- * @author Zoli
+ * @author Papp Zoltán - VMW84B
  * Ezen osztály segítségével tudunk regisztrálni a rendszerbe
  */
 public class RegAction {
@@ -60,7 +60,7 @@ public class RegAction {
                 JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_REQUIRED, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                 name = null;
             } else if (name == null) {
-                JOptionPane.showMessageDialog(parent, GuiConstants.EXIT, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, GuiConstants.EXIT, GuiConstants.FRAME_TITLE, JOptionPane.INFORMATION_MESSAGE);
                 System.exit(0);
             }
         }
