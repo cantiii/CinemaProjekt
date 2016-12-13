@@ -124,6 +124,7 @@ public class AddAction implements ActionListener {
         while (name == null) {
             name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
             if (name != null && !name.trim().equals("")) {
+                name = name.trim();
                 if (name.length() < 3 || name.length() > 20) {
                     JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                     name = null;
@@ -148,6 +149,7 @@ public class AddAction implements ActionListener {
                 while (name == null) {
                     name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
                     if (name != null && !name.trim().equals("")) {
+                        name = name.trim();
                         if (name.length() < 3 || name.length() > 20) {
                             JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                             name = null;
@@ -168,6 +170,7 @@ public class AddAction implements ActionListener {
                 while (name == null) {
                     name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
                     if (name != null && !name.trim().equals("")) {
+                        name = name.trim();
                         if (name.length() < 3 || name.length() > 20) {
                             JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                             name = null;
@@ -188,6 +191,7 @@ public class AddAction implements ActionListener {
                 while (name == null) {
                     name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
                     if (name != null && !name.trim().equals("")) {
+                        name = name.trim();
                         if (name.length() < 3 || name.length() > 20) {
                             JOptionPane.showMessageDialog(parent, GuiConstants.LENGHT_ERROR, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);
                             name = null;
@@ -212,6 +216,7 @@ public class AddAction implements ActionListener {
         Integer number = null;
         do {
             String str = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
+            str = str.trim();
             try {
                 //megpróbáljuk a stringet int-é parszolni
                 number = Integer.parseInt(str);
@@ -230,6 +235,7 @@ public class AddAction implements ActionListener {
         while (name == null) {
             name = JOptionPane.showInputDialog(parent, label, GuiConstants.FELVITEL_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
             if (name != null && !name.trim().equals("")) {
+                name = name.trim();
                 if (!dateFormat(name)) {
                     //ha hamis eredményt kapunk(vagyis hiba volt) újra kell próbálni
                     name = null;

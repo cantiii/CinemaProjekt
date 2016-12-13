@@ -455,7 +455,7 @@ public class CinemaFrame extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     String text = filterText.getText();
                     if (text.length() == 0) {
-                        sorter.setRowFilter(null);
+                        sorter.setRowFilter(filter);
                     } else {
                         sorter.setRowFilter(RowFilter.regexFilter(text));
                     }
@@ -692,6 +692,7 @@ public class CinemaFrame extends JFrame {
 
         if (model.getRowCount() != 0) {
             tortenetTable.setModel(model);
+            tortenetTable.setEnabled(false);
 
             TableRowSorter<GenericTableModel<Vetites>> sorter = new TableRowSorter<>(model);
             tortenetTable.setRowSorter(sorter);

@@ -30,6 +30,7 @@ public class LoginAction {
             i++;
             name = JOptionPane.showInputDialog(parent, GuiConstants.LOGIN_BUT_TEXT, GuiConstants.LOGIN_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
             if (name != null && !name.trim().equals("")) {
+                name = name.trim();
                 //ha megtaláljuk a user nevet az adatbázisban beengedjük a felhasználót
                 if (dao.isUser(name) != null) {
                     getUser = dao.isUser(name);

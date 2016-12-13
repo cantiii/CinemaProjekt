@@ -60,6 +60,8 @@ public class DelAction implements ActionListener {
                         JOptionPane.showMessageDialog(parent, GuiConstants.TORLESFAIL, GuiConstants.TORLES_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
                         return;
                     }
+
+                    felhasznaloTorles(model, felhasznalo);
                 }
                 //a GenericTableModel osztály removeEntity függvénye végzi a törlést
                 model.removeEntity(convertRowIndexToModel);
@@ -170,5 +172,23 @@ public class DelAction implements ActionListener {
             }
             teremModel.removeEntity(terem.get(t));
         }
+    }
+
+    public void felhasznaloTorles(GenericTableModel model, Felhasznalo felhasznalo) {
+        dao = new DefaultDao(Foglalas.class);
+        List<Foglalas> torlendoFoglalasok = dao.findFoglalasByUser(felhasznalo);
+
+        dao = new DefaultDao(Szek.class);
+        List<Szek> szekLista = dao.findAll();
+
+        for (int i = 0; i < torlendoFoglalasok.size(); i++) {
+            if (szekLista.contains(torlendoFoglalasok.get(i).getSzekId())) {
+                GenericTableModel<Szek> szekModel = new GenericTableModel(DaoManager.getInstance().getSzekDao(), Szek.PROPERTY_NAMES);
+                Szek szek = torlendoFoglalasok.get(i).getSzekId();
+                szek.setFoglalt(false);
+                szekModel.updateSzek(szek);
+            }
+        }
+        torlendoFoglalasok.clear();
     }
 }

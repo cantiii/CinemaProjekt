@@ -169,6 +169,24 @@ public class DefaultDao<T extends PersistentEntity> implements GenericDao<T> {
         }
         return result;
     }
+    
+        /**
+     * 
+     * @param - Felhasznalo entitás, amelyről megszeretnénk tudni, hogy melyik foglalasok(székek) tartoznak hozzá
+     * @return - A keresett foglalások(székek) listája
+     */
+    public List<Foglalas> findFoglalasByUser(Felhasznalo felhasznalo) {
+        List<Foglalas> result;
+        try {
+            Query query = getEntityManager()
+                    .createNamedQuery("Foglalas.findSzekByUser")
+                    .setParameter("felhasznaloId", felhasznalo);
+            result = (List<Foglalas>) query.getResultList();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        return result;
+    }
 
     /**
      * 

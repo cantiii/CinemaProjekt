@@ -43,6 +43,7 @@ public class RegAction {
             //bekérünk egy név jelöltet
             name = JOptionPane.showInputDialog(parent, GuiConstants.USERNAME_TEXT, GuiConstants.REG_BUT_TEXT, JOptionPane.INFORMATION_MESSAGE);
             if (name != null && !name.trim().equals("")) {
+                name = name.trim();
                 // hossz ellenőrzés
                 if (name.length() < 3 || name.length() > 10) {
                     JOptionPane.showMessageDialog(parent, GuiConstants.USERNAME_LENGHT, GuiConstants.FAIL, JOptionPane.ERROR_MESSAGE);

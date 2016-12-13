@@ -37,7 +37,7 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
     public Object getValueAt(int rowIndex, int columnIndex) {
         return items.get(rowIndex).get(columnIndex);
     }
-    
+
     public Object getRowValue(int rowIndex) {
         return items.get(rowIndex);
     }
@@ -47,8 +47,12 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
         if (getRowCount() > rowIndex) {
             T item = items.get(rowIndex); // meg van az entitás minden eleme a sor miatt
             //üres stringre nem módosít
-            if(!(aValue.toString().trim().equals(""))) {               
-                item.set(columnIndex, aValue); // az entitás columnIndex. oszlopában megváltoztatja az értéket
+            if (!(aValue.toString().trim().equals(""))) {
+                try {
+                    item.set(columnIndex, aValue.toString().trim()); // az entitás columnIndex. oszlopában megváltoztatja az értéket
+                } catch (ClassCastException e) {
+                    item.set(columnIndex, aValue); // az entitás columnIndex. oszlopában megváltoztatja az értéket
+                }
                 updateEntity(item, rowIndex);
             }
         }
@@ -73,8 +77,8 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
     }
 
     /**
-     * 
-     * @param item - egy generikus entitás, amit hozzá szeretnénk adni az adatbázishoz 
+     *
+     * @param item - egy generikus entitás, amit hozzá szeretnénk adni az adatbázishoz
      */
     public void addEntity(T item) {
         DAO.create(item);
@@ -82,28 +86,28 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
     }
 
     /**
-     * 
+     *
      * @param rowIndex - egy sornak a száma, amiből meghatározzuk a pontos entitást, amit törölni szeretnénk
      */
     public void removeEntity(int rowIndex) {
         T entity = items.get(rowIndex);
-        items.remove(rowIndex); 
+        items.remove(rowIndex);
         DAO.delete(entity);
-        fireTableDataChanged();        
+        fireTableDataChanged();
     }
-    
+
     /**
      * Ez akkor kell, ha nem sor alapján tőrlünk
-     * @param item 
+     * @param item
      */
     public void removeEntity(T item) {
         items.remove(item);
-        DAO.delete(item); 
-        fireTableDataChanged();      
+        DAO.delete(item);
+        fireTableDataChanged();
     }
-    
+
     /**
-     * 
+     *
      * @param item - az szerkesztett/módosított entitás
      * @param rowIndex - az update helye
      */
@@ -112,10 +116,10 @@ public class GenericTableModel<T extends PersistentEntity> extends AbstractTable
         DAO.update(entity);
         fireTableRowsUpdated(0, items.size() - 1);
     }
-    
+
     /**
      * Ez akkor kell, ha nem sor alapján update-elünk
-     * @param szek 
+     * @param szek
      */
     public void updateSzek(T szek) {
         DAO.update(szek);

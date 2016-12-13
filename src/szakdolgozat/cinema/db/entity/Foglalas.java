@@ -12,7 +12,8 @@ import javax.persistence.*;
 @NamedQueries({
     @NamedQuery(name = "Foglalas.findAll", query = "SELECT f FROM Foglalas f"),
     @NamedQuery(name = "Foglalas.findById", query = "SELECT f FROM Foglalas f WHERE f.id = :id"),
-    @NamedQuery(name = "Foglalas.findSzekById", query = "SELECT f FROM Foglalas f WHERE f.szekId = :szekId"),})
+    @NamedQuery(name = "Foglalas.findSzekById", query = "SELECT f FROM Foglalas f WHERE f.szekId = :szekId"),
+    @NamedQuery(name = "Foglalas.findSzekByUser", query = "SELECT f FROM Foglalas f WHERE f.felhasznaloId = :felhasznaloId")})
 public class Foglalas implements Serializable, PersistentEntity {
 
     public static final String PROPERTY_NAMES[] = {"Felhasználó", "Szék"};
